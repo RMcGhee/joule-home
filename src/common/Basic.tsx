@@ -1,5 +1,5 @@
 import Grow from '@mui/material/Grow';
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 
 interface LeftGrowProps {
     children: ReactElement;

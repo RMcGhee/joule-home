@@ -13,6 +13,7 @@ import '@fontsource/roboto/700.css';
 import { Box } from '@mui/system';
 import BottomNav from './bottom-nav/BottomNav';
 import LeftGrow from './common/Basic';
+import Calculator from './calculator/Calculator';
 
 const user_home_url = 'https://rmcghee.github.io/'
 
@@ -27,7 +28,7 @@ function App() {
     <ThemeProvider theme={theme}>
     <CssBaseline>
     <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <LeftGrow trigger={animate}><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
+      <LeftGrow><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
         <h1>joule-home</h1>
       </Box></LeftGrow>
       <Box sx={{
@@ -36,7 +37,7 @@ function App() {
         flexDirection: 'column',
         justifyContent: 'top',
       }}>
-        <Button onClick={toggleAnimation} sx={{ alignSelf: 'flex-start' }}>Toggle Animation</Button>
+        <Calculator/>
       </Box>
       <BottomNav/>
     </Container>
