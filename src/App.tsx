@@ -1,30 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Link, Paper, Container, ThemeProvider, Divider } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+
 import './App.css';
+import { CssBaseline } from '@mui/material';
+import { theme } from './base-theme';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { Box } from '@mui/system';
+import BottomNav from './bottom-nav/BottomNav';
+
+const user_home_url = 'https://rmcghee.github.io/'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+    <CssBaseline>
+    <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Box sx={{ flexGrow: 0}} style={{ padding: 0, marginTop: 30 }}>
+        <h1>joule-home</h1>
+      </Box>
+      <Box sx={{
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+      </Box>
+      <BottomNav/>
+    </Container>
+    </CssBaseline>
+    </ThemeProvider>
   );
 }
 
