@@ -23,6 +23,7 @@ theme = createTheme(theme, {
             styleOverrides: {
                 tooltip: {
                     backgroundColor: 'transparent',
+                    fontSize: theme.typography.pxToRem(14),
                     border: `1px solid ${theme.palette.secondary.main}`,
                 }
             }
