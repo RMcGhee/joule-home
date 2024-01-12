@@ -4,7 +4,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import './App.css';
 import { CssBaseline } from '@mui/material';
-import { theme } from './base-theme';
+import theme from './base-theme';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';

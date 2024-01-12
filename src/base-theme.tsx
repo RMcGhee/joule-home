@@ -1,13 +1,13 @@
-import { ThemeOptions, ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeOptions, createTheme } from '@mui/material/styles';
 
-export const themeOptions: ThemeOptions = {
+const themeOptions: ThemeOptions = {
     palette: {
         mode: 'dark',
         primary: {
-        main: '#aa00ff',
+            main: '#aa00ff',
         },
         secondary: {
-        main: '#e91e63',
+            main: '#e91e63',
         },
         background: {
             default: '#000000', // Set the default background color to black
@@ -15,4 +15,19 @@ export const themeOptions: ThemeOptions = {
     },
 };
 
-export const theme = createTheme(themeOptions);
+let theme = createTheme(themeOptions);
+
+theme = createTheme(theme, {
+    components: {
+        MuiTooltip: {
+            styleOverrides: {
+                tooltip: {
+                    backgroundColor: 'transparent',
+                    border: `1px solid ${theme.palette.secondary.main}`,
+                }
+            }
+        }
+    }
+});
+
+export default theme;
