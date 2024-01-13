@@ -22,7 +22,7 @@ theme = createTheme(theme, {
         MuiTooltip: {
             styleOverrides: {
                 tooltip: {
-                    backgroundColor: 'transparent',
+                    backgroundColor: `${theme.palette.background.default}BF`,
                     fontSize: theme.typography.pxToRem(14),
                     border: `1px solid ${theme.palette.secondary.main}`,
                 }

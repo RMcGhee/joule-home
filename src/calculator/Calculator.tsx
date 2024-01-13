@@ -28,8 +28,7 @@ const Calculator = () => {
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-        <Tooltip title={disableTooltip} disableHoverListener={!isACFilled} disableFocusListener={true}
-          PopperProps={{ sx: { '.MuiTooltip-tooltip': { backgroundColor: theme.palette.background.default }}}}>
+        <Tooltip title={disableTooltip} disableHoverListener={!isACFilled} disableFocusListener={true}>
           <TextField 
             label="Current Heat Pump SEER" 
             value={currentHeatPumpSeer}
@@ -38,8 +37,7 @@ const Calculator = () => {
             onChange={(e) => setCurrentHeatPumpSeer(e.target.value)} 
           />
         </Tooltip>
-        <Tooltip title={disableTooltip} disableHoverListener={!isACFilled} disableFocusListener={true}
-          PopperProps={{ sx: { '.MuiTooltip-tooltip': { backgroundColor: theme.palette.background.default }}}}>
+        <Tooltip title={disableTooltip} disableHoverListener={!isACFilled} disableFocusListener={true}>
           <TextField 
             label="Current Heat Pump HSPF"
             value={currentHeatPumpHspf}
@@ -48,8 +46,7 @@ const Calculator = () => {
             onChange={(e) => setCurrentHeatPumpHspf(e.target.value)} 
           />
         </Tooltip>
-        <Tooltip title={disableTooltip} disableHoverListener={!isHeatPumpFilled} disableFocusListener={true}
-          PopperProps={{ sx: { '.MuiTooltip-tooltip': { backgroundColor: theme.palette.background.default }}}}>
+        <Tooltip title={disableTooltip} disableHoverListener={!isHeatPumpFilled} disableFocusListener={true}>
           <TextField 
             label="Current AC SEER" 
             value={currentACSeer}
@@ -64,7 +61,7 @@ const Calculator = () => {
           style={textFieldStyle}
           onChange={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
         />
-        <Tooltip title='Any zip close to you' PopperProps={{ sx: { '.MuiTooltip-tooltip': { backgroundColor: theme.palette.background.default }}}}>
+        <Tooltip title='Any zip close to you'>
           <TextField 
             label="Zip Code" 
             value={zipCode} 
