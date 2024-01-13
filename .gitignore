@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+# data
+/scripts/cdd-data
+/scripts/hdd-data
+
 # testing
 /coverage
 
