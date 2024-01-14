@@ -8,6 +8,7 @@
 # data
 /scripts/cdd-data
 /scripts/hdd-data
+/scripts/dd-average
 
 # testing
 /coverage

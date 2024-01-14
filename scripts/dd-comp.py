@@ -1,8 +1,14 @@
 import os
 import csv
+import functools as fn
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=2)
+
+months = {
+    'Jan': 31, 'Feb': 28, 'Mar': 31, 'Apr': 30, 'May': 31, 'Jun': 30,
+    'Jul': 31, 'Aug': 31, 'Sep': 30, 'Oct': 31, 'Nov': 30, 'Dec': 31
+    }
 
 def get_dd_data(result: dict, filename: str, dd_type: str) -> dict:
     with open(filename, 'r') as in_file:
@@ -25,13 +31,17 @@ def get_dd_data(result: dict, filename: str, dd_type: str) -> dict:
             city_data[f'{dd_type} {month} {year}'] = int(dd)
     return result
 
+def get_dd_averages(result: dict) -> dict:
+    for city, data in result.items():
+        for month in months.keys():
+            cdd_mon_av = round(sum([v for k, v in data.items() if f'cdd {month}' in k]) / 3)
+            hdd_mon_av = round(sum([v for k, v in data.items() if f'hdd {month}' in k]) / 3)
+            data[f'cdd {month}'] = cdd_mon_av
+            data[f'hdd {month}'] = hdd_mon_av
+    return result
+
 cdd_monthly_files = [x for x in os.listdir('./scripts/cdd-data/monthly/2021') if 'DS_Store' not in x]
 hdd_monthly_files = [x for x in os.listdir('./scripts/hdd-data/monthly/2021') if 'DS_Store' not in x]
-
-months = {
-    'Jan': 31, 'Feb': 28, 'Mar': 31, 'Apr': 30, 'May': 31, 'Jun': 30,
-    'Jul': 31, 'Aug': 31, 'Sep': 30, 'Oct': 31, 'Nov': 30, 'Dec': 31
-    }
 
 test_filename = './scripts/cdd-data/monthly/2021/Apr 2021.txt'
 cdd_monthly_folder = './scripts/cdd-data/monthly/'
@@ -48,17 +58,24 @@ for filename in cdd_filenames:
 for filename in hdd_filenames:
     dd_data = get_dd_data(dd_data, filename, 'hdd')
 
+dd_data = get_dd_averages(dd_data)
+
 csv_headers = {}
 for city_data in dd_data.values():
     csv_headers.update(city_data.items())
 
 csv_headers = list(csv_headers.keys())
-pp.pprint(csv_headers)
+csv_av_headers = list(filter(lambda x: x.split(' ')[-1] not in ['2021', '2022', '2023'], csv_headers))
+csv_mon_headers = list(filter(lambda x: x.split(' ')[-1] in ['2021', '2022', '2023'], csv_headers))
+csv_headers = []
+csv_headers.extend(csv_av_headers)
+csv_headers.extend(csv_mon_headers)
+csv_headers.insert(0, 'City')
 
-with open('./scripts/test_out.csv', 'w', newline='') as csv_file:
+with open('./scripts/dd-average/monthly_dd.csv', 'w', newline='') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
 
     writer.writeheader()
     for city, data in dd_data.items():
+        data['City'] = city
         writer.writerow(data)
-# pp.pprint(dd_data)
