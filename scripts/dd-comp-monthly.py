@@ -110,14 +110,17 @@ csv_city_headers = ['City', 'zip', 'lat', 'lon']
 csv_headers = csv_city_headers
 csv_headers.extend(csv_av_headers)
 csv_headers.extend(csv_mon_headers)
-csv_headers.insert(0, 'City')
+
+out_data = {}
+out_keys: list = list(dd_data.keys())
+out_keys.sort(key=lambda x: (x.split(', ')[1], x.split(', ')[0]))
 
 with open('./scripts/dd-average/monthly_dd.csv', 'w', newline='') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
 
     writer.writeheader()
-    for city, data in dd_data.items():
-        data['City'] = city
-        writer.writerow(data)
+    for key in out_keys:
+        dd_data[key]['City'] = key
+        writer.writerow(dd_data[key])
 
 search.close()
