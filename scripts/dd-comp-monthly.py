@@ -1,9 +1,12 @@
 import os
 import csv
 import functools as fn
+import sqlalchemy as sa
+from uszipcode import SearchEngine, SimpleZipcode
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=2)
+search = SearchEngine()
 
 months = {
     'Jan': 31, 'Feb': 28, 'Mar': 31, 'Apr': 30, 'May': 31, 'Jun': 30,
@@ -40,6 +43,38 @@ def get_dd_averages(result: dict) -> dict:
             data[f'hdd {month}'] = hdd_mon_av
     return result
 
+def fix_map_names(result: dict) -> dict:
+    fix_list = [
+        ('BETTLES FIELD, AK', 'BETTLES, AK'), ('DELTA JUNCTION, AK', 'BIG DELTA, AK'),
+        ('COPPER CENTER, AK', 'GULKANA, AK'), ('MC GRATH, AK', 'MCGRATH, AK'),
+        ('SAINT PAUL ISLAND, AK', 'ST PAUL ISLAND, AK'), ('MOUNT SHASTA, CA', 'MT SHASTA, CA'),
+        ('FORT LAUDERDALE, FL', 'FT LAUDERDALE, FL'), ('HILO, HI', 'HILO-HAWAII, HI'),
+        ('HONOLULU, HI', 'HONOLULU-OAHU, HI'), ('KAHULUI, HI', 'KAHULUI-MAUI, HI'),
+        ('LIHUE, HI', 'LIHUE-KAUAI, HI'), ('SAULT SAINTE MARIE, MI', 'SAULT ST MARIE, MI'),
+        ('INTERNATIONAL FALLS, MN', "INT'L FALLS, MN"), ('MOUNT WASHINGTON, NH', 'MT WASHINGTON, NH'),
+        ('HATTERAS, NC', 'CAPE HATTERAS, NC'), ('RALEIGH, NC', 'RALEIGH DURHAM, NC'),
+        ("DEVILS LAKE, ND", "DEVIL'S LAKE, ND"), ('AKRON, OH', 'AKRON CANTON, OH'),
+        ('BAKER CITY, OR', 'BAKER, OR'), ('DALLAS, TX', 'DALLAS FT WORTH, TX'),
+        ('MIDLAND, TX', 'MIDLAND ODESSA, TX'), ('FORKS, WA', 'QUILLAYUTE, WA'),
+        ('RENTON, WA', 'SEATTLE TACOMA, WA'), ('LA CROSSE, WI', 'LACROSSE, WI'),
+        ]
+
+    for fix_city, bad_city in fix_list:
+        result[fix_city] = result.pop(bad_city)
+
+    return result
+
+def get_map_info(result: dict) -> dict:
+    for city_state, data in result.items():
+        city, state = city_state.split(', ')
+        sql = f'SELECT * FROM simple_zipcode WHERE major_city LIKE "%{city}%" AND state = "{state}" ORDER BY population_density DESC'
+        city_info = search.ses.execute(sql).first()
+        data['zip'] = city_info.zipcode
+        data['lat'] = city_info.lat
+        data['lon'] = city_info.lng
+    
+    return result
+
 cdd_monthly_files = [x for x in os.listdir('./scripts/cdd-data/monthly/2021') if 'DS_Store' not in x]
 hdd_monthly_files = [x for x in os.listdir('./scripts/hdd-data/monthly/2021') if 'DS_Store' not in x]
 
@@ -60,6 +95,10 @@ for filename in hdd_filenames:
 
 dd_data = get_dd_averages(dd_data)
 
+dd_data = fix_map_names(dd_data)
+
+dd_data = get_map_info(dd_data)
+
 csv_headers = {}
 for city_data in dd_data.values():
     csv_headers.update(city_data.items())
@@ -67,7 +106,8 @@ for city_data in dd_data.values():
 csv_headers = list(csv_headers.keys())
 csv_av_headers = list(filter(lambda x: x.split(' ')[-1] not in ['2021', '2022', '2023'], csv_headers))
 csv_mon_headers = list(filter(lambda x: x.split(' ')[-1] in ['2021', '2022', '2023'], csv_headers))
-csv_headers = []
+csv_city_headers = ['City', 'zip', 'lat', 'lon']
+csv_headers = csv_city_headers
 csv_headers.extend(csv_av_headers)
 csv_headers.extend(csv_mon_headers)
 csv_headers.insert(0, 'City')
@@ -79,3 +119,5 @@ with open('./scripts/dd-average/monthly_dd.csv', 'w', newline='') as csv_file:
     for city, data in dd_data.items():
         data['City'] = city
         writer.writerow(data)
+
+search.close()
