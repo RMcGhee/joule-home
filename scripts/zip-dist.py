@@ -24,6 +24,7 @@ def get_top_five(dd_list: list, zip_list: list) -> list:
             dest_coord: tuple = (dest['lat'], dest['lon'])
             dist_dict[dest['City']] = (dest['id'], distance.distance(row_coord, dest_coord).km, *dest_coord)
         
+        #not sorting right after adding id.
         top_five = sorted(dist_dict.items(), key=lambda x: x[1])[:5]
         row['top_five'] = [(x[0], x[1][0]) for x in top_five]
     
