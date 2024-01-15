@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Divider, Stack, Tooltip, Typography } from '@mui/material';
-import LeftGrow from '../common/Basic';
+import { LeftGrow } from '../common/Basic';
 
 import '../App.css';
 

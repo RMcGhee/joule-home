@@ -21,6 +21,12 @@ theme = createTheme(theme, {
     components: {
         MuiTooltip: {
             styleOverrides: {
+                arrow: {
+                    "&:before": {
+                      border: `1px solid ${theme.palette.secondary.main}`
+                    },
+                    color: `${theme.palette.background.default}BF`,
+                },
                 tooltip: {
                     backgroundColor: `${theme.palette.background.default}BF`,
                     fontSize: theme.typography.pxToRem(14),

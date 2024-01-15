@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Box, Button, Tooltip } from '@mui/material';
-import LeftGrow from '../common/Basic';
-import theme from '../base-theme';
-import { useTheme } from '@emotion/react';
+import { Box, Button, Tooltip, InputAdornment } from '@mui/material';
+import { LeftGrow, ValidatedField } from '../common/Basic';
 
 const Calculator = () => {
   const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState('');
@@ -28,47 +26,52 @@ const Calculator = () => {
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-        <Tooltip title={disableTooltip} disableHoverListener={!isACFilled} disableFocusListener={true}>
-          <TextField 
-            label="Current Heat Pump SEER" 
-            value={currentHeatPumpSeer}
-            style={textFieldStyle}
-            disabled={isACFilled}
-            onChange={(e) => setCurrentHeatPumpSeer(e.target.value)} 
-          />
-        </Tooltip>
-        <Tooltip title={disableTooltip} disableHoverListener={!isACFilled} disableFocusListener={true}>
-          <TextField 
-            label="Current Heat Pump HSPF"
-            value={currentHeatPumpHspf}
-            style={textFieldStyle}
-            disabled={isACFilled}
-            onChange={(e) => setCurrentHeatPumpHspf(e.target.value)} 
-          />
-        </Tooltip>
-        <Tooltip title={disableTooltip} disableHoverListener={!isHeatPumpFilled} disableFocusListener={true}>
-          <TextField 
-            label="Current AC SEER" 
-            value={currentACSeer}
-            style={textFieldStyle}
-            disabled={isHeatPumpFilled}
-            onChange={(e) => setCurrentACSeer(e.target.value)} 
-          />
-        </Tooltip>
-        <TextField 
+        <ValidatedField 
+          label="Current Heat Pump SEER" 
+          value={currentHeatPumpSeer}
+          inputMode='numeric'
+          inputType='decimal'
+          style={textFieldStyle}
+          disabled={isACFilled}
+          setter={(e) => setCurrentHeatPumpSeer(e.target.value)}
+          // onChange={(e) => setCurrentHeatPumpSeer(e.target.value)} 
+        />
+        <ValidatedField 
+          label="Current Heat Pump HSPF"
+          value={currentHeatPumpHspf}
+          inputMode='numeric'
+          inputType='decimal'
+          style={textFieldStyle}
+          disabled={isACFilled}
+          setter={(e) => setCurrentHeatPumpHspf(e.target.value)} 
+        />
+        <ValidatedField 
+          label="Current AC SEER" 
+          value={currentACSeer}
+          inputMode='numeric'
+          inputType='decimal'
+          style={textFieldStyle}
+          disabled={isHeatPumpFilled}
+          setter={(e) => setCurrentACSeer(e.target.value)} 
+        />
+        <ValidatedField 
           label="Current Furnace Efficiency" 
           value={currentFurnaceEfficiency} 
+          inputMode='numeric'
+          inputType='decimal'
           style={textFieldStyle}
-          onChange={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
+          InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
+          setter={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
         />
-        <Tooltip title='Any zip close to you'>
-          <TextField 
-            label="Zip Code" 
-            value={zipCode} 
-            style={textFieldStyle}
-            onChange={(e) => setZipCode(e.target.value)} 
-          />
-        </Tooltip>
+        <ValidatedField 
+          label="Zip Code"
+          value={zipCode}
+          len={5}
+          inputMode='numeric'
+          inputType='int'
+          style={textFieldStyle}
+          setter={(e) => setZipCode(e.target.value)} 
+        />
         <Button onClick={handleCalculate} style={textFieldStyle}>Calculate</Button>
       </Box>
     </LeftGrow>

@@ -12,7 +12,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { Box } from '@mui/system';
 import BottomNav from './bottom-nav/BottomNav';
-import LeftGrow from './common/Basic';
+import { LeftGrow } from './common/Basic';
 import Calculator from './calculator/Calculator';
 
 const user_home_url = 'https://rmcghee.github.io/'
