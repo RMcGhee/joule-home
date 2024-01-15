@@ -19,8 +19,6 @@ type ValidatedFieldProps = TextFieldProps & {
   len?: number;
   inputType?: 'decimal' | 'text' | 'int';
   invalidMsg?: string;
-  isTooltipDisabled?: boolean;
-  disabledTooltip?: string;
   setter: (value: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 };
 
@@ -29,8 +27,6 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
   len = 0,
   inputType = 'text',
   invalidMsg,
-  isTooltipDisabled,
-  disabledTooltip,
   setter,
   ...textFieldProps
 }) => {
