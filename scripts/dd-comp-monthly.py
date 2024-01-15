@@ -1,6 +1,5 @@
 import os
 import csv
-import functools as fn
 import sqlalchemy as sa
 from uszipcode import SearchEngine, SimpleZipcode
 from pprint import PrettyPrinter
@@ -106,7 +105,7 @@ for city_data in dd_data.values():
 csv_headers = list(csv_headers.keys())
 csv_av_headers = list(filter(lambda x: x.split(' ')[-1] not in ['2021', '2022', '2023'], csv_headers))
 csv_mon_headers = list(filter(lambda x: x.split(' ')[-1] in ['2021', '2022', '2023'], csv_headers))
-csv_city_headers = ['City', 'zip', 'lat', 'lon']
+csv_city_headers = ['City', 'id', 'zip', 'lat', 'lon']
 csv_headers = csv_city_headers
 csv_headers.extend(csv_av_headers)
 csv_headers.extend(csv_mon_headers)
@@ -119,8 +118,9 @@ with open('./scripts/dd-average/monthly_dd.csv', 'w', newline='') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
 
     writer.writeheader()
-    for key in out_keys:
+    for id, key in enumerate(out_keys):
         dd_data[key]['City'] = key
+        dd_data[key]['id'] = id
         writer.writerow(dd_data[key])
 
 search.close()
