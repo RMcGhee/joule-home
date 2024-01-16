@@ -9,6 +9,7 @@
 /scripts/cdd-data
 /scripts/hdd-data
 /scripts/dd-average
+/scripts/secrets.txt
 
 # testing
 /coverage

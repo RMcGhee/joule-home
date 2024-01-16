@@ -50,13 +50,20 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
     return len > 0 ? `Enter only ${inputType}, max ${len} characters` : `Enter only ${inputType}`;
   };
 
+  const fieldStyle = {
+    ...textFieldProps.style,
+    transition: 'background-color 1.0s ease',
+    backgroundColor: textFieldProps.disabled ? '#202020' : 'transparent',
+  };
+
   return (
     <Tooltip title={error ? getErrorMsg() : ''} open={error} arrow>
       <TextField
         {...textFieldProps}
         error={error}
         onChange={handleChange}
-        style={{ ...textFieldProps.style, }}
+        size={ textFieldProps.disabled ? 'small' : 'medium' }
+        style={fieldStyle}
       />
     </Tooltip>
   );
