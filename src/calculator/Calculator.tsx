@@ -3,6 +3,7 @@ import { Box, Button, Tooltip, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
+import { ZipDist } from '../entities/ZipDist';
 
 const Calculator = () => {
   const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState('');
@@ -105,8 +106,7 @@ const Calculator = () => {
               borderBottomLeftRadius: '0',
             }
           }}
-          setter={(e) => setZipCode(e.target.value)}
-          onZipDataReceived={setZipDistData}
+          zipData={zipDistData as ZipDist}
         />
         </div>
         <Button onClick={handleCalculate} style={textFieldStyle}>Calculate</Button>

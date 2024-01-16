@@ -18,10 +18,10 @@ export type ZipDist = {
     near_id_3: number
     near_id_4: number
     near_id_5: number
-    near_zip_1: number
-    near_zip_2: number
-    near_zip_3: number
-    near_zip_4: number
-    near_zip_5: number
+    near_zip_1: string
+    near_zip_2: string
+    near_zip_3: string
+    near_zip_4: string
+    near_zip_5: string
     zip: string
 };
