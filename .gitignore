@@ -17,6 +17,10 @@
 # production
 /build
 
+#supabase
+/joule-home.code-workspace
+/supabase
+
 # misc
 .DS_Store
 .env.local
