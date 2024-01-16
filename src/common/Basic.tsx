@@ -57,9 +57,10 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
     return len > 0 ? `Enter only ${inputType}, max ${len} characters` : `Enter only ${inputType}`;
   };
 
+  // Merge incoming transitions, don't overwrite.
   const fieldStyle = {
     ...textFieldProps.style,
-    transition: 'background-color 1.0s ease',
+    transition: `${textFieldProps.style?.transition ? textFieldProps.style?.transition + ', ' : ''}background-color 1.0s ease`,
     backgroundColor: textFieldProps.disabled ? '#202020' : 'transparent',
   };
 
@@ -70,7 +71,9 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
         error={error}
         onChange={handleChange}
         size={ textFieldProps.disabled ? 'small' : 'medium' }
-        style={fieldStyle}
+        style={{
+          ...fieldStyle,
+        }}
       />
     </Tooltip>
   );

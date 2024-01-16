@@ -1,6 +1,7 @@
 import { Grow, TextField, TextFieldProps, Tooltip } from '@mui/material';
 import React, { useState, ReactElement } from 'react';
 import { ValidatedField, ValidatedFieldProps } from './Basic';
+import { ZipDist } from '../entities/ZipDist';
 
 type ZipFieldProps = ValidatedFieldProps & {
   onZipDataReceived: (data: any) => void; // Callback to update state in parent
@@ -24,9 +25,11 @@ export const ZipField: React.FC<ZipFieldProps> = ({
         },
       });
       if (!response.ok) throw new Error('Network response was not ok');
-      const data = await response.json();
-      // Implement the API request logic here
-      // use onZipDataReceived(data); to set parent state
+      const responseData = await response.json();
+      const data = responseData.data[0] as ZipDist;
+      console.log(data);
+      console.log(data.city);
+      onZipDataReceived(data);
     }
   };
 
@@ -41,6 +44,8 @@ export const ZipField: React.FC<ZipFieldProps> = ({
     const zipCode = e.target.value;
     if (zipCode.length === 5) {
       fetchZipData(zipCode);
+    } else {
+      onZipDataReceived({});
     }
   };
   

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Tooltip, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
+import { SelectClimate } from '../common/SelectClimate';
 
 const Calculator = () => {
   const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState('');
@@ -9,7 +10,7 @@ const Calculator = () => {
   const [currentACSeer, setCurrentACSeer] = useState('');
   const [currentFurnaceEfficiency, setCurrentFurnaceEfficiency] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [zipDistData, setZipDistData] = useState('');
+  const [zipDistData, setZipDistData] = useState({});
 
   const handleCalculate = () => {
     // Logic for calculation goes here
@@ -22,6 +23,7 @@ const Calculator = () => {
 
   const isHeatPumpFilled = (currentHeatPumpSeer.trim() !== '' || currentHeatPumpHspf.trim() !== '');
   const isACFilled = currentACSeer.trim() !== '';
+  const haveZipDistData = Object.keys(zipDistData).length !== 0;
 
   const disableTooltip = 'Fill out either heat pump info or AC, not both';
 
@@ -65,16 +67,48 @@ const Calculator = () => {
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
           setter={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
         />
-        <ZipField
-          label="Zip Code"
-          value={zipCode}
-          len={5}
-          inputMode='numeric'
-          inputType='int'
-          style={textFieldStyle}
+        <div style={{ display: 'flex' }}>
+          <ZipField
+            label="Zip Code"
+            value={zipCode}
+            len={5}
+            inputMode='numeric'
+            inputType='int'
+            style={{
+              ...textFieldStyle,
+              width: haveZipDistData ? '125px' : '250px',
+              marginRight: '0',
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+            }}
+            InputProps={{
+              style: {
+                borderTopRightRadius: haveZipDistData ? '0' : '4px',
+                borderBottomRightRadius: haveZipDistData ? '0' : '4px',
+              }
+            }}
+            setter={(e) => setZipCode(e.target.value)}
+            onZipDataReceived={setZipDistData}
+          />
+        <SelectClimate
+          label="Closest Climate"
+          hidden={!haveZipDistData}
+          style={{
+            ...textFieldStyle,
+            width: haveZipDistData ? '125px' : '0px',
+            marginLeft: '0',
+            opacity: haveZipDistData ? 1 : 0,
+            transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+          }}
+          InputProps={{
+            style: {
+              borderTopLeftRadius: '0',
+              borderBottomLeftRadius: '0',
+            }
+          }}
           setter={(e) => setZipCode(e.target.value)}
           onZipDataReceived={setZipDistData}
         />
+        </div>
         <Button onClick={handleCalculate} style={textFieldStyle}>Calculate</Button>
       </Box>
     </LeftGrow>
