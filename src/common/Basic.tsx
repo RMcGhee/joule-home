@@ -15,14 +15,21 @@ interface LeftGrowProps {
   );
 };
 
-type ValidatedFieldProps = TextFieldProps & {
+export type ValidatedFieldProps = TextFieldProps & {
   len?: number;
   inputType?: 'decimal' | 'text' | 'int';
   invalidMsg?: string;
+  /** 
+   * setter is always called AFTER validation, regardless of whether validation fails
+   * @param value Change event for the field  */
   setter: (value: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 };
 
-
+/**
+ * 
+ * @param setter The setter for the state variable, always called AFTER validation, regarless of whether or not validation fails.
+ * @returns 
+ */
 export const ValidatedField: React.FC<ValidatedFieldProps> = ({
   len = 0,
   inputType = 'text',

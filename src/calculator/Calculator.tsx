@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Tooltip, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
+import { ZipField } from '../common/ZipField';
 
 const Calculator = () => {
   const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState('');
@@ -8,6 +9,7 @@ const Calculator = () => {
   const [currentACSeer, setCurrentACSeer] = useState('');
   const [currentFurnaceEfficiency, setCurrentFurnaceEfficiency] = useState('');
   const [zipCode, setZipCode] = useState('');
+  const [zipDistData, setZipDistData] = useState('');
 
   const handleCalculate = () => {
     // Logic for calculation goes here
@@ -63,14 +65,15 @@ const Calculator = () => {
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
           setter={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
         />
-        <ValidatedField 
+        <ZipField
           label="Zip Code"
           value={zipCode}
           len={5}
           inputMode='numeric'
           inputType='int'
           style={textFieldStyle}
-          setter={(e) => setZipCode(e.target.value)} 
+          setter={(e) => setZipCode(e.target.value)}
+          onZipDataReceived={setZipDistData}
         />
         <Button onClick={handleCalculate} style={textFieldStyle}>Calculate</Button>
       </Box>
