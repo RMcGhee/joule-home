@@ -15,8 +15,6 @@ export const ZipField: React.FC<ZipFieldProps> = ({
     // Need to validate here too, since the setter is always called after validation, even
     // if validation fails.
     if (validateZip(zipCode)) {
-      console.log(`REceived ${zipCode}`);
-
       const response = await fetch(edgeFunction, {
         method: 'POST',
         body: JSON.stringify({ 'zip': zipCode }),
