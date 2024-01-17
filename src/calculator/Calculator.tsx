@@ -12,6 +12,7 @@ const Calculator = () => {
   const [currentFurnaceEfficiency, setCurrentFurnaceEfficiency] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [zipDistData, setZipDistData] = useState({});
+  const [selectedClimate, setSelectedClimate] = useState('');
 
   const handleCalculate = () => {
     // Logic for calculation goes here
@@ -25,8 +26,6 @@ const Calculator = () => {
   const isHeatPumpFilled = (currentHeatPumpSeer.trim() !== '' || currentHeatPumpHspf.trim() !== '');
   const isACFilled = currentACSeer.trim() !== '';
   const haveZipDistData = Object.keys(zipDistData).length !== 0;
-
-  const disableTooltip = 'Fill out either heat pump info or AC, not both';
 
   return (
     <LeftGrow>
@@ -107,6 +106,8 @@ const Calculator = () => {
             }
           }}
           zipData={zipDistData as ZipDist}
+          selectedClimate={selectedClimate}
+          setSelectedClimate={setSelectedClimate}
         />
         </div>
         <Button onClick={handleCalculate} style={textFieldStyle}>Calculate</Button>

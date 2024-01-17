@@ -1,42 +1,44 @@
 import { TextField, TextFieldProps, MenuItem } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ZipDist } from '../entities/ZipDist';
+import { isEmpty } from './Util';
 
 type SelectClimateProps = TextFieldProps & {
-  zipData: ZipDist; // Include a property for zip data
+  zipData: ZipDist;
+  selectedClimate: string;
+  setSelectedClimate: (data: string) => void;
+};
+
+type ClimateMenuItems = {
+  itemKey: string | number;
+  value: string | number;
 };
 
 export const SelectClimate: React.FC<SelectClimateProps> = ({
   zipData,
+  selectedClimate,
+  setSelectedClimate,
   ...textFieldProps
 }) => {
-  const [selectedZip, setSelectedZip] = useState('');
+  const [menuItems, setMenuItems] = useState<ClimateMenuItems[]>([]);
 
   useEffect(() => {
-    if (zipData && Object.keys(zipData).length !== 0) {
-      setSelectedZip(zipData['near_zip_1']);
-    } else {
-      setSelectedZip('');
-    }
-  }, [zipData]);
-
-
-  const menuItems = zipData && Object.keys(zipData).length !== 0
-    ? Array.from({ length: 5 }, (_, i) => {
+    if (!isEmpty(zipData)) {
+      setMenuItems(Array.from({ length: 5 }, (_, i) => {
         const cityKey = `near_city_${i + 1}` as keyof ZipDist;
         const zipKey = `near_zip_${i + 1}` as keyof ZipDist;
-        return (
-          <MenuItem key={zipData[zipKey]} value={zipData[zipKey]}>
-            {zipData[cityKey]} ({zipData[zipKey]})
-          </MenuItem>
-        );
-      })
-    : [<MenuItem key={'placeholder'} value={'placeholder'}>No zip entered</MenuItem>];
-
+        return {itemKey: zipData[cityKey], value: zipData[zipKey]};
+      }));
+      setSelectedClimate(zipData['near_zip_1']);
+    } else {
+      setMenuItems( [{itemKey: 'placeholder', value: ''}] );
+      setSelectedClimate('');
+    }
+  }, [zipData]);
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedZip(event.target.value as string);
-  };  
+    setSelectedClimate(event.target.value as string);
+  };
 
   const fieldStyle = {
     ...textFieldProps.style,
@@ -47,7 +49,7 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
   return (
     <TextField
       {...textFieldProps}
-      value={selectedZip}
+      value={selectedClimate}
       select
       label='Closest Climate'
       onChange={handleChange}
@@ -55,7 +57,9 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
         ...fieldStyle
       }}
     >
-      {menuItems}
+      {menuItems.map(item => (
+        <MenuItem key={item.itemKey} value={item.value}>{item.value} : {item.itemKey}</MenuItem>
+      ))}
     </TextField>
   );
 };
