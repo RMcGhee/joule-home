@@ -14,12 +14,13 @@ import BottomNav from './bottom-nav/BottomNav';
 import { LeftGrow } from './common/Basic';
 import CurrentSystemForm from './calculator/CurrentSystemForm';
 import Introduction from './calculator/Introduction';
+import { FormData } from './entities/FormData';
 
 const user_home_url = 'https://rmcghee.github.io/'
 
 function App() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({} as FormData);
 
   useEffect(() => {
     // Load cached data from localStorage
@@ -33,7 +34,6 @@ function App() {
     setCurrentStep(currentStep + stepChange);
     localStorage.setItem('formData', JSON.stringify(formData));
   };
-  
 
   const renderStep = () => {
     switch (currentStep) {

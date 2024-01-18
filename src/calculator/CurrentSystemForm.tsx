@@ -1,30 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
 import { ZipDist } from '../entities/ZipDist';
+import { FormData } from '../entities/FormData';
 
 type CurrentSystemFormProps = {
-  formData: object;
-  setFormData: (data: object) => void;
+  formData: FormData;
+  setFormData: (data: FormData) => void;
 };
 
 const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
   formData,
   setFormData,
 }) => {
-  const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState('');
-  const [currentHeatPumpHspf, setCurrentHeatPumpHspf] = useState('');
-  const [currentACSeer, setCurrentACSeer] = useState('');
-  const [currentFurnaceEfficiency, setCurrentFurnaceEfficiency] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [zipDistData, setZipDistData] = useState({});
-  const [selectedClimate, setSelectedClimate] = useState('');
+  const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState(formData.currentHeatPumpSeer || '');
+  const [currentHeatPumpHspf, setCurrentHeatPumpHspf] = useState(formData.currentHeatPumpHspf || '');
+  const [currentACSeer, setCurrentACSeer] = useState(formData.currentACSeer || '');
+  const [currentFurnaceEfficiency, setCurrentFurnaceEfficiency] = useState(formData.currentFurnaceEfficiency || '');
+  const [zipCode, setZipCode] = useState(formData.zipCode || '');
+  const [zipDistData, setZipDistData] = useState(formData.zipDistData || {} as ZipDist);
+  const [selectedClimate, setSelectedClimate] = useState(formData.selectedClimate || '');
 
   const isHeatPumpFilled = (currentHeatPumpSeer.trim() !== '' || currentHeatPumpHspf.trim() !== '');
   const isACFilled = currentACSeer.trim() !== '';
   const haveZipDistData = Object.keys(zipDistData).length !== 0;
+
+  useEffect(() => {
+    setFormData({
+      ...formData, 'currentACSeer': currentACSeer, 'currentFurnaceEfficiency': currentFurnaceEfficiency,
+      'currentHeatPumpHspf': currentHeatPumpHspf, 'currentHeatPumpSeer': currentHeatPumpSeer,
+      'zipCode': zipCode, 'selectedClimate': selectedClimate,
+    });
+  }, [currentACSeer, currentFurnaceEfficiency, currentHeatPumpHspf, currentHeatPumpSeer, zipCode, selectedClimate]);
 
   return (
     <LeftGrow>
