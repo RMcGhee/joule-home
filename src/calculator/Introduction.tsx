@@ -12,7 +12,7 @@ const Introduction: React.FC = () => {
         be affected by an upgrade.
         <br/>
         <Grid container spacing={2}>
-            <Grid item sm={6} textAlign='center'>
+            <Grid item xs={12} sm={6} textAlign='center'>
                 <Paper>
                     <Typography variant="h6">Required</Typography>
                     <Divider />
@@ -25,7 +25,7 @@ const Introduction: React.FC = () => {
                      ))}
                 </Paper>
             </Grid>
-            <Grid item sm={6} textAlign='center'>
+            <Grid item xs={12} sm={6} textAlign='center'>
                 <Paper>
                     <Typography variant="h6">Optional</Typography>
                     <Divider />

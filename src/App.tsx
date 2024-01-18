@@ -67,14 +67,16 @@ function App() {
         maxWidth: '400px',
       }}>
         {renderStep()}
-        
-        <Box sx={{ display: 'flex', padding: 2 }}>
+
+        <Box sx={{ position: 'relative', padding: 2, marginBottom: '30px' }}>
           <Button
             onClick={() => handleNextStep(-1)}
             style={{
               width: currentStep != 0 ? '50%' : '0%',
               opacity: currentStep != 0 ? 1 : 0,
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              position: 'absolute',
+              left: 0,
             }}
           >
             Previous
@@ -84,6 +86,9 @@ function App() {
             style={{
               width: currentStep != 0 ? '50%' : '100%',
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              flexGrow: currentStep === 0 ? 1 : 0,
+              position: 'absolute',
+              right: 0,
             }}  
           >
             Next
