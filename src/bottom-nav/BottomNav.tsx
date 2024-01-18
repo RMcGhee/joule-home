@@ -33,8 +33,8 @@ const BottomNav: React.FC = () => {
           <h2 style={{ cursor: 'pointer' }}>r.mcghee</h2>
         </Tooltip>
         <Divider orientation='vertical'/>
-        <Link href={user_home_url + "synbio.html"}>Synthetic Biology</Link><br />
-        <Link href={user_home_url + "photography.html"}>Photography</Link><br />
+        <Link href={user_home_url + "synbio.html"}>synthetic biology</Link><br />
+        <Link href={user_home_url + "photography.html"}>photography</Link><br />
         <Link href="/">joule-home</Link><br />
       </Stack>
     </LeftGrow>
