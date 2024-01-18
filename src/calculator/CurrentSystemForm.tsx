@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, InputAdornment } from '@mui/material';
+import { Box, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
@@ -45,7 +45,6 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           inputType='decimal'
           disabled={isACFilled}
           setter={(e) => setCurrentHeatPumpSeer(e.target.value)}
-          // onChange={(e) => setCurrentHeatPumpSeer(e.target.value)} 
         />
         <ValidatedField 
           label="Current Heat Pump HSPF"
