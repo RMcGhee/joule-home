@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Container, ThemeProvider } from '@mui/material';
-
-import './App.css';
+import { useEffect, useState } from 'react';
+import { Button, Container, ThemeProvider } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 import theme from './base-theme';
+
+import './App.css';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -12,15 +12,44 @@ import '@fontsource/roboto/700.css';
 import { Box } from '@mui/system';
 import BottomNav from './bottom-nav/BottomNav';
 import { LeftGrow } from './common/Basic';
-import Calculator from './calculator/Calculator';
+import CurrentSystemForm from './calculator/CurrentSystemForm';
+import Introduction from './calculator/Introduction';
 
 const user_home_url = 'https://rmcghee.github.io/'
 
 function App() {
-  const [animate, setAnimate] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState({});
 
-  const toggleAnimation = () => {
-    setAnimate(prev => !prev); // Toggle the state
+  useEffect(() => {
+    // Load cached data from localStorage
+    const savedData = localStorage.getItem('formData');
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+    }
+  }, []);
+
+  const handleNextStep = (stepChange = 1) => {
+    setCurrentStep(currentStep + stepChange);
+    localStorage.setItem('formData', JSON.stringify(formData));
+  };
+  
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return <CurrentSystemForm formData={formData} setFormData={setFormData} />;
+      // case 2:
+      //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
+      // case 3:
+      //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
+      // case 4:
+      //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
+      // case 4:
+      //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
+      default:
+        return <Introduction />;
+    }
   };
   
   return (
@@ -34,10 +63,27 @@ function App() {
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'top',
+        justifyContent: 'space-between',
         maxWidth: '400px',
       }}>
-        <Calculator/>
+        {renderStep()}
+        <Box sx={{ display: 'flex', padding: 2 }}>
+          <Button
+            onClick={() => handleNextStep(-1)}
+            style={{
+              width: currentStep != 0 ? '50%' : '0%',
+              opacity: currentStep != 0 ? 1 : 0,
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+            }}
+            >Previous</Button>
+          <Button
+            onClick={() => handleNextStep()}
+            style={{
+              width: currentStep != 0 ? '50%' : '100%',
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+            }}  
+          >Next</Button>
+        </Box>
       </Box>
       <BottomNav/>
     </Container>

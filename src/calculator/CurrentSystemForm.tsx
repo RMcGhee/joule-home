@@ -5,7 +5,15 @@ import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
 import { ZipDist } from '../entities/ZipDist';
 
-const Calculator = () => {
+type CurrentSystemFormProps = {
+  formData: object;
+  setFormData: (data: object) => void;
+};
+
+const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
+  formData,
+  setFormData,
+}) => {
   const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState('');
   const [currentHeatPumpHspf, setCurrentHeatPumpHspf] = useState('');
   const [currentACSeer, setCurrentACSeer] = useState('');
@@ -13,11 +21,6 @@ const Calculator = () => {
   const [zipCode, setZipCode] = useState('');
   const [zipDistData, setZipDistData] = useState({});
   const [selectedClimate, setSelectedClimate] = useState('');
-
-  const handleCalculate = () => {
-    // Logic for calculation goes here
-    console.log("Calculating with values:", currentHeatPumpSeer, currentACSeer, currentFurnaceEfficiency, zipCode);
-  };
 
   const isHeatPumpFilled = (currentHeatPumpSeer.trim() !== '' || currentHeatPumpHspf.trim() !== '');
   const isACFilled = currentACSeer.trim() !== '';
@@ -100,10 +103,9 @@ const Calculator = () => {
           setSelectedClimate={setSelectedClimate}
         />
         </div>
-        <Button onClick={handleCalculate}>Calculate</Button>
       </Box>
     </LeftGrow>
   );
 };
 
-export default Calculator;
+export default CurrentSystemForm;
