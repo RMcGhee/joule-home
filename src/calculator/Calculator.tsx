@@ -19,10 +19,6 @@ const Calculator = () => {
     console.log("Calculating with values:", currentHeatPumpSeer, currentACSeer, currentFurnaceEfficiency, zipCode);
   };
 
-  const textFieldStyle = {
-    width: '250px',
-  };
-
   const isHeatPumpFilled = (currentHeatPumpSeer.trim() !== '' || currentHeatPumpHspf.trim() !== '');
   const isACFilled = currentACSeer.trim() !== '';
   const haveZipDistData = Object.keys(zipDistData).length !== 0;
@@ -35,7 +31,6 @@ const Calculator = () => {
           value={currentHeatPumpSeer}
           inputMode='numeric'
           inputType='decimal'
-          style={textFieldStyle}
           disabled={isACFilled}
           setter={(e) => setCurrentHeatPumpSeer(e.target.value)}
           // onChange={(e) => setCurrentHeatPumpSeer(e.target.value)} 
@@ -45,7 +40,6 @@ const Calculator = () => {
           value={currentHeatPumpHspf}
           inputMode='numeric'
           inputType='decimal'
-          style={textFieldStyle}
           disabled={isACFilled}
           setter={(e) => setCurrentHeatPumpHspf(e.target.value)} 
         />
@@ -54,7 +48,6 @@ const Calculator = () => {
           value={currentACSeer}
           inputMode='numeric'
           inputType='decimal'
-          style={textFieldStyle}
           disabled={isHeatPumpFilled}
           setter={(e) => setCurrentACSeer(e.target.value)} 
         />
@@ -63,7 +56,6 @@ const Calculator = () => {
           value={currentFurnaceEfficiency} 
           inputMode='numeric'
           inputType='decimal'
-          style={textFieldStyle}
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
           setter={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
         />
@@ -75,8 +67,7 @@ const Calculator = () => {
             inputMode='numeric'
             inputType='int'
             style={{
-              ...textFieldStyle,
-              width: haveZipDistData ? '125px' : '250px',
+              width: haveZipDistData ? '50%' : '100%',
               marginRight: '0',
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
             }}
@@ -93,8 +84,7 @@ const Calculator = () => {
           label="Closest Climate"
           hidden={!haveZipDistData}
           style={{
-            ...textFieldStyle,
-            width: haveZipDistData ? '125px' : '0px',
+            width: haveZipDistData ? '50%' : '0%',
             marginLeft: '0',
             opacity: haveZipDistData ? 1 : 0,
             transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
@@ -110,7 +100,7 @@ const Calculator = () => {
           setSelectedClimate={setSelectedClimate}
         />
         </div>
-        <Button onClick={handleCalculate} style={textFieldStyle}>Calculate</Button>
+        <Button onClick={handleCalculate}>Calculate</Button>
       </Box>
     </LeftGrow>
   );
