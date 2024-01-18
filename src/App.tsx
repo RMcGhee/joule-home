@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Link, Paper, Container, ThemeProvider, Divider, Button } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import { useState } from 'react';
+import { Container, ThemeProvider } from '@mui/material';
 
 import './App.css';
 import { CssBaseline } from '@mui/material';
@@ -36,6 +35,7 @@ function App() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'top',
+        maxWidth: '400px',
       }}>
         <Calculator/>
       </Box>
