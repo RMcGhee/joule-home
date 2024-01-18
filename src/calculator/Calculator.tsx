@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Tooltip, InputAdornment } from '@mui/material';
+import { Box, Button, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
