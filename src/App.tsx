@@ -67,6 +67,7 @@ function App() {
         maxWidth: '400px',
       }}>
         {renderStep()}
+        
         <Box sx={{ display: 'flex', padding: 2 }}>
           <Button
             onClick={() => handleNextStep(-1)}
@@ -75,14 +76,18 @@ function App() {
               opacity: currentStep != 0 ? 1 : 0,
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
             }}
-            >Previous</Button>
+          >
+            Previous
+          </Button>
           <Button
             onClick={() => handleNextStep()}
             style={{
               width: currentStep != 0 ? '50%' : '100%',
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
             }}  
-          >Next</Button>
+          >
+            Next
+          </Button>
         </Box>
       </Box>
       <BottomNav/>
