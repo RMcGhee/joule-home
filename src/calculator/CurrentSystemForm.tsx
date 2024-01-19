@@ -38,6 +38,24 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
     });
   }, [currentACSeer, currentFurnaceEfficiency, currentHeatPumpHspf, currentHeatPumpSeer, zipCode, selectedClimate, zipDistData]);
 
+  const helpText = (
+    <div>
+      <h3>Current Heat Pump Seer/HSPF</h3>
+      <p>You should be able to find this and HSPF by searching for the model of your heat pump, but it's usually between 13 and 20 SEER, and 8 and 10 HSPF.
+        These values represent how efficient a heat pump is in cooling and heating mode, and higher numbers are better.
+      </p>
+      <hr/>
+      <h3>Current AC Seer</h3>
+      <p>See above, but AC only run in cooling mode, so they only have a SEER.</p>
+      <hr/>
+      <h3>Current Furnace Efficiency</h3>
+      <p>Use this if you have any kind of burning heating device. Find by searching the model of your furnace, this value is usually between 80% and 95%, although older furnaces or boilers can be lower. Higher is better.</p>
+      <hr/>
+      <h3>Zip code/Closest Climate</h3>
+      <p>Type in any zip code near you. After entering your zip code, select the closest locale to you in the Closest Climate box.</p>
+    </div>
+  );
+
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
@@ -119,7 +137,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%'}}
           onClick={() => setShowHelpPopover(!showHelpPopover)}
         ><QuestionMark/></IconButton>
-        <HelpPopover helpText={'...and another thing.'} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
+        <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
       </Box>
     </LeftGrow>
   );

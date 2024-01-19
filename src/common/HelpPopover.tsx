@@ -3,7 +3,7 @@ import { LeftGrow } from "./Basic";
 import theme from "../base-theme";
 
 export type HelpPopoverProps = {
-    helpText: string;
+    helpText: JSX.Element;
     isOpen: boolean;
     onClose: () => void;
 };
@@ -15,15 +15,16 @@ export const HelpPopover: React.FC<HelpPopoverProps> = ({
   }) => {
     const popoverSx: SxProps = {
       position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
+      top: '24%',
+      left: '24%',
+      transform: 'translate(-24%, -24%)',
       backgroundColor: 'background.paper',
       border: `2px solid ${theme.palette.secondary.main}`,
       boxShadow: 24,
       p: 2,
       borderRadius: '7px',
       maxWidth: '400px',
+      maxHeight: '90vh',
       overflow: 'auto',
     };
 
@@ -35,10 +36,7 @@ export const HelpPopover: React.FC<HelpPopoverProps> = ({
         aria-describedby="modal-modal-description"
       >
         <Box padding={2} sx={popoverSx}>
-          Hellow my darling.
           {helpText}
-          <br/>
-          asdfkjkasdfkjalsdkf aklsdjf alsdkfj asldfkj asdlfkj asdlkfj asdlfkj asdlkfj asdlkfj sdfkj sdkfj sdkfj sdkfj sdkfj sdkfj 
         </Box>
       </Modal>
     );
