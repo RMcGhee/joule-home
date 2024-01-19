@@ -11,6 +11,7 @@ const themeOptions: ThemeOptions = {
         },
         background: {
             default: '#000000', // Set the default background color to black
+            paper: '#222222',
         },
     },
 };

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, InputAdornment } from '@mui/material';
+import { Box, IconButton, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
 import { ZipDist } from '../entities/ZipDist';
 import { FormData } from '../entities/FormData';
+import { QuestionMark } from '@mui/icons-material';
+import { HelpPopover } from '../common/HelpPopover';
 
 type CurrentSystemFormProps = {
   formData: FormData;
@@ -22,6 +24,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
   const [zipCode, setZipCode] = useState(formData.zipCode || '');
   const [zipDistData, setZipDistData] = useState(formData.zipDistData || {} as ZipDist);
   const [selectedClimate, setSelectedClimate] = useState(formData.selectedClimate || '');
+  const [showHelpPopover, setShowHelpPopover] = useState(false);
 
   const isHeatPumpFilled = (currentHeatPumpSeer.trim() !== '' || currentHeatPumpHspf.trim() !== '');
   const isACFilled = currentACSeer.trim() !== '';
@@ -111,6 +114,12 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           setSelectedClimate={setSelectedClimate}
         />
         </div>
+        <IconButton
+          color='primary'
+          sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%'}}
+          onClick={() => setShowHelpPopover(!showHelpPopover)}
+        ><QuestionMark/></IconButton>
+        <HelpPopover helpText={'...and another thing.'} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
       </Box>
     </LeftGrow>
   );
