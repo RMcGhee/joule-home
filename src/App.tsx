@@ -17,8 +17,6 @@ import Introduction from './calculator/Introduction';
 import { FormData } from './entities/FormData';
 import { isEmpty } from './common/Util';
 
-const user_home_url = 'https://rmcghee.github.io/'
-
 function App() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({} as FormData);
