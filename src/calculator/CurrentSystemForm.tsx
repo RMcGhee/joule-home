@@ -31,9 +31,9 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
     setFormData({
       ...formData, 'currentACSeer': currentACSeer, 'currentFurnaceEfficiency': currentFurnaceEfficiency,
       'currentHeatPumpHspf': currentHeatPumpHspf, 'currentHeatPumpSeer': currentHeatPumpSeer,
-      'zipCode': zipCode, 'selectedClimate': selectedClimate,
+      'zipCode': zipCode, 'selectedClimate': selectedClimate, 'zipDistData': zipDistData,
     });
-  }, [currentACSeer, currentFurnaceEfficiency, currentHeatPumpHspf, currentHeatPumpSeer, zipCode, selectedClimate]);
+  }, [currentACSeer, currentFurnaceEfficiency, currentHeatPumpHspf, currentHeatPumpSeer, zipCode, selectedClimate, zipDistData]);
 
   return (
     <LeftGrow>

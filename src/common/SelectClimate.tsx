@@ -9,9 +9,21 @@ type SelectClimateProps = TextFieldProps & {
   setSelectedClimate: (data: string) => void;
 };
 
-type ClimateMenuItems = {
+type ClimateMenuItem = {
   itemKey: string | number;
   value: string | number;
+};
+
+const generateMenuItems = (zipData: ZipDist): ClimateMenuItem[] => {
+  if (!isEmpty(zipData)) {
+    return Array.from({ length: 5 }, (_, i) => {
+      const cityKey = `near_city_${i + 1}` as keyof ZipDist;
+      const zipKey = `near_zip_${i + 1}` as keyof ZipDist;
+      return {itemKey: zipData[cityKey], value: zipData[zipKey]};
+    });
+  } else {
+    return [{itemKey: 'placeholder', value: ''}];
+  }
 };
 
 export const SelectClimate: React.FC<SelectClimateProps> = ({
@@ -20,20 +32,12 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
   setSelectedClimate,
   ...textFieldProps
 }) => {
-  const [menuItems, setMenuItems] = useState<ClimateMenuItems[]>([]);
+  const [menuItems, setMenuItems] = useState<ClimateMenuItem[]>(generateMenuItems(zipData));
 
   useEffect(() => {
-    if (!isEmpty(zipData)) {
-      setMenuItems(Array.from({ length: 5 }, (_, i) => {
-        const cityKey = `near_city_${i + 1}` as keyof ZipDist;
-        const zipKey = `near_zip_${i + 1}` as keyof ZipDist;
-        return {itemKey: zipData[cityKey], value: zipData[zipKey]};
-      }));
-      setSelectedClimate(zipData['near_zip_1']);
-    } else {
-      setMenuItems( [{itemKey: 'placeholder', value: ''}] );
-      setSelectedClimate('');
-    }
+    let menuItems = generateMenuItems(zipData);
+    setMenuItems(menuItems);
+    setSelectedClimate(menuItems[0].value as string);
   }, [zipData]);
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

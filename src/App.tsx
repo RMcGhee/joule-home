@@ -15,6 +15,7 @@ import { LeftGrow } from './common/Basic';
 import CurrentSystemForm from './calculator/CurrentSystemForm';
 import Introduction from './calculator/Introduction';
 import { FormData } from './entities/FormData';
+import { isEmpty } from './common/Util';
 
 const user_home_url = 'https://rmcghee.github.io/'
 
@@ -30,9 +31,15 @@ function App() {
     }
   }, []);
 
+  // Save form data whenever it's updated.
+  useEffect(() => {
+    if (!isEmpty(formData)){
+      localStorage.setItem('formData', JSON.stringify(formData));
+    }
+  }, [formData]);
+
   const handleNextStep = (stepChange = 1) => {
     setCurrentStep(currentStep + stepChange);
-    localStorage.setItem('formData', JSON.stringify(formData));
   };
 
   const renderStep = () => {
