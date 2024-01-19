@@ -29,12 +29,18 @@ function App() {
     }
   }, []);
 
-  // Save form data whenever it's updated.
+  // Save form data 3 seconds after it's updated.
   useEffect(() => {
-    if (!isEmpty(formData)){
-      localStorage.setItem('formData', JSON.stringify(formData));
+    if (!isEmpty(formData)) {
+      const timer = setTimeout(() => {
+        localStorage.setItem('formData', JSON.stringify(formData));
+      }, 3000);
+  
+      // Return clearTimeout as the cleanup so that it clears if unmounted or called again.
+      return () => clearTimeout(timer);
     }
   }, [formData]);
+  
 
   const handleNextStep = (stepChange = 1) => {
     setCurrentStep(currentStep + stepChange);
