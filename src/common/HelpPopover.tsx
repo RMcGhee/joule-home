@@ -1,5 +1,4 @@
 import { Box, Modal, SxProps } from "@mui/material";
-import { LeftGrow } from "./Basic";
 import theme from "../base-theme";
 
 export type HelpPopoverProps = {

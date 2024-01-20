@@ -83,8 +83,8 @@ function App() {
           <Button
             onClick={() => handleNextStep(-1)}
             style={{
-              width: currentStep != 0 ? '50%' : '0%',
-              opacity: currentStep != 0 ? 1 : 0,
+              width: currentStep !== 0 ? '50%' : '0%',
+              opacity: currentStep !== 0 ? 1 : 0,
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               position: 'absolute',
               left: 0,
@@ -95,7 +95,7 @@ function App() {
           <Button
             onClick={() => handleNextStep()}
             style={{
-              width: currentStep != 0 ? '50%' : '100%',
+              width: currentStep !== 0 ? '50%' : '100%',
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               flexGrow: currentStep === 0 ? 1 : 0,
               position: 'absolute',
