@@ -92,12 +92,12 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
  */
 export const maybeGoNextField: (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => void = 
   (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => {
-  if (e.key === 'Enter' && currentIndex + 1 >= inputIds.length) {
-    document.getElementById(inputIds[currentIndex])?.blur();
-  } else {
-    let elem = document.getElementById(inputIds[currentIndex + 1]);
-    if (elem) {
-      if (e.key === 'Enter') {
+  if (e.key === 'Enter') {
+    if (currentIndex + 1 >= inputIds.length) {
+      document.getElementById(inputIds[currentIndex])?.blur();
+    } else {
+      let elem = document.getElementById(inputIds[currentIndex + 1]);
+      if (elem) {
         if (elem.getAttribute('disabled') !== null) {
           maybeGoNextField(currentIndex + 1, e, inputIds);
         } else {
