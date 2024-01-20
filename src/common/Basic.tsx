@@ -92,7 +92,7 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
  */
 export const maybeGoNextField: (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => void = 
   (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => {
-  if (currentIndex + 1 >= inputIds.length) {
+  if (e.key === 'Enter' && currentIndex + 1 >= inputIds.length) {
     document.getElementById(inputIds[currentIndex])?.blur();
   } else {
     let elem = document.getElementById(inputIds[currentIndex + 1]);
