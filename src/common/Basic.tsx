@@ -78,3 +78,32 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
     </Tooltip>
   );
 };
+
+/**
+ * Use to get enter goes to next field in input behavior. Pass to onKeyUp for all elements
+ * in the form, and give each element a unique id. Pass in these ids as inputIds, in the
+ * order that they should be in for next bevahior. currentIndex should represent the index
+ * of the current input id in the array, i.e.: ['a', 'b'] input 'a' has index 0, 'b', 1.
+ * The last element defocuses on enter.
+ * @param currentIndex number
+ * @param e React.KeyboardEvent
+ * @param inputIds string[]
+ */
+export const maybeGoNextField: (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => void = 
+  (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => {
+  if (currentIndex + 1 >= inputIds.length) {
+    document.getElementById(inputIds[currentIndex])?.blur();
+  } else {
+    let elem = document.getElementById(inputIds[currentIndex + 1]);
+    if (elem) {
+      if (e.key === 'Enter') {
+        if (elem.getAttribute('disabled') !== null) {
+          maybeGoNextField(currentIndex + 1, e, inputIds);
+        } else {
+          e.preventDefault();
+          elem.focus();
+        }
+      }
+    }
+  }
+};

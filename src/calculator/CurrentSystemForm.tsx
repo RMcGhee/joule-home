@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, IconButton, InputAdornment } from '@mui/material';
-import { LeftGrow, ValidatedField } from '../common/Basic';
+import { LeftGrow, ValidatedField, maybeGoNextField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
 import { ZipDist } from '../entities/ZipDist';
@@ -38,6 +38,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
     });
   }, [currentACSeer, currentFurnaceEfficiency, currentHeatPumpHspf, currentHeatPumpSeer, zipCode, selectedClimate, zipDistData]);
 
+  const inputIds = ['heatPumpSeer', 'heatPumpHspf', 'acSeer', 'furnaceEfficiency', 'zipCode'];
+
   const helpText = (
     <div>
       <h3>Current Heat Pump Seer/HSPF</h3>
@@ -62,39 +64,48 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
         <ValidatedField 
           label="Current Heat Pump SEER" 
           value={currentHeatPumpSeer}
+          id={'heatPumpSeer'}
           inputMode='numeric'
           inputType='decimal'
           disabled={isACFilled}
           setter={(e) => setCurrentHeatPumpSeer(e.target.value)}
+          onKeyUp={(e) => maybeGoNextField(0, e, inputIds)}
         />
         <ValidatedField 
           label="Current Heat Pump HSPF"
           value={currentHeatPumpHspf}
+          id={'heatPumpHspf'}
           inputMode='numeric'
           inputType='decimal'
           disabled={isACFilled}
           setter={(e) => setCurrentHeatPumpHspf(e.target.value)} 
+          onKeyUp={(e) => maybeGoNextField(1, e, inputIds)}
         />
         <ValidatedField 
           label="Current AC SEER" 
           value={currentACSeer}
+          id={'acSeer'}
           inputMode='numeric'
           inputType='decimal'
           disabled={isHeatPumpFilled}
           setter={(e) => setCurrentACSeer(e.target.value)} 
+          onKeyUp={(e) => maybeGoNextField(2, e, inputIds)}
         />
         <ValidatedField 
           label="Current Furnace Efficiency" 
           value={currentFurnaceEfficiency} 
+          id={'furnaceEfficiency'}
           inputMode='numeric'
           inputType='decimal'
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
           setter={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
+          onKeyUp={(e) => maybeGoNextField(3, e, inputIds)}
         />
         <div style={{ display: 'flex' }}>
           <ZipField
             label="Zip Code"
             value={zipCode}
+            id={'zipCode'}
             len={5}
             inputMode='numeric'
             inputType='int'
@@ -110,6 +121,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
               }
             }}
             setter={(e) => setZipCode(e.target.value)}
+            onKeyUp={(e) => maybeGoNextField(4, e, inputIds)}
             onZipDataReceived={setZipDistData}
           />
         <SelectClimate
