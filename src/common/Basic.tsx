@@ -80,11 +80,12 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
 };
 
 /**
- * Use to get enter goes to next field in input behavior. Pass to onKeyUp for all elements
+ * Use to get enter goes to next field in input behavior. Use in onKeyUp for all elements
  * in the form, and give each element a unique id. Pass in these ids as inputIds, in the
  * order that they should be in for next bevahior. currentIndex should represent the index
  * of the current input id in the array, i.e.: ['a', 'b'] input 'a' has index 0, 'b', 1.
  * The last element defocuses on enter.
+ * EX: onKeyUp={(e) => maybeGoNextField(1, e, inputIds)}
  * @param currentIndex number
  * @param e React.KeyboardEvent
  * @param inputIds string[]

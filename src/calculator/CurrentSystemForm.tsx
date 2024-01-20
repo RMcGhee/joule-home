@@ -36,6 +36,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
       'currentHeatPumpHspf': currentHeatPumpHspf, 'currentHeatPumpSeer': currentHeatPumpSeer,
       'zipCode': zipCode, 'selectedClimate': selectedClimate, 'zipDistData': zipDistData,
     });
+    // intentionally not dependencies; formData and setFormData
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentACSeer, currentFurnaceEfficiency, currentHeatPumpHspf, currentHeatPumpSeer, zipCode, selectedClimate, zipDistData]);
 
   const inputIds = ['heatPumpSeer', 'heatPumpHspf', 'acSeer', 'furnaceEfficiency', 'zipCode'];
@@ -65,8 +67,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           label="Current Heat Pump SEER" 
           value={currentHeatPumpSeer}
           id={'heatPumpSeer'}
-          inputMode='numeric'
           inputType='decimal'
+          inputProps={{ inputMode: 'decimal' }}
           disabled={isACFilled}
           setter={(e) => setCurrentHeatPumpSeer(e.target.value)}
           onKeyUp={(e) => maybeGoNextField(0, e, inputIds)}
@@ -75,8 +77,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           label="Current Heat Pump HSPF"
           value={currentHeatPumpHspf}
           id={'heatPumpHspf'}
-          inputMode='numeric'
           inputType='decimal'
+          inputProps={{ inputMode: 'decimal' }}
           disabled={isACFilled}
           setter={(e) => setCurrentHeatPumpHspf(e.target.value)} 
           onKeyUp={(e) => maybeGoNextField(1, e, inputIds)}
@@ -85,8 +87,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           label="Current AC SEER" 
           value={currentACSeer}
           id={'acSeer'}
-          inputMode='numeric'
           inputType='decimal'
+          inputProps={{ inputMode: 'decimal' }}
           disabled={isHeatPumpFilled}
           setter={(e) => setCurrentACSeer(e.target.value)} 
           onKeyUp={(e) => maybeGoNextField(2, e, inputIds)}
@@ -95,8 +97,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           label="Current Furnace Efficiency" 
           value={currentFurnaceEfficiency} 
           id={'furnaceEfficiency'}
-          inputMode='numeric'
           inputType='decimal'
+          inputProps={{ inputMode: 'decimal' }}
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
           setter={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
           onKeyUp={(e) => maybeGoNextField(3, e, inputIds)}
@@ -107,8 +109,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
             value={zipCode}
             id={'zipCode'}
             len={5}
-            inputMode='numeric'
             inputType='int'
+            inputProps={{ inputMode: 'numeric' }}
             style={{
               width: haveZipDistData ? '50%' : '100%',
               marginRight: '0',

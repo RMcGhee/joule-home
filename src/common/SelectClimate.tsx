@@ -38,6 +38,8 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
     let menuItems = generateMenuItems(zipData);
     setMenuItems(menuItems);
     setSelectedClimate(menuItems[0].value as string);
+    // intentionally not dependencies; setSelectedClimate
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zipData]);
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
