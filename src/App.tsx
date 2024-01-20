@@ -16,6 +16,7 @@ import CurrentSystemForm from './calculator/CurrentSystemForm';
 import Introduction from './calculator/Introduction';
 import { FormData } from './entities/FormData';
 import { isEmpty } from './common/Util';
+import EnergyUsageForm from './calculator/EnergyUsageForm';
 
 function App() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -50,8 +51,8 @@ function App() {
     switch (currentStep) {
       case 1:
         return <CurrentSystemForm formData={formData} setFormData={setFormData} />;
-      // case 2:
-      //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
+      case 2:
+        return <EnergyUsageForm formData={formData} setFormData={setFormData} />;
       // case 3:
       //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
       // case 4:
