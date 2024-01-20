@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ValidatedField, ValidatedFieldProps } from './Basic';
 import { ZipDist } from '../entities/ZipDist';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, InputAdornment } from '@mui/material';
 
 type ZipFieldProps = ValidatedFieldProps & {
   onZipDataReceived: (data: any) => void; // Callback to update state in parent
@@ -55,7 +55,9 @@ export const ZipField: React.FC<ZipFieldProps> = ({
     <ValidatedField
         {...validatedFieldProps}
         setter={handleZipChange}
-        InputProps={{ endAdornment: zipDataLoading ? <CircularProgress/> : null }}
+        InputProps={{ 
+          endAdornment: zipDataLoading ? <InputAdornment position='end'><CircularProgress/></InputAdornment> : null 
+        }}
     />
   );
 };
