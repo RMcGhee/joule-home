@@ -10,7 +10,7 @@ type EnergyUsageFormProps = {
   setFormData: (data: FormData) => void;
 };
 
-type EnergyFormData = {
+export type EnergyFormData = {
   summerElectricBill: string;
   summerGasBill: string;
   winterElectricBill: string;

@@ -14,13 +14,13 @@ import BottomNav from './bottom-nav/BottomNav';
 import { LeftGrow } from './common/Basic';
 import CurrentSystemForm from './calculator/CurrentSystemForm';
 import Introduction from './calculator/Introduction';
-import { FormData } from './entities/FormData';
+import { FormData, defaultFormData } from './entities/FormData';
 import { isEmpty } from './common/Util';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
 
 function App() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({} as FormData);
+  const [formData, setFormData] = useState({...defaultFormData} as FormData);
 
   useEffect(() => {
     // Load cached data from localStorage

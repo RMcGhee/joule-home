@@ -4,7 +4,7 @@ import { ZipDist } from '../entities/ZipDist';
 import { CircularProgress, InputAdornment } from '@mui/material';
 
 type ZipFieldProps = ValidatedFieldProps & {
-  onZipDataReceived: (data: any) => void; // Callback to update state in parent
+  onZipDataReceived: (data: ZipDist, zipCode: string) => void; // Callback to update state in parent
 };
   
 export const ZipField: React.FC<ZipFieldProps> = ({
@@ -31,7 +31,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
       if (!response.ok) throw new Error('Network response was not ok');
       const responseData = await response.json();
       const data = responseData.data[0] as ZipDist;
-      onZipDataReceived(data === undefined ? {} : data);
+      onZipDataReceived(data === undefined ? {} as ZipDist : data, zipCode);
     }
   };
 
@@ -47,7 +47,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
     if (zipCode.length === 5) {
       fetchZipData(zipCode);
     } else {
-      onZipDataReceived({});
+      onZipDataReceived({} as ZipDist, zipCode);
     }
   };
   

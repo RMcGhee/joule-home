@@ -8,6 +8,16 @@ import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 
+export type CurrentSystemData = {
+  currentACSeer: string
+  currentFurnaceEfficiency: string
+  currentHeatPumpHspf: string
+  currentHeatPumpSeer: string
+  zipCode: string
+  selectedClimate: string
+  zipDistData: ZipDist
+};
+
 type CurrentSystemFormProps = {
   formData: FormData;
   setFormData: (data: FormData) => void;
@@ -17,28 +27,21 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
   formData,
   setFormData,
 }) => {
-  const [currentHeatPumpSeer, setCurrentHeatPumpSeer] = useState(formData.currentHeatPumpSeer || '');
-  const [currentHeatPumpHspf, setCurrentHeatPumpHspf] = useState(formData.currentHeatPumpHspf || '');
-  const [currentACSeer, setCurrentACSeer] = useState(formData.currentACSeer || '');
-  const [currentFurnaceEfficiency, setCurrentFurnaceEfficiency] = useState(formData.currentFurnaceEfficiency || '');
-  const [zipCode, setZipCode] = useState(formData.zipCode || '');
-  const [zipDistData, setZipDistData] = useState(formData.zipDistData || {} as ZipDist);
-  const [selectedClimate, setSelectedClimate] = useState(formData.selectedClimate || '');
+  const [systemData, setSystemData] = useState({...formData} as CurrentSystemData);
+
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
-  const isHeatPumpFilled = (currentHeatPumpSeer.trim() !== '' || currentHeatPumpHspf.trim() !== '');
-  const isACFilled = currentACSeer.trim() !== '';
-  const haveZipDistData = Object.keys(zipDistData).length !== 0;
+  const isHeatPumpFilled = (systemData.currentHeatPumpSeer.trim() !== '' || systemData.currentHeatPumpHspf.trim() !== '');
+  const isACFilled = systemData.currentACSeer.trim() !== '';
+  const haveZipDistData = Object.keys(systemData.zipDistData).length !== 0;
 
   useEffect(() => {
     setFormData({
-      ...formData, 'currentACSeer': currentACSeer, 'currentFurnaceEfficiency': currentFurnaceEfficiency,
-      'currentHeatPumpHspf': currentHeatPumpHspf, 'currentHeatPumpSeer': currentHeatPumpSeer,
-      'zipCode': zipCode, 'selectedClimate': selectedClimate, 'zipDistData': zipDistData,
+      ...formData, ...systemData,
     });
     // intentionally not dependencies; formData and setFormData
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentACSeer, currentFurnaceEfficiency, currentHeatPumpHspf, currentHeatPumpSeer, zipCode, selectedClimate, zipDistData]);
+  }, [systemData]);
 
   const inputIds = ['heatPumpSeer', 'heatPumpHspf', 'acSeer', 'furnaceEfficiency', 'zipCode'];
 
@@ -65,48 +68,48 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
         <ValidatedField 
           label="Current Heat Pump SEER" 
-          value={currentHeatPumpSeer}
+          value={systemData.currentHeatPumpSeer}
           id={'heatPumpSeer'}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
           disabled={isACFilled}
-          setter={(e) => setCurrentHeatPumpSeer(e.target.value)}
+          setter={(e) => setSystemData({...systemData, currentHeatPumpSeer: e.target.value})} 
           onKeyUp={(e) => maybeGoNextField(0, e, inputIds)}
         />
         <ValidatedField 
           label="Current Heat Pump HSPF"
-          value={currentHeatPumpHspf}
+          value={systemData.currentHeatPumpHspf}
           id={'heatPumpHspf'}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
           disabled={isACFilled}
-          setter={(e) => setCurrentHeatPumpHspf(e.target.value)} 
+          setter={(e) => setSystemData({...systemData, currentHeatPumpHspf: e.target.value})} 
           onKeyUp={(e) => maybeGoNextField(1, e, inputIds)}
         />
         <ValidatedField 
           label="Current AC SEER" 
-          value={currentACSeer}
+          value={systemData.currentACSeer}
           id={'acSeer'}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
           disabled={isHeatPumpFilled}
-          setter={(e) => setCurrentACSeer(e.target.value)} 
+          setter={(e) => setSystemData({...systemData, currentACSeer: e.target.value})} 
           onKeyUp={(e) => maybeGoNextField(2, e, inputIds)}
         />
         <ValidatedField 
           label="Current Furnace Efficiency" 
-          value={currentFurnaceEfficiency} 
+          value={systemData.currentFurnaceEfficiency} 
           id={'furnaceEfficiency'}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
-          setter={(e) => setCurrentFurnaceEfficiency(e.target.value)} 
+          setter={(e) => setSystemData({...systemData, currentFurnaceEfficiency: e.target.value})} 
           onKeyUp={(e) => maybeGoNextField(3, e, inputIds)}
         />
         <div style={{ display: 'flex' }}>
           <ZipField
             label="Zip Code"
-            value={zipCode}
+            value={systemData.zipCode}
             id={'zipCode'}
             len={5}
             inputType='int'
@@ -122,9 +125,9 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
                 borderBottomRightRadius: haveZipDistData ? '0' : '4px',
               }
             }}
-            setter={(e) => setZipCode(e.target.value)}
+            setter={(e) => setSystemData({...systemData, zipCode: e.target.value})} 
             onKeyUp={(e) => maybeGoNextField(4, e, inputIds)}
-            onZipDataReceived={setZipDistData}
+            onZipDataReceived={(d, zipCode) => setSystemData({...systemData, zipDistData: d, zipCode: zipCode})}
           />
         <SelectClimate
           label="Closest Climate"
@@ -141,9 +144,9 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
               borderBottomLeftRadius: '0',
             }
           }}
-          zipData={zipDistData as ZipDist}
-          selectedClimate={selectedClimate}
-          setSelectedClimate={setSelectedClimate}
+          zipData={systemData.zipDistData}
+          selectedClimate={systemData.selectedClimate}
+          setSelectedClimate={(e) => setSystemData({...systemData, selectedClimate: e})} 
         />
         </div>
         <IconButton
