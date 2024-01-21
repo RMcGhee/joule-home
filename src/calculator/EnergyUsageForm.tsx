@@ -22,18 +22,14 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   setFormData,
 }) => {
 
-  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>({
-    summerElectricBill: '', summerGasBill: '',
-    winterElectricBill: '', winterGasBill: '',
-  } as EnergyFormData);
+  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>({...formData} as EnergyFormData);
   
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
   useEffect(() => {
-    // setFormData({
-      // ...formData, 'currentHeatPumpHspf': currentHeatPumpHspf, 'currentHeatPumpSeer': currentHeatPumpSeer,
-    // });
-    console.log(energyFormData);
+    setFormData({
+      ...formData, ...energyFormData,
+    });
   }, [energyFormData]);
 
   const helpText = (
