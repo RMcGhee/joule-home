@@ -19,6 +19,7 @@ export type ValidatedFieldProps = TextFieldProps & {
   len?: number;
   inputType?: 'decimal' | 'text' | 'int';
   invalidMsg?: string;
+  formOrder?: number;
   /** 
    * setter is always called AFTER validation, regardless of whether validation fails
    * @param value Change event for the field  */
@@ -26,8 +27,11 @@ export type ValidatedFieldProps = TextFieldProps & {
 };
 
 /**
- * 
+ * @param len Length limit if any. Leave blank or 0 for unrestricted.
+ * @param inputType Restrict the input type to text, decimal, or int.
  * @param setter The setter for the state variable, always called AFTER validation, regarless of whether or not validation fails.
+ * @param formOrder If specified, the int order that this element falls in a form. i.e., if 0 and 1 specified, enter will focus
+ * 1 after 0, and then defocus 1 if enter is hit.
  * @returns 
  */
 export const ValidatedField: React.FC<ValidatedFieldProps> = ({
@@ -35,6 +39,7 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
   inputType = 'text',
   invalidMsg,
   setter,
+  formOrder,
   ...textFieldProps
 }) => {
   const [error, setError] = useState(false);
@@ -70,7 +75,9 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
         {...textFieldProps}
         error={error}
         onChange={handleChange}
+        onKeyUp={formOrder !== undefined ? (e) => maybeGoNextField(e) : undefined}
         size={ textFieldProps.disabled ? 'small' : 'medium' }
+        inputProps={{ formorder: formOrder }}
         style={{
           ...fieldStyle,
         }}
@@ -86,22 +93,31 @@ export const ValidatedField: React.FC<ValidatedFieldProps> = ({
  * of the current input id in the array, i.e.: ['a', 'b'] input 'a' has index 0, 'b', 1.
  * The last element defocuses on enter.
  * EX: onKeyUp={(e) => maybeGoNextField(1, e, inputIds)}
- * @param currentIndex number
  * @param e React.KeyboardEvent
- * @param inputIds string[]
+ * @param disabledElement HTMLElement | null
  */
-export const maybeGoNextField: (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => void = 
-  (currentIndex: number, e: React.KeyboardEvent<HTMLDivElement>, inputIds: string[]) => {
+export const maybeGoNextField: (e: React.KeyboardEvent<HTMLDivElement>, disabledElement?: HTMLElement | null) => void = 
+  (e: React.KeyboardEvent<HTMLDivElement>, disabledElement: HTMLElement | null = null) => {
+  let targetElement: HTMLElement | null = disabledElement !== null ? disabledElement : e.target as HTMLElement;
   if (e.key === 'Enter') {
-    if (currentIndex + 1 >= inputIds.length) {
-      document.getElementById(inputIds[currentIndex])?.blur();
+    let currentIdx = targetElement?.getAttribute('formorder');
+    if (currentIdx === undefined || currentIdx === null) return;
+
+    const currentOrder = parseInt(currentIdx);
+    const allFormOrderElements = Array.from<HTMLElement>(document.querySelectorAll('[formOrder]'))
+      .filter((a) => a.getAttribute('formOrder') !== null)
+      .sort((a, b) => parseInt(a.getAttribute('formOrder') ?? '') - parseInt(b.getAttribute('formOrder') ?? ''));
+
+    const nextIndex = currentOrder + 1;
+    if (nextIndex >= allFormOrderElements.length) {
+      allFormOrderElements[currentOrder].blur();
     } else {
-      let elem = document.getElementById(inputIds[currentIndex + 1]);
+      let elem = allFormOrderElements[nextIndex];
       if (elem) {
         if (elem.getAttribute('disabled') !== null) {
-          maybeGoNextField(currentIndex + 1, e, inputIds);
+          maybeGoNextField(e, elem);
         } else {
-          e.preventDefault();
+          e?.preventDefault();
           elem.focus();
         }
       }

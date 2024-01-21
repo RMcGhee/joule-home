@@ -36,8 +36,6 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
     console.log(energyFormData);
   }, [energyFormData]);
 
-  const inputIds = ['summerElectricBill', 'summerGasBill'];
-
   const helpText = (
     <div>
       <h3>Current Heat Pump Seer/HSPF</h3>
@@ -55,20 +53,18 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
           <ValidatedField 
             label="Summer Electric Bill" 
             value={energyFormData.summerElectricBill}
-            id={'summerElectricBill'}
             inputType='decimal'
             inputProps={{ inputMode: 'decimal' }}
+            formOrder={0}
             setter={(e) => setEnergyFormData({...energyFormData, summerElectricBill: e.target.value})}
-            onKeyUp={(e) => maybeGoNextField(0, e, inputIds)}
           />
           <ValidatedField 
             label="Summer Gas Bill"
             value={energyFormData.summerGasBill}
-            id={'summerGasBill'}
             inputType='decimal'
             inputProps={{ inputMode: 'decimal' }}
+            formOrder={1}
             setter={(e) => setEnergyFormData({...energyFormData, summerGasBill: e.target.value})}
-            onKeyUp={(e) => maybeGoNextField(1, e, inputIds)}
           />
         </div>
         <IconButton
