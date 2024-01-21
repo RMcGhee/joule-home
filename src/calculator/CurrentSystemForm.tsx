@@ -3,20 +3,10 @@ import { Box, IconButton, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField, maybeGoNextField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
-import { ZipDist } from '../entities/ZipDist';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-
-export type CurrentSystemData = {
-  currentACSeer: string
-  currentFurnaceEfficiency: string
-  currentHeatPumpHspf: string
-  currentHeatPumpSeer: string
-  zipCode: string
-  selectedClimate: string
-  zipDistData: ZipDist
-};
+import { CurrentSystemData } from '../entities/CurrentSystemData';
 
 type CurrentSystemFormProps = {
   formData: FormData;

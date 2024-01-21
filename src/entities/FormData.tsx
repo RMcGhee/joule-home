@@ -1,5 +1,5 @@
-import { CurrentSystemData } from "../calculator/CurrentSystemForm";
 import { EnergyFormData } from "../calculator/EnergyUsageForm";
+import { CurrentSystemData } from "./CurrentSystemData";
 import { ZipDist } from "./ZipDist";
 
 export type FormData = CurrentSystemData & EnergyFormData & {};
