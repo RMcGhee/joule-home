@@ -18,4 +18,5 @@ export const defaultFormData: FormData = {
     winterGasBill: '',
     electricPrice: '',
     gasPrice: '',
+    gasUnits: 'ccf',
 };

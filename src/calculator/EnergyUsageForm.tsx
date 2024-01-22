@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton, InputAdornment } from '@mui/material';
+import { Box, IconButton, InputAdornment, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
@@ -28,13 +28,28 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
 
   const helpText = (
     <div>
-      <h3>Current Heat Pump Seer/HSPF</h3>
-      <p>You should be able to find this and HSPF by searching for the model of your heat pump, but it's usually between 13 and 20 SEER, and 8 and 10 HSPF.
-        These values represent how efficient a heat pump is in cooling and heating mode, and higher numbers are better.
+      <h3>Summer/winter elctric or gas bill</h3>
+      <p>These should be the average of the three hottest (summer) and coldest (winter) months. For example, to get winter gas bill,
+        average your gas bills for December, January, and Febuary (if these are the coldest months for your area). For summer,
+        you would average months June, July, and August. If you use a different energy source (propane, oil, kerosene, etc), then
+        use your cost for this for winter and summer gas bill. If you don't use a fossil fuel for heating, leave these blank.
       </p>
       <hr/>
+      <h3>Electric/gas price</h3>
+      <p>The average price that your utility charges per unit of energy delivered ($/kWh for electricity, $/Ccf/therms for gas).
+        If your utility charges rates on a time of use basis, simply use the average price (divide your total bill by your total usage).
+      </p>
+      <hr/>
+      <h3>Gas units; Ccf or kBTU</h3>
+      <p>The units that your gas utility measures delivery in. Ccf and kBTU are fairly close (1.038 therms/Ccf), so if you don't know,
+        it's fine to leave this as the default. therms and kBTU are the same.
+      </p>
     </div>
   );
+
+  const onChangeGasUnits = (event: React.MouseEvent<HTMLElement>, newUnits: string) => {
+    setEnergyFormData({...energyFormData, gasUnits: newUnits});
+  };
 
   return (
     <LeftGrow>
@@ -90,7 +105,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
             setter={(e) => setEnergyFormData({...energyFormData, summerElectricBill: e.target.value})}
           />
           <ValidatedField 
-            label="Gas Price/kBTU"
+            label={`Gas Price/${energyFormData.gasUnits}`}
             value={energyFormData.gasPrice}
             inputType='decimal'
             inputProps={{ inputMode: 'decimal' }}
@@ -99,6 +114,16 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
             setter={(e) => setEnergyFormData({...energyFormData, summerGasBill: e.target.value})}
           />
         </div>
+        <ToggleButtonGroup
+          color="primary"
+          value={energyFormData.gasUnits}
+          exclusive
+          onChange={onChangeGasUnits}
+          aria-label="Platform"
+        >
+          <ToggleButton value="ccf">Ccf</ToggleButton>
+          <ToggleButton value="therm">therms/kBTU</ToggleButton>
+        </ToggleButtonGroup>
         <IconButton
           color='primary'
           sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%'}}

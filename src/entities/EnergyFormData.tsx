@@ -5,4 +5,5 @@ export type EnergyFormData = {
     winterGasBill: string;
     electricPrice: string;
     gasPrice: string;
+    gasUnits: 'ccf' | 'therm' | string;
   };

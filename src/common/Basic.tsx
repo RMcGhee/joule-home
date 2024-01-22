@@ -17,7 +17,7 @@ interface LeftGrowProps {
 
 export type ValidatedFieldProps = TextFieldProps & {
   len?: number;
-  inputType?: 'decimal' | 'text' | 'int';
+  inputType?: 'decimal' | 'text' | 'int' | string;
   invalidMsg?: string;
   formOrder?: number;
   /** 
