@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton } from '@mui/material';
-import { LeftGrow, ValidatedField, maybeGoNextField } from '../common/Basic';
+import { Box, IconButton, InputAdornment } from '@mui/material';
+import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
+import { EnergyFormData } from '../entities/EnergyFormData';
 
 type EnergyUsageFormProps = {
   formData: FormData;
   setFormData: (data: FormData) => void;
-};
-
-export type EnergyFormData = {
-  summerElectricBill: string;
-  summerGasBill: string;
-  winterElectricBill: string;
-  winterGasBill: string;
 };
 
 const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
@@ -45,12 +39,13 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '1rem' }}>
           <ValidatedField 
             label="Summer Electric Bill" 
             value={energyFormData.summerElectricBill}
             inputType='decimal'
             inputProps={{ inputMode: 'decimal' }}
+            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
             formOrder={0}
             setter={(e) => setEnergyFormData({...energyFormData, summerElectricBill: e.target.value})}
           />
@@ -59,7 +54,48 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
             value={energyFormData.summerGasBill}
             inputType='decimal'
             inputProps={{ inputMode: 'decimal' }}
+            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
             formOrder={1}
+            setter={(e) => setEnergyFormData({...energyFormData, summerGasBill: e.target.value})}
+          />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '1rem' }}>
+          <ValidatedField 
+            label="Winter Electric Bill" 
+            value={energyFormData.winterElectricBill}
+            inputType='decimal'
+            inputProps={{ inputMode: 'decimal' }}
+            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+            formOrder={2}
+            setter={(e) => setEnergyFormData({...energyFormData, summerElectricBill: e.target.value})}
+          />
+          <ValidatedField 
+            label="Winter Gas Bill"
+            value={energyFormData.winterGasBill}
+            inputType='decimal'
+            inputProps={{ inputMode: 'decimal' }}
+            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+            formOrder={3}
+            setter={(e) => setEnergyFormData({...energyFormData, summerGasBill: e.target.value})}
+          />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '1rem' }}>
+          <ValidatedField 
+            label="Electric Price/kWh" 
+            value={energyFormData.electricPrice}
+            inputType='decimal'
+            inputProps={{ inputMode: 'decimal' }}
+            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+            formOrder={4}
+            setter={(e) => setEnergyFormData({...energyFormData, summerElectricBill: e.target.value})}
+          />
+          <ValidatedField 
+            label="Gas Price/kBTU"
+            value={energyFormData.gasPrice}
+            inputType='decimal'
+            inputProps={{ inputMode: 'decimal' }}
+            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+            formOrder={5}
             setter={(e) => setEnergyFormData({...energyFormData, summerGasBill: e.target.value})}
           />
         </div>
