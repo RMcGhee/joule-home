@@ -12,6 +12,7 @@ export const defaultFormData: FormData = {
     zipCode: '',
     selectedClimate: '',
     zipDistData: {} as ZipDist,
+    energyResolution: 'biannual',
     summerElectricBill: '',
     summerGasBill: '',
     winterElectricBill: '',
