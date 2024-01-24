@@ -1,5 +1,5 @@
 import { CurrentSystemData } from "./CurrentSystemData";
-import { EnergyFormData } from "./EnergyFormData";
+import { EnergyFormData, MonthlyBill, defaultMonthlyBill, } from "./EnergyFormData";
 import { ZipDist } from "./ZipDist";
 
 export type FormData = CurrentSystemData & EnergyFormData & {};
@@ -17,6 +17,8 @@ export const defaultFormData: FormData = {
     summerGasBill: '',
     winterElectricBill: '',
     winterGasBill: '',
+    monthlyGasBill: defaultMonthlyBill,
+    monthlyElectricBill: defaultMonthlyBill,
     electricPrice: '',
     gasPrice: '',
     gasUnits: 'ccf',

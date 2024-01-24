@@ -4,7 +4,7 @@ import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData } from '../entities/EnergyFormData';
+import { EnergyFormData, MonthlyBill, } from '../entities/EnergyFormData';
 
 type EnergyUsageFormProps = {
   formData: FormData;
@@ -19,6 +19,8 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   const [energyFormData, setEnergyFormData] = useState<EnergyFormData>({...formData} as EnergyFormData);
   
   const [showHelpPopover, setShowHelpPopover] = useState(false);
+
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   useEffect(() => {
     setFormData({
@@ -99,26 +101,30 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
 
   const monthlyForm = (
     <Box sx={{justifyContent: 'space-between', flexDirection: 'column', gap: 2, marginTop: '5px', }}>
-      <div style={rowSx}>
-        <ValidatedField 
-          label="Jan Electric Bill" 
-          value={energyFormData.summerElectricBill}
-          inputType='decimal'
-          inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-          formOrder={0}
-          setter={(e) => setEnergyFormData({...energyFormData, summerElectricBill: e.target.value})}
-        />
-        <ValidatedField 
-          label="Jan Gas Bill"
-          value={energyFormData.summerGasBill}
-          inputType='decimal'
-          inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-          formOrder={1}
-          setter={(e) => setEnergyFormData({...energyFormData, summerGasBill: e.target.value})}
-        />
-      </div>
+      {months.map((month, i) => {
+        return (
+          <div style={rowSx} key={`${month}-row`}>
+            <ValidatedField 
+              label={`${month} Electric Bill`}
+              value={energyFormData.monthlyElectricBill[month.toLowerCase() as keyof MonthlyBill]}
+              inputType='decimal'
+              inputProps={{ inputMode: 'decimal' }}
+              InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+              formOrder={i + 6}
+              setter={(e) => setEnergyFormData({...energyFormData, monthlyElectricBill: {...energyFormData.monthlyElectricBill, [month.toLowerCase()]:  e.target.value}})}
+            />
+            <ValidatedField 
+              label={`${month} Gas Bill`}
+              value={energyFormData.monthlyGasBill[month.toLowerCase() as keyof MonthlyBill]}
+              inputType='decimal'
+              inputProps={{ inputMode: 'decimal' }}
+              InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+              formOrder={i + 18}
+              setter={(e) => setEnergyFormData({...energyFormData, monthlyGasBill: {...energyFormData.monthlyGasBill, [month.toLowerCase()]:  e.target.value}})}
+            />
+          </div>
+        );
+      })}
     </Box>
   );
 
