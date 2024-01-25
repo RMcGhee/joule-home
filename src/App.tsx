@@ -26,7 +26,8 @@ function App() {
     // Load cached data from localStorage
     const savedData = localStorage.getItem('formData');
     if (savedData) {
-      setFormData(JSON.parse(savedData));
+      let loadedData = {...defaultFormData, ...JSON.parse(savedData)}
+      setFormData(loadedData);
     }
   }, []);
 

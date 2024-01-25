@@ -1,17 +1,17 @@
 export type EnergyFormData = {
   energyResolution: 'biannual' | 'monthly';
-  summerElectricBill: string;
-  summerGasBill: string;
-  winterElectricBill: string;
-  winterGasBill: string;
+  summerElectricUsage: string;
+  summerGasUsage: string;
+  winterElectricUsage: string;
+  winterGasUsage: string;
   electricPrice: string;
-  monthlyGasBill: MonthlyBill;
-  monthlyElectricBill: MonthlyBill;
+  monthlyGasUsage: MonthlyUsage;
+  monthlyElectricUsage: MonthlyUsage;
   gasPrice: string;
   gasUnits: 'ccf' | 'therm';
 };
 
-export type MonthlyBill = {
+export type MonthlyUsage = {
   jan: string;
   feb: string;
   mar: string;
@@ -26,7 +26,7 @@ export type MonthlyBill = {
   dec: string;
 };
 
-export const defaultMonthlyBill = {
+export const defaultMonthlyUsage = {
   jan: '',
   feb: '',
   mar: '',

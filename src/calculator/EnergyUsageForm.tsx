@@ -4,7 +4,7 @@ import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, MonthlyBill, } from '../entities/EnergyFormData';
+import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
 
 type EnergyUsageFormProps = {
   formData: FormData;
@@ -30,11 +30,12 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
 
   const helpText = (
     <div>
-      <h3>Summer/winter elctric or gas bill</h3>
-      <p>These should be the average of the three hottest (summer) and coldest (winter) months. For example, to get winter gas bill,
-        average your gas bills for December, January, and Febuary (if these are the coldest months for your area). For summer,
+      <h3>Summer/winter electric or gas usage</h3>
+      <p>These should be the average of the three hottest (summer) and coldest (winter) months. For example, to get winter gas usage,
+        average your gas usages for December, January, and Febuary (if these are the coldest months for your area). For summer,
         you would average months June, July, and August. If you use a different energy source (propane, oil, kerosene, etc), then
-        use your cost for this for winter and summer gas bill. If you don't use a fossil fuel for heating, leave these blank.
+        use your units for this for winter and summer gas usage. As long as you use the same units, most calculations will be accurate.
+        If you don't use a fossil fuel for heating, leave these blank.
       </p>
       <hr/>
       <h3>Electric/gas price</h3>
@@ -58,42 +59,46 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
     <Box sx={{justifyContent: 'space-between', flexDirection: 'column', gap: 2, marginTop: '5px'}}>
       <div style={rowSx}>
         <ValidatedField 
-          label="Summer Electric Bill" 
-          value={energyFormData.summerElectricBill}
+          label="Summer Electric Usage" 
+          value={energyFormData.summerElectricUsage}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+          InputProps={{ endAdornment: <InputAdornment position="end">kWh</InputAdornment> }}
+          InputLabelProps={{ shrink: true }}
           formOrder={0}
-          setter={(e) => setEnergyFormData({...energyFormData, summerElectricBill: e.target.value})}
+          setter={(e) => setEnergyFormData({...energyFormData, summerElectricUsage: e.target.value})}
         />
         <ValidatedField 
-          label="Summer Gas Bill"
-          value={energyFormData.summerGasBill}
+          label="Summer Gas Usage"
+          value={energyFormData.summerGasUsage}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+          InputProps={{ endAdornment: <InputAdornment position="end">{energyFormData.gasUnits}</InputAdornment> }}
+          InputLabelProps={{ shrink: true }}
           formOrder={1}
-          setter={(e) => setEnergyFormData({...energyFormData, summerGasBill: e.target.value})}
+          setter={(e) => setEnergyFormData({...energyFormData, summerGasUsage: e.target.value})}
         />
       </div>
       <div style={rowSx}>
         <ValidatedField 
-          label="Winter Electric Bill" 
-          value={energyFormData.winterElectricBill}
+          label="Winter Electric Usage" 
+          value={energyFormData.winterElectricUsage}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+          InputProps={{ endAdornment: <InputAdornment position="end">kWh</InputAdornment> }}
+          InputLabelProps={{ shrink: true }}
           formOrder={2}
-          setter={(e) => setEnergyFormData({...energyFormData, winterElectricBill: e.target.value})}
+          setter={(e) => setEnergyFormData({...energyFormData, winterElectricUsage: e.target.value})}
         />
         <ValidatedField 
-          label="Winter Gas Bill"
-          value={energyFormData.winterGasBill}
+          label="Winter Gas Usage"
+          value={energyFormData.winterGasUsage}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+          InputProps={{ endAdornment: <InputAdornment position="end">{energyFormData.gasUnits}</InputAdornment> }}
+          InputLabelProps={{ shrink: true }}
           formOrder={3}
-          setter={(e) => setEnergyFormData({...energyFormData, winterGasBill: e.target.value})}
+          setter={(e) => setEnergyFormData({...energyFormData, winterGasUsage: e.target.value})}
         />
       </div>
     </Box>
@@ -105,22 +110,24 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
         return (
           <div style={rowSx} key={`${month}-row`}>
             <ValidatedField 
-              label={`${month} Electric Bill`}
-              value={energyFormData.monthlyElectricBill[month.toLowerCase() as keyof MonthlyBill]}
+              label={`${month} Electric Usage`}
+              value={energyFormData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]}
               inputType='decimal'
               inputProps={{ inputMode: 'decimal' }}
-              InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+              InputProps={{ endAdornment: <InputAdornment position="end">kWh</InputAdornment> }}
+              InputLabelProps={{ shrink: true }}
               formOrder={i + 6}
-              setter={(e) => setEnergyFormData({...energyFormData, monthlyElectricBill: {...energyFormData.monthlyElectricBill, [month.toLowerCase()]:  e.target.value}})}
+              setter={(e) => setEnergyFormData({...energyFormData, monthlyElectricUsage: {...energyFormData.monthlyElectricUsage, [month.toLowerCase()]:  e.target.value}})}
             />
             <ValidatedField 
-              label={`${month} Gas Bill`}
-              value={energyFormData.monthlyGasBill[month.toLowerCase() as keyof MonthlyBill]}
+              label={`${month} Gas Usage`}
+              value={energyFormData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]}
               inputType='decimal'
               inputProps={{ inputMode: 'decimal' }}
-              InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+              InputProps={{ endAdornment: <InputAdornment position="end">{energyFormData.gasUnits}</InputAdornment> }}
+              InputLabelProps={{ shrink: true }}
               formOrder={i + 18}
-              setter={(e) => setEnergyFormData({...energyFormData, monthlyGasBill: {...energyFormData.monthlyGasBill, [month.toLowerCase()]:  e.target.value}})}
+              setter={(e) => setEnergyFormData({...energyFormData, monthlyGasUsage: {...energyFormData.monthlyGasUsage, [month.toLowerCase()]:  e.target.value}})}
             />
           </div>
         );
