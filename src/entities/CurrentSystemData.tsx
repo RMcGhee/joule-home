@@ -1,3 +1,4 @@
+import { DegreeDayData } from "./DegreeDayData";
 import { ZipDist } from "./ZipDist";
 
 export type CurrentSystemData = {
@@ -8,4 +9,5 @@ export type CurrentSystemData = {
     zipCode: string
     selectedClimate: string
     zipDistData: ZipDist
+    degreeDayData: DegreeDayData
   };

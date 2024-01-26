@@ -1,4 +1,5 @@
 import { CurrentSystemData } from "./CurrentSystemData";
+import { DegreeDayData } from "./DegreeDayData";
 import { EnergyFormData, defaultMonthlyUsage, } from "./EnergyFormData";
 import { ZipDist } from "./ZipDist";
 
@@ -12,6 +13,7 @@ export const defaultFormData: FormData = {
     zipCode: '',
     selectedClimate: '',
     zipDistData: {} as ZipDist,
+    degreeDayData: {} as DegreeDayData,
     energyResolution: 'biannual',
     summerElectricUsage: '',
     summerGasUsage: '',
