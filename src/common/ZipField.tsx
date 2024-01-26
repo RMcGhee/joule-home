@@ -30,7 +30,13 @@ export const ZipField: React.FC<ZipFieldProps> = ({
       setZipDataLoading(false);
       if (!response.ok) throw new Error('Network response was not ok');
       const responseData = await response.json();
-      const data = responseData.data[0] as ZipDist;
+      let zips = responseData.data[0];
+      for (let [key, value] of Object.entries(zips)) {
+        if (key.includes('zip') && typeof value === 'number') {
+          zips[key] = value.toString().padStart(5, '0');
+        }
+      }
+      const data = zips as ZipDist;
       onZipDataReceived(data === undefined ? {} as ZipDist : data, zipCode);
     }
   };
