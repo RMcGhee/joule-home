@@ -5,6 +5,8 @@ import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
+import { DegreeDayMonths } from '../entities/DegreeDayData';
+import { ScatterChart } from '@mui/x-charts';
 
 type EnergyUsageAnalysisProps = {
   formData: FormData;
@@ -27,6 +29,25 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
     });
   }, [energyFormData]);
 
+  type MonthDataEntry = [string, [number, number]];
+
+  // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
+  const coolingMonthsKwh = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
+    if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
+      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]]
+    }
+    return null;
+  })
+  .filter((entry): entry is MonthDataEntry => entry !== null);
+
+  const heatingMonthsKwh = Object.entries(formData.degreeDayData.heating).map(([month, dd]) => {
+    if (dd > formData.degreeDayData.cooling[month as keyof DegreeDayMonths]) {
+      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]]
+    }
+    return null;
+  })
+  .filter((entry): entry is MonthDataEntry => entry !== null);
+
   const helpText = (
     <div>
       <h3>Summer/winter electric or gas usage</h3>
@@ -42,42 +63,24 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
 
   return (
     <LeftGrow>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2, transition: 'all 1s' }}>
-        <ToggleButtonGroup
-          color="primary"
-          value={energyFormData.energyResolution}
-          exclusive
-          onChange={(e, newResolution) => {
-            if (newResolution !== null) {
-              setEnergyFormData({...energyFormData, energyResolution: newResolution})
-            }
-          }
-        }
-          aria-label="Monthly or biannual"
-        >
-          <ToggleButton value="biannual">Summer/Winter</ToggleButton>
-          <ToggleButton value="monthly">Monthly</ToggleButton>
-        </ToggleButtonGroup>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '1rem', marginBottom: '1rem' }}>
-          <ValidatedField 
-            label="Electric Price/kWh" 
-            value={energyFormData.electricPrice}
-            inputType='decimal'
-            inputProps={{ inputMode: 'decimal' }}
-            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-            formOrder={4}
-            setter={(e) => setEnergyFormData({...energyFormData, electricPrice: e.target.value})}
-          />
-          <ValidatedField 
-            label={`Gas Price/${energyFormData.gasUnits}`}
-            value={energyFormData.gasPrice}
-            inputType='decimal'
-            inputProps={{ inputMode: 'decimal' }}
-            InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-            formOrder={5}
-            setter={(e) => setEnergyFormData({...energyFormData, gasPrice: e.target.value})}
-          />
-        </div>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
+        <ScatterChart
+          title='kWh usage'
+          series={[
+            {
+              label: 'Cooling months',
+              data: coolingMonthsKwh.map(([k, [kwh, dd]]) => ({x: dd, y: kwh, id: k})),
+              color: '#4e79a7',
+            },
+            {
+              label: 'Heating months',
+              data: heatingMonthsKwh.map(([k, [kwh, dd]]) => ({x: dd, y: kwh, id: k})),
+              color: '#e15759',
+            },
+          ]}
+          width={500}
+          height={300}
+        />
         <IconButton
           color='primary'
           sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%'}}

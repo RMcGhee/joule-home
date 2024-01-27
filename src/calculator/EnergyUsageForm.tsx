@@ -117,7 +117,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
               InputProps={{ endAdornment: <InputAdornment position="end">kWh</InputAdornment> }}
               InputLabelProps={{ shrink: true }}
               formOrder={i + 6}
-              setter={(e) => setEnergyFormData({...energyFormData, monthlyElectricUsage: {...energyFormData.monthlyElectricUsage, [month.toLowerCase()]:  e.target.value}})}
+              setter={(e) => setEnergyFormData({...energyFormData, monthlyElectricUsage: {...energyFormData.monthlyElectricUsage, [month.toLowerCase()]: e.target.value}})}
             />
             <ValidatedField 
               label={`${month} Gas Usage`}
@@ -127,7 +127,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
               InputProps={{ endAdornment: <InputAdornment position="end">{energyFormData.gasUnits}</InputAdornment> }}
               InputLabelProps={{ shrink: true }}
               formOrder={i + 18}
-              setter={(e) => setEnergyFormData({...energyFormData, monthlyGasUsage: {...energyFormData.monthlyGasUsage, [month.toLowerCase()]:  e.target.value}})}
+              setter={(e) => setEnergyFormData({...energyFormData, monthlyGasUsage: {...energyFormData.monthlyGasUsage, [month.toLowerCase()]: e.target.value}})}
             />
           </div>
         );

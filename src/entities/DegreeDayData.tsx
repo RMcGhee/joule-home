@@ -22,3 +22,8 @@ export type DegreeDayMonths = {
     nov: string;
     dec: string;
 };
+
+export const initDegreeDayMonths = (data: {[key: string]: string}): DegreeDayMonths => {
+    let convert = Object.fromEntries(Object.entries(data).map(([key, value]) => [key, Number(value)]));
+    return convert as unknown as DegreeDayMonths;
+};

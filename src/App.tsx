@@ -18,7 +18,7 @@ import { FormData, defaultFormData } from './entities/FormData';
 import { isEmpty } from './common/Util';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
 import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
-import { DegreeDayData } from './entities/DegreeDayData';
+import { DegreeDayData, initDegreeDayMonths } from './entities/DegreeDayData';
 
 function App() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -70,6 +70,8 @@ function App() {
         if (!response.ok) throw new Error('Network response was not ok');
         const responseData = await response.json();
         const data = responseData.data[0] as DegreeDayData;
+        data.cooling = initDegreeDayMonths(data.cooling);
+        data.heating = initDegreeDayMonths(data.heating);
         setFormData({ ...formData, degreeDayData: data });
       }
     }
