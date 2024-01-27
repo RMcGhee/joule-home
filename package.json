@@ -17,8 +17,11 @@
     "@types/node": "^16.18.70",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
+    "chart.js": "^4.4.1",
+    "chartjs-plugin-trendline": "^2.1.0",
     "ml-regression-simple-linear": "^3.0.0",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
@@ -52,6 +55,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/chartjs-plugin-trendline": "^1.0.4",
     "gh-pages": "^6.1.1",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0"

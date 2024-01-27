@@ -6,7 +6,9 @@ import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
 import { DegreeDayMonths } from '../entities/DegreeDayData';
-import { ScatterChart } from '@mui/x-charts';
+import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
+import { Chart, Scatter } from 'react-chartjs-2';
+import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 
 type EnergyUsageAnalysisProps = {
   formData: FormData;
@@ -17,8 +19,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   formData,
   setFormData,
 }) => {
-  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>({...formData} as EnergyFormData);
-  
+  ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
+  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>({ ...formData } as EnergyFormData);
+
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -34,7 +37,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
   const coolingMonthsKwh = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
     if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]]
+      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]];
     }
     return null;
   })
@@ -42,11 +45,18 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
 
   const heatingMonthsKwh = Object.entries(formData.degreeDayData.heating).map(([month, dd]) => {
     if (dd > formData.degreeDayData.cooling[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]]
+      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]];
     }
     return null;
   })
   .filter((entry): entry is MonthDataEntry => entry !== null);
+  
+  const coolingMonthScatter = coolingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh }));
+  const heatingMonthScatter = heatingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh }));
+  const coolingMonthLine = new SimpleLinearRegression(coolingMonthScatter.map((pair) => pair.x), coolingMonthScatter.map((pair) => pair.y));
+  const heatingMonthLine = new SimpleLinearRegression(heatingMonthScatter.map((pair) => pair.x), heatingMonthScatter.map((pair) => pair.y));
+  const coolingMonthMaxDd = Math.max(...coolingMonthsKwh.map(([k, [kwh, dd]]) => dd));
+  const heatingMonthMaxDd = Math.max(...heatingMonthsKwh.map(([k, [kwh, dd]]) => dd));
 
   const helpText = (
     <div>
@@ -57,39 +67,80 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
         use your units for this for winter and summer gas usage. As long as you use the same units, most calculations will be accurate.
         If you don't use a fossil fuel for heating, leave these blank.
       </p>
-      <hr/>
+      <hr />
     </div>
   );
+
+  const chartData = {
+    datasets: [
+      {
+        type: 'scatter' as const,
+        label: 'Cooling kWh',
+        data: coolingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh })),
+        backgroundColor: '#4e79a7',
+      },
+      {
+        type: 'line' as const,
+        label: 'Trend',
+        data: [{x: 0, y: coolingMonthLine.intercept}, {x: coolingMonthMaxDd, y: coolingMonthLine.predict(coolingMonthMaxDd)}],
+        borderColor: '#4e79a7',
+        borderWidth: 2,
+      },
+      {
+        type: 'scatter' as const,
+        label: 'Heating kWh',
+        data: heatingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh })),
+        backgroundColor: '#e15759',
+      },
+      {
+        type: 'line' as const,
+        label: 'Trend',
+        data: [{x: 0, y: heatingMonthLine.intercept}, {x: heatingMonthMaxDd, y: heatingMonthLine.predict(heatingMonthMaxDd)}],
+        borderColor: '#e15759',
+        borderWidth: 2,
+      },
+    ],
+  };
 
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-        <ScatterChart
-          title='kWh usage'
-          series={[
-            {
-              label: 'Cooling months',
-              data: coolingMonthsKwh.map(([k, [kwh, dd]]) => ({x: dd, y: kwh, id: k})),
-              color: '#4e79a7',
+        <Chart
+          title='kWh per season'
+          type='scatter'
+          data={chartData}
+          width={400}
+          height={400}
+          options={{
+            scales: {
+              x: {
+                beginAtZero: true,
+              },
+              y: {
+                beginAtZero: true,
+              }
             },
-            {
-              label: 'Heating months',
-              data: heatingMonthsKwh.map(([k, [kwh, dd]]) => ({x: dd, y: kwh, id: k})),
-              color: '#e15759',
+            plugins: {
+              title: {
+                display: true,
+                text: 'kWh per season',
+                align: 'center',
+                font: {
+                  size: 18
+                }
+              },
             },
-          ]}
-          width={500}
-          height={300}
+          }}
         />
         <IconButton
           color='primary'
-          sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%'}}
+          sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%' }}
           onClick={() => setShowHelpPopover(!showHelpPopover)}
-        ><QuestionMark/></IconButton>
+        ><QuestionMark /></IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
       </Box>
     </LeftGrow>
   );
-};
+}
 
 export default EnergyUsageAnalysis;
