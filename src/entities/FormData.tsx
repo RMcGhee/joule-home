@@ -1,9 +1,10 @@
+import { CalculatedData } from "./CalculatedData";
 import { CurrentSystemData } from "./CurrentSystemData";
 import { DegreeDayData } from "./DegreeDayData";
 import { EnergyFormData, defaultMonthlyUsage, } from "./EnergyFormData";
 import { ZipDist } from "./ZipDist";
 
-export type FormData = CurrentSystemData & EnergyFormData & {};
+export type FormData = CurrentSystemData & EnergyFormData & CalculatedData & {};
 
 export const defaultFormData: FormData = {
     currentACSeer: '',
@@ -24,4 +25,5 @@ export const defaultFormData: FormData = {
     electricPrice: '',
     gasPrice: '',
     gasUnits: 'ccf',
+    baseElectricUsage: 0,
 };
