@@ -17,6 +17,8 @@ import Introduction from './calculator/Introduction';
 import { FormData, defaultFormData } from './entities/FormData';
 import { isEmpty } from './common/Util';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
+import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
+import { DegreeDayData } from './entities/DegreeDayData';
 
 function App() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -43,9 +45,34 @@ function App() {
     }
   }, [formData]);
   
+  const validateZip = (zipCode: string) => {
+    if (zipCode.length !== 5) return false;
+    if (!/^[0-9]*\.?[0-9]*$/.test(zipCode)) return false;
+    return true;
+  };
 
-  const handleNextStep = (stepChange = 1) => {
+  const handleNextStep = async (stepChange = 1) => {
     setCurrentStep(currentStep + stepChange);
+
+    // also get data for degree days
+    if (currentStep + stepChange === 2) {
+      if (validateZip(formData.selectedClimate)) {
+        const edgeFunction = 'http://127.0.0.1:54321/functions/v1/get-dd'
+        // Need to validate here too, since the setter is always called after validation, even
+        // if validation fails.
+        const response = await fetch(edgeFunction, {
+          method: 'POST',
+          body: JSON.stringify({ 'zip': formData.selectedClimate }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        const responseData = await response.json();
+        const data = responseData.data[0] as DegreeDayData;
+        setFormData({ ...formData, degreeDayData: data });
+      }
+    }
   };
 
   const renderStep = () => {
@@ -54,8 +81,8 @@ function App() {
         return <CurrentSystemForm formData={formData} setFormData={setFormData} />;
       case 2:
         return <EnergyUsageForm formData={formData} setFormData={setFormData} />;
-      // case 3:
-      //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
+      case 3:
+        return <EnergyUsageAnalysis formData={formData} setFormData={setFormData} />;
       // case 4:
       //   return <BasicValuesComponent formData={formData} setFormData={setFormData} />;
       // case 4:
