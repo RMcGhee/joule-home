@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { ForwardedRef, useEffect, useRef } from 'react';
 import { FormData } from '../../entities/FormData';
 import { EnergyFormData, MonthlyUsage, } from '../../entities/EnergyFormData';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
@@ -6,6 +6,7 @@ import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement
 import { Chart } from 'react-chartjs-2';
 import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 type SeasonKwhGraphProps = {
   formData: FormData;
@@ -16,6 +17,26 @@ const SeasonKwhGraph: React.FC<SeasonKwhGraphProps> = ({
   formData,
   setBaseElectricUsage,
 }) => {
+  const chartRef = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
+
+  useEffect(() => {
+    if (chartRef && chartRef.current) {
+      console.log('have chartRef');
+      console.log(chartRef);
+      const chart = chartRef.current;
+      const ctx = chart.ctx;
+
+      const gradient = ctx.createLinearGradient(0, 0, 25, 0);
+      gradient.addColorStop(0, 'blue');
+      gradient.addColorStop(1, 'red');
+
+      if (chart.options.scales?.x?.title) {
+        chart.options.scales.x.title.color = gradient;
+      }
+      chart.update();
+    }
+  }, [chartRef]);
+  
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
 
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
@@ -81,6 +102,7 @@ const SeasonKwhGraph: React.FC<SeasonKwhGraphProps> = ({
 
   return (
     <Chart
+      ref={chartRef}
       title='kWh per season'
       type='scatter'
       data={chartData}
