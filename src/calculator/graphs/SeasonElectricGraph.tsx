@@ -8,12 +8,12 @@ import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
-type SeasonKwhGraphProps = {
+type SeasonElectricGraphProps = {
   formData: FormData;
   setBaseElectricUsage: (e: number) => void;
 };
 
-const SeasonKwhGraph: React.FC<SeasonKwhGraphProps> = ({
+const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
   formData,
   setBaseElectricUsage,
 }) => {
@@ -140,4 +140,4 @@ const SeasonKwhGraph: React.FC<SeasonKwhGraphProps> = ({
   );
 }
 
-export default SeasonKwhGraph;
+export default SeasonElectricGraph;

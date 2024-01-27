@@ -5,7 +5,7 @@ import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
-import SeasonKwhGraph from './graphs/SeasonKwhGraph';
+import SeasonElectricGraph from './graphs/SeasonElectricGraph';
 
 export type MonthDataEntry = [string, [number, number]];
 
@@ -49,7 +49,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-        <SeasonKwhGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
+        <SeasonElectricGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
         <IconButton
           color='primary'
           sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%' }}
