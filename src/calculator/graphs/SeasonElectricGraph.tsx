@@ -21,21 +21,17 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
 
   const chartRefElectric = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
 
-  useEffect(() => {
-    if (chartRefElectric && chartRefElectric.current) {
-      const chart = chartRefElectric.current;
+  const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>) => {
+    if (chartRef && chartRef.current) {
+      const chart = chartRef.current;
       const ctx = chart.ctx;
-
+      
       const gradient = ctx.createLinearGradient(0, 0, 25, 0);
       gradient.addColorStop(0, 'blue');
       gradient.addColorStop(1, 'red');
-
-      if (chart.options.scales?.x?.title) {
-        chart.options.scales.x.title.color = gradient;
-      }
-      chart.update();
+      return gradient;
     }
-  }, [chartRefElectric]);
+  };
 
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
   const coolingMonthsKwh = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
@@ -113,6 +109,7 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
             title: {
               text: 'DegreeDays',
               display: true,
+              color: getLinearGradient(chartRefElectric),
             },
           },
           y: {
