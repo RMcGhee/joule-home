@@ -52,7 +52,7 @@ function App() {
   }, [formData]);
 
   const handleNextStep = (stepChange = 1) => {
-    localStorage.setItem('formData', JSON.stringify(formData));
+    localStorage.setItem('formData', JSON.stringify(formDataRef.current));
     setCurrentStep(currentStep + stepChange);
   };
 

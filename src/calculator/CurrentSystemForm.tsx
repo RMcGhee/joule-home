@@ -28,7 +28,10 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
 
   useEffect(() => {
     setFormData({
-      ...formData, ...systemData,
+      ...formData, 
+      ...systemData,
+      zipDistData: {...formData.zipDistData},
+      degreeDayData: {...formData.degreeDayData},
     });
     // intentionally not dependencies; formData and setFormData
     // eslint-disable-next-line react-hooks/exhaustive-deps
