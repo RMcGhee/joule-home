@@ -18,15 +18,14 @@ import { FormData, defaultFormData } from './entities/FormData';
 import { isEmpty } from './common/Util';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
 import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
+import { useImmer } from 'use-immer';
 
 export default function App() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({...defaultFormData} as FormData);
+  const [formData, setFormData] = useImmer({...defaultFormData} as FormData);
 
   useEffect(() => {
     // Load cached data from localStorage
-    console.log('app load from storage');
-    console.log(formData.degreeDayData);
     const savedData = localStorage.getItem('formData');
     if (savedData) {
       let loadedData = {...defaultFormData, ...JSON.parse(savedData)}
@@ -36,12 +35,8 @@ export default function App() {
 
   // Save form data 3 seconds after it's updated.
   useEffect(() => {
-    console.log('app pre save');
-    console.log(formData.degreeDayData);
     if (!isEmpty(formData)) {
       const timer = setTimeout(() => {
-        console.log('app save');
-        console.log(formData.degreeDayData);
         localStorage.setItem('formData', JSON.stringify(formData));
       }, 3000);
   
@@ -109,7 +104,7 @@ export default function App() {
               flexGrow: currentStep === 0 ? 1 : 0,
               position: 'absolute',
               right: 0,
-            }}  
+            }}
           >
             Next
           </Button>

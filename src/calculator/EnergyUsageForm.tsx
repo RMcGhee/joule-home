@@ -7,10 +7,11 @@ import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
 import { DegreeDayData, initDegreeDayMonths } from '../entities/DegreeDayData';
 import { isEmpty } from '../common/Util';
+import { Updater } from 'use-immer';
 
 type EnergyUsageFormProps = {
   formData: FormData;
-  setFormData: (data: FormData) => void;
+  setFormData: Updater<FormData>;
 };
 
 const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
@@ -19,7 +20,6 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
 }) => {
 
   const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(() => {
-    console.log('energyformdata init state');
     return {...formData} as EnergyFormData;
   });
   
@@ -41,7 +41,6 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   };
 
   useEffect(() => {
-    console.log('energyusageform render');
     if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
       const getDegreeDayData = async () => {
         const edgeFunction = 'http://127.0.0.1:54321/functions/v1/get-dd'
@@ -57,26 +56,29 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
         const data = responseData.data[0] as DegreeDayData;
         data.cooling = initDegreeDayMonths(data.cooling);
         data.heating = initDegreeDayMonths(data.heating);
-        console.log('energy usage form getdd data set form data');
-        console.log(formData.degreeDayData);
-        setFormData({ ...formData, degreeDayData: data });
+        setFormData((formDataDraft) => {
+          formDataDraft.degreeDayData = data;
+        });
       };
       getDegreeDayData();
     }
   }, []);
 
   useEffect(() => {
-    energyFormData.monthlyElectricUsage = kWhData as MonthlyUsage
-    energyFormData.monthlyGasUsage = gasData as MonthlyUsage;
-    console.log('energy useage form');
-    console.log(formData.degreeDayData);
-    setFormData({
-      ...formData,
-      degreeDayData: {...formData.degreeDayData},
-      zipDistData: {...formData.zipDistData},
-      ...energyFormData,
-      monthlyElectricUsage: {...energyFormData.monthlyElectricUsage},
-      monthlyGasUsage: {...energyFormData.monthlyGasUsage},
+    energyFormData.monthlyElectricUsage = kWhData;
+    energyFormData.monthlyGasUsage = gasData;
+    setFormData((formDataDraft) => {
+      Object.assign(formDataDraft, {
+        monthlyElectricUsage: {...energyFormData.monthlyElectricUsage},
+        monthlyGasUsage: {...energyFormData.monthlyGasUsage},
+        energyResolution: energyFormData.energyResolution,
+        summerElectricUsage: energyFormData.summerElectricUsage,
+        winterElectricUsage: energyFormData.winterElectricUsage,
+        winterGasUsage: energyFormData.winterGasUsage,
+        electricPrice: energyFormData.electricPrice,
+        gasPrice: energyFormData.gasPrice,
+        gasUnits: energyFormData.gasUnits,
+      } as FormData);
     });
   }, [energyFormData]);
 

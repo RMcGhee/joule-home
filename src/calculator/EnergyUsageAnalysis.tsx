@@ -7,12 +7,13 @@ import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, } from '../entities/EnergyFormData';
 import SeasonElectricGraph from './graphs/SeasonElectricGraph';
 import SeasonGasGraph from './graphs/SeasonGasGraph';
+import { Updater } from 'use-immer';
 
 export type MonthDataEntry = [string, [number, number]];
 
 type EnergyUsageAnalysisProps = {
   formData: FormData;
-  setFormData: (data: FormData) => void;
+  setFormData: Updater<FormData>;
 };
 
 const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
@@ -29,10 +30,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   useEffect(() => {
-    console.log('energy usage analysis set form data');
-    console.log(formData.degreeDayData);
-    setFormData({
-      ...formData, ...energyFormData, baseElectricUsage: baseElectricUsage, baseGasUsage: baseGasUsage
+    setFormData((formDataDraft) => {
+      formDataDraft.baseElectricUsage = baseElectricUsage;
+      formDataDraft.baseGasUsage = baseGasUsage;
     });
   }, [energyFormData, baseElectricUsage, baseGasUsage]);
 
@@ -62,7 +62,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           color='primary'
           sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%' }}
           onClick={() => setShowHelpPopover(!showHelpPopover)}
-        ><QuestionMark /></IconButton>
+        >
+          <QuestionMark />
+        </IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
       </Box>
     </LeftGrow>

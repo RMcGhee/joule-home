@@ -7,10 +7,11 @@ import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { CurrentSystemData } from '../entities/CurrentSystemData';
+import { Updater } from 'use-immer';
 
 type CurrentSystemFormProps = {
   formData: FormData;
-  setFormData: (data: FormData) => void;
+  setFormData: Updater<FormData>;
 };
 
 const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
@@ -26,12 +27,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
   const haveZipDistData = Object.keys(systemData.zipDistData).length !== 0;
 
   useEffect(() => {
-    console.log('current system form set form data');
-    setFormData({
-      ...formData, 
-      ...systemData,
-      zipDistData: {...formData.zipDistData},
-      degreeDayData: {...formData.degreeDayData},
+    setFormData((draftFormData) => {
+      Object.assign(draftFormData, systemData);
     });
     // intentionally not dependencies; formData and setFormData
     // eslint-disable-next-line react-hooks/exhaustive-deps
