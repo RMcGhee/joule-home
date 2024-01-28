@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Container, ThemeProvider } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 import theme from './base-theme';
@@ -18,16 +18,15 @@ import { FormData, defaultFormData } from './entities/FormData';
 import { isEmpty } from './common/Util';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
 import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
-import { DegreeDayData, initDegreeDayMonths } from './entities/DegreeDayData';
 
-function App() {
+export default function App() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({...defaultFormData} as FormData);
 
-  const formDataRef = useRef(formData);
-
   useEffect(() => {
     // Load cached data from localStorage
+    console.log('app load from storage');
+    console.log(formData.degreeDayData);
     const savedData = localStorage.getItem('formData');
     if (savedData) {
       let loadedData = {...defaultFormData, ...JSON.parse(savedData)}
@@ -35,15 +34,15 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    formDataRef.current = formData;
-  }, [formData]);
-
   // Save form data 3 seconds after it's updated.
   useEffect(() => {
-    if (!isEmpty(formDataRef.current)) {
+    console.log('app pre save');
+    console.log(formData.degreeDayData);
+    if (!isEmpty(formData)) {
       const timer = setTimeout(() => {
-        localStorage.setItem('formData', JSON.stringify(formDataRef.current));
+        console.log('app save');
+        console.log(formData.degreeDayData);
+        localStorage.setItem('formData', JSON.stringify(formData));
       }, 3000);
   
       // Return clearTimeout as the cleanup so that it clears if unmounted or called again.
@@ -52,7 +51,7 @@ function App() {
   }, [formData]);
 
   const handleNextStep = (stepChange = 1) => {
-    localStorage.setItem('formData', JSON.stringify(formDataRef.current));
+    localStorage.setItem('formData', JSON.stringify(formData));
     setCurrentStep(currentStep + stepChange);
   };
 
@@ -121,6 +120,4 @@ function App() {
     </CssBaseline>
     </ThemeProvider>
   );
-}
-
-export default App;
+};

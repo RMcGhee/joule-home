@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, IconButton, InputAdornment } from '@mui/material';
-import { LeftGrow, ValidatedField, maybeGoNextField } from '../common/Basic';
+import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { CurrentSystemData } from '../entities/CurrentSystemData';
-import { DegreeDayData } from '../entities/DegreeDayData';
 
 type CurrentSystemFormProps = {
   formData: FormData;
@@ -27,6 +26,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
   const haveZipDistData = Object.keys(systemData.zipDistData).length !== 0;
 
   useEffect(() => {
+    console.log('current system form set form data');
     setFormData({
       ...formData, 
       ...systemData,

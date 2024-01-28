@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Collapse, IconButton, InputAdornment, Slide, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, Collapse, IconButton, InputAdornment, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
@@ -18,7 +18,10 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   setFormData,
 }) => {
 
-  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>({...formData} as EnergyFormData);
+  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(() => {
+    console.log('energyformdata init state');
+    return {...formData} as EnergyFormData;
+  });
   
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
@@ -38,6 +41,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   };
 
   useEffect(() => {
+    console.log('energyusageform render');
     if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
       const getDegreeDayData = async () => {
         const edgeFunction = 'http://127.0.0.1:54321/functions/v1/get-dd'
@@ -53,6 +57,8 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
         const data = responseData.data[0] as DegreeDayData;
         data.cooling = initDegreeDayMonths(data.cooling);
         data.heating = initDegreeDayMonths(data.heating);
+        console.log('energy usage form getdd data set form data');
+        console.log(formData.degreeDayData);
         setFormData({ ...formData, degreeDayData: data });
       };
       getDegreeDayData();
@@ -62,7 +68,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   useEffect(() => {
     energyFormData.monthlyElectricUsage = kWhData as MonthlyUsage
     energyFormData.monthlyGasUsage = gasData as MonthlyUsage;
-    console.log('energy form');
+    console.log('energy useage form');
     console.log(formData.degreeDayData);
     setFormData({
       ...formData,

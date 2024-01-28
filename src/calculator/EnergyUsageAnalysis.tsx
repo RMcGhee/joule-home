@@ -4,7 +4,7 @@ import { LeftGrow } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
+import { EnergyFormData, } from '../entities/EnergyFormData';
 import SeasonElectricGraph from './graphs/SeasonElectricGraph';
 import SeasonGasGraph from './graphs/SeasonGasGraph';
 
@@ -29,6 +29,8 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   useEffect(() => {
+    console.log('energy usage analysis set form data');
+    console.log(formData.degreeDayData);
     setFormData({
       ...formData, ...energyFormData, baseElectricUsage: baseElectricUsage, baseGasUsage: baseGasUsage
     });
