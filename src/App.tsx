@@ -35,15 +35,15 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    formDataRef.current = formData;
+  }, [formData]);
+
   // Save form data 3 seconds after it's updated.
   useEffect(() => {
-    if (!isEmpty(formData)) {
-      console.log('pre save app');
-      console.log(formData.degreeDayData);
+    if (!isEmpty(formDataRef.current)) {
       const timer = setTimeout(() => {
-        console.log('save data');
-        console.log(formData.degreeDayData);
-        localStorage.setItem('formData', JSON.stringify(formData));
+        localStorage.setItem('formData', JSON.stringify(formDataRef.current));
       }, 3000);
   
       // Return clearTimeout as the cleanup so that it clears if unmounted or called again.

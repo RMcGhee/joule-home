@@ -60,10 +60,8 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   }, []);
 
   useEffect(() => {
-    energyFormData.monthlyElectricUsage = kWhData as MonthlyUsage;
+    energyFormData.monthlyElectricUsage = kWhData as MonthlyUsage
     energyFormData.monthlyGasUsage = gasData as MonthlyUsage;
-    console.log('energy usage form:');
-    console.log(formData.degreeDayData);
     setFormData({
       ...formData,
       degreeDayData: {...formData.degreeDayData},
