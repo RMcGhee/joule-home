@@ -1,6 +1,6 @@
-import React, { ForwardedRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormData } from '../../entities/FormData';
-import { EnergyFormData, MonthlyUsage, } from '../../entities/EnergyFormData';
+import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
@@ -8,22 +8,22 @@ import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
-type SeasonElectricGraphProps = {
+type SeasonGasGraphProps = {
   formData: FormData;
-  setBaseElectricUsage: (e: number) => void;
+  setBaseGasUsage: (e: number) => void;
 };
 
-const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
+const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
   formData,
-  setBaseElectricUsage,
+  setBaseGasUsage,
 }) => {
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
 
-  const chartRefElectric = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
+  const chartRefGas = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
 
   useEffect(() => {
-    if (chartRefElectric && chartRefElectric.current) {
-      const chart = chartRefElectric.current;
+    if (chartRefGas && chartRefGas.current) {
+      const chart = chartRefGas.current;
       const ctx = chart.ctx;
 
       const gradient = ctx.createLinearGradient(0, 0, 25, 0);
@@ -35,35 +35,35 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
       }
       chart.update();
     }
-  }, [chartRefElectric]);
+  }, [chartRefGas]);
 
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
-  const coolingMonthsKwh = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
+  const coolingMonthsGas = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
     if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]];
+      return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
     }
     return null;
   })
   .filter((entry): entry is MonthDataEntry => entry !== null);
 
-  const heatingMonthsKwh = Object.entries(formData.degreeDayData.heating).map(([month, dd]) => {
+  const heatingMonthsGas = Object.entries(formData.degreeDayData.heating).map(([month, dd]) => {
     if (dd > formData.degreeDayData.cooling[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]];
+      return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
     }
     return null;
   })
   .filter((entry): entry is MonthDataEntry => entry !== null);
   
-  const coolingMonthScatter = coolingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh }));
-  const heatingMonthScatter = heatingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh }));
+  const coolingMonthScatter = coolingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
+  const heatingMonthScatter = heatingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
   const coolingMonthLine = new SimpleLinearRegression(coolingMonthScatter.map((pair) => pair.x), coolingMonthScatter.map((pair) => pair.y));
   const heatingMonthLine = new SimpleLinearRegression(heatingMonthScatter.map((pair) => pair.x), heatingMonthScatter.map((pair) => pair.y));
-  const coolingMonthMaxDd = Math.max(...coolingMonthsKwh.map(([k, [kwh, dd]]) => dd));
-  const heatingMonthMaxDd = Math.max(...heatingMonthsKwh.map(([k, [kwh, dd]]) => dd));
+  const coolingMonthMaxDd = Math.max(...coolingMonthsGas.map(([k, [unit, dd]]) => dd));
+  const heatingMonthMaxDd = Math.max(...heatingMonthsGas.map(([k, [unit, dd]]) => dd));
 
   useEffect(() => {
     if (coolingMonthLine && heatingMonthLine) {
-      setBaseElectricUsage((coolingMonthLine.intercept + heatingMonthLine.intercept) / 2);
+      setBaseGasUsage((coolingMonthLine.intercept + heatingMonthLine.intercept) / 2);
     }
   }, [coolingMonthLine, heatingMonthLine]);
 
@@ -71,8 +71,8 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
     datasets: [
       {
         type: 'scatter' as const,
-        label: 'Cooling kWh',
-        data: coolingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh })),
+        label: 'Cooling gas',
+        data: coolingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit })),
         backgroundColor: '#4e79a7',
       },
       {
@@ -84,8 +84,8 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
       },
       {
         type: 'scatter' as const,
-        label: 'Heating kWh',
-        data: heatingMonthsKwh.map(([k, [kwh, dd]]) => ({ x: dd, y: kwh })),
+        label: 'Heating gas',
+        data: heatingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit })),
         backgroundColor: '#e15759',
       },
       {
@@ -100,8 +100,9 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
 
   return (
     <Chart
-      ref={chartRefElectric}
-      key='seasonElectricGraph'
+      ref={chartRefGas}
+      key='seasonGasGraph'
+      title={`Gas (${formData.gasUnits}) per season`}
       type='scatter'
       data={chartData}
       width={400}
@@ -118,7 +119,7 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
           y: {
             beginAtZero: true,
             title: {
-              text: 'kWh',
+              text: `Gas (${formData.gasUnits})`,
               display: true,
             },
           }
@@ -126,7 +127,7 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
         plugins: {
           title: {
             display: true,
-            text: 'kWh per season',
+            text: `Gas (${formData.gasUnits}) per season`,
             align: 'center',
             font: {
               size: 18
@@ -138,4 +139,4 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
   );
 }
 
-export default SeasonElectricGraph;
+export default SeasonGasGraph;

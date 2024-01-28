@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Container, ThemeProvider } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 import theme from './base-theme';
@@ -24,6 +24,8 @@ function App() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({...defaultFormData} as FormData);
 
+  const formDataRef = useRef(formData);
+
   useEffect(() => {
     // Load cached data from localStorage
     const savedData = localStorage.getItem('formData');
@@ -36,7 +38,11 @@ function App() {
   // Save form data 3 seconds after it's updated.
   useEffect(() => {
     if (!isEmpty(formData)) {
+      console.log('pre save app');
+      console.log(formData.degreeDayData);
       const timer = setTimeout(() => {
+        console.log('save data');
+        console.log(formData.degreeDayData);
         localStorage.setItem('formData', JSON.stringify(formData));
       }, 3000);
   
@@ -44,37 +50,10 @@ function App() {
       return () => clearTimeout(timer);
     }
   }, [formData]);
-  
-  const validateZip = (zipCode: string) => {
-    if (zipCode.length !== 5) return false;
-    if (!/^[0-9]*\.?[0-9]*$/.test(zipCode)) return false;
-    return true;
-  };
 
-  const handleNextStep = async (stepChange = 1) => {
+  const handleNextStep = (stepChange = 1) => {
+    localStorage.setItem('formData', JSON.stringify(formData));
     setCurrentStep(currentStep + stepChange);
-
-    // also get data for degree days
-    if (currentStep + stepChange === 2) {
-      if (validateZip(formData.selectedClimate)) {
-        const edgeFunction = 'http://127.0.0.1:54321/functions/v1/get-dd'
-        // Need to validate here too, since the setter is always called after validation, even
-        // if validation fails.
-        const response = await fetch(edgeFunction, {
-          method: 'POST',
-          body: JSON.stringify({ 'zip': formData.selectedClimate }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const responseData = await response.json();
-        const data = responseData.data[0] as DegreeDayData;
-        data.cooling = initDegreeDayMonths(data.cooling);
-        data.heating = initDegreeDayMonths(data.heating);
-        setFormData({ ...formData, degreeDayData: data });
-      }
-    }
   };
 
   const renderStep = () => {

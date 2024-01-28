@@ -7,6 +7,7 @@ import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { CurrentSystemData } from '../entities/CurrentSystemData';
+import { DegreeDayData } from '../entities/DegreeDayData';
 
 type CurrentSystemFormProps = {
   formData: FormData;
@@ -129,7 +130,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           }}
           zipData={systemData.zipDistData}
           selectedClimate={systemData.selectedClimate}
-          setSelectedClimate={(e) => setSystemData({...systemData, selectedClimate: e})} 
+          setSelectedClimate={(e) => setSystemData({...systemData, selectedClimate: e})}
         />
         </div>
         <IconButton

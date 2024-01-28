@@ -6,6 +6,7 @@ import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
 import SeasonElectricGraph from './graphs/SeasonElectricGraph';
+import SeasonGasGraph from './graphs/SeasonGasGraph';
 
 export type MonthDataEntry = [string, [number, number]];
 
@@ -23,15 +24,15 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
   const [baseElectricUsage, setBaseElectricUsage] = useState(0);
+  const [baseGasUsage, setBaseGasUsage] = useState(0);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   useEffect(() => {
-    console.log(`Calculated base load: ${baseElectricUsage}`);
     setFormData({
-      ...formData, ...energyFormData, baseElectricUsage: baseElectricUsage
+      ...formData, ...energyFormData, baseElectricUsage: baseElectricUsage, baseGasUsage: baseGasUsage
     });
-  }, [energyFormData, baseElectricUsage]);
+  }, [energyFormData, baseElectricUsage, baseGasUsage]);
 
   const helpText = (
     <div>
@@ -49,7 +50,12 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-        <SeasonElectricGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
+        <div id='seasonElectricGraph' style={{ width: '1'}}>
+          <SeasonElectricGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
+        </div>
+        <div id='seasonGasGraph' style={{ width: '1'}}>
+          <SeasonGasGraph formData={formData} setBaseGasUsage={setBaseGasUsage}/>
+        </div>
         <IconButton
           color='primary'
           sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%' }}

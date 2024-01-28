@@ -5,6 +5,8 @@ import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
+import { DegreeDayData, initDegreeDayMonths } from '../entities/DegreeDayData';
+import { isEmpty } from '../common/Util';
 
 type EnergyUsageFormProps = {
   formData: FormData;
@@ -21,10 +23,54 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const kWhData = {jan: '743', feb: '725', mar: '589', apr: '550', may: '714', jun: '1243', jul: '1635', aug: '1384', sep: '972', oct: '529', nov: '620', dec: '723',};
+  const gasData = {jan: '171', feb: '156', mar: '143', apr: '65', may: '25', jun: '13', jul: '12', aug: '12', sep: '11', oct: '20', nov: '69', dec: '134'};
+
+  const validateZip = (zipCode: string) => {
+    if (zipCode.length !== 5) return false;
+    if (!/^[0-9]*\.?[0-9]*$/.test(zipCode)) return false;
+    return true;
+  };
+
+  const degreeDayDataOutOfDate = (degreeDayData: DegreeDayData): boolean => {
+    let res = (isEmpty(degreeDayData) || degreeDayData.cooling.jan === '' || degreeDayData.zip !== formData.selectedClimate);
+    return res;
+  };
 
   useEffect(() => {
+    if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
+      const getDegreeDayData = async () => {
+        const edgeFunction = 'http://127.0.0.1:54321/functions/v1/get-dd'
+        const response = await fetch(edgeFunction, {
+          method: 'POST',
+          body: JSON.stringify({ 'zip': formData.selectedClimate }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        const responseData = await response.json();
+        const data = responseData.data[0] as DegreeDayData;
+        data.cooling = initDegreeDayMonths(data.cooling);
+        data.heating = initDegreeDayMonths(data.heating);
+        setFormData({ ...formData, degreeDayData: data });
+      };
+      getDegreeDayData();
+    }
+  }, []);
+
+  useEffect(() => {
+    energyFormData.monthlyElectricUsage = kWhData as MonthlyUsage;
+    energyFormData.monthlyGasUsage = gasData as MonthlyUsage;
+    console.log('energy usage form:');
+    console.log(formData.degreeDayData);
     setFormData({
-      ...formData, ...energyFormData,
+      ...formData,
+      degreeDayData: {...formData.degreeDayData},
+      zipDistData: {...formData.zipDistData},
+      ...energyFormData,
+      monthlyElectricUsage: {...energyFormData.monthlyElectricUsage},
+      monthlyGasUsage: {...energyFormData.monthlyGasUsage},
     });
   }, [energyFormData]);
 
