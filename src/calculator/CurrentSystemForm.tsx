@@ -18,7 +18,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
   formData,
   setFormData,
 }) => {
-  const [systemData, setSystemData] = useState(initCurrentSystem(formData) as CurrentSystemData);
+  const [systemData, setSystemData] = useState(initCurrentSystem(formData));
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 

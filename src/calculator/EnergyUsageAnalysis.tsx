@@ -4,7 +4,7 @@ import { LeftGrow } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, } from '../entities/EnergyFormData';
+import { EnergyFormData, initEnergyForm, } from '../entities/EnergyFormData';
 import SeasonElectricGraph from './graphs/SeasonElectricGraph';
 import SeasonGasGraph from './graphs/SeasonGasGraph';
 import { Updater } from 'use-immer';
@@ -20,7 +20,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   formData,
   setFormData,
 }) => {
-  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>({ ...formData } as EnergyFormData);
+  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(initEnergyForm(formData));
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 

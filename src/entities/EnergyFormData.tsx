@@ -1,3 +1,5 @@
+import { FormData } from "./FormData";
+
 export type EnergyFormData = {
   energyResolution: 'biannual' | 'monthly';
   summerElectricUsage: string;
@@ -39,4 +41,19 @@ export const defaultMonthlyUsage = {
   oct: '',
   nov: '',
   dec: '',
+};
+
+export const initEnergyForm = (formData: FormData): EnergyFormData => {
+  return {
+    energyResolution: formData.energyResolution,
+    summerElectricUsage: formData.summerElectricUsage,
+    summerGasUsage: formData.summerGasUsage,
+    winterElectricUsage: formData.winterElectricUsage,
+    winterGasUsage: formData.winterGasUsage,
+    electricPrice: formData.electricPrice,
+    monthlyGasUsage: {...formData.monthlyGasUsage},
+    monthlyElectricUsage: {...formData.monthlyElectricUsage},
+    gasPrice: formData.gasPrice,
+    gasUnits: formData.gasUnits,
+  } as EnergyFormData;
 };
