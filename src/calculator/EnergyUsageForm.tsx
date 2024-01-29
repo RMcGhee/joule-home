@@ -4,7 +4,7 @@ import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, MonthlyUsage, } from '../entities/EnergyFormData';
+import { EnergyFormData, MonthlyUsage, initEnergyForm, } from '../entities/EnergyFormData';
 import { DegreeDayData, initDegreeDayMonths } from '../entities/DegreeDayData';
 import { isEmpty } from '../common/Util';
 import { Updater } from 'use-immer';
@@ -19,9 +19,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   setFormData,
 }) => {
 
-  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(() => {
-    return {...formData} as EnergyFormData;
-  });
+  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(initEnergyForm(formData));
   
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
