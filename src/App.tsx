@@ -20,6 +20,7 @@ import EnergyUsageForm from './calculator/EnergyUsageForm';
 import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
 import { useImmer } from 'use-immer';
 import { validateCurrentSystemData } from './entities/CurrentSystemData';
+import { validateEnergyFormData } from './entities/EnergyFormData';
 
 export default function App() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -47,9 +48,9 @@ export default function App() {
         case 1:
           setNextDisabled(!validateCurrentSystemData(formData));
           break;
-          // validate current system form.
         case 2:
-          // validate energyusage form
+          setNextDisabled(!validateEnergyFormData(formData));
+          break;
         case 3:
           // validate energy analysis form
       }

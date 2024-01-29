@@ -4,7 +4,10 @@ export function isEmpty(toCheck: object) {
 };
 
 export function isNumeric(toCheck: string) {
-    return toCheck !== '' && !isNaN(parseFloat(toCheck));
+    if (toCheck === '743e') {
+        console.log(parseFloat(toCheck));
+    }
+    return toCheck !== '' && !isNaN(Number(toCheck));
 };
 
 export const validateZip = (zipCode: string) => {

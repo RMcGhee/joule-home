@@ -1,3 +1,4 @@
+import { isNumeric } from "../common/Util";
 import { FormData } from "./FormData";
 
 export type EnergyFormData = {
@@ -6,9 +7,9 @@ export type EnergyFormData = {
   summerGasUsage: string;
   winterElectricUsage: string;
   winterGasUsage: string;
-  electricPrice: string;
   monthlyGasUsage: MonthlyUsage;
   monthlyElectricUsage: MonthlyUsage;
+  electricPrice: string;
   gasPrice: string;
   gasUnits: 'ccf' | 'therm';
 };
@@ -50,10 +51,22 @@ export const initEnergyForm = (formData: FormData): EnergyFormData => {
     summerGasUsage: formData.summerGasUsage,
     winterElectricUsage: formData.winterElectricUsage,
     winterGasUsage: formData.winterGasUsage,
-    electricPrice: formData.electricPrice,
     monthlyGasUsage: {...formData.monthlyGasUsage},
     monthlyElectricUsage: {...formData.monthlyElectricUsage},
+    electricPrice: formData.electricPrice,
     gasPrice: formData.gasPrice,
     gasUnits: formData.gasUnits,
   } as EnergyFormData;
+};
+
+// TODO: only validating when monthly used, not summer/winter
+export const validateEnergyFormData = (formData: FormData): boolean => {
+  return (
+      formData.energyResolution === 'monthly' &&
+      Object.entries(formData.monthlyElectricUsage).map(([_month, usage]) => isNumeric(usage)).every((entry) => entry) &&
+      Object.entries(formData.monthlyGasUsage).map(([_month, usage]) => isNumeric(usage)).every((entry) => entry)
+    ) &&
+    isNumeric(formData.electricPrice) &&
+    isNumeric(formData.gasPrice);
+  return true;
 };

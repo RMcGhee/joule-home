@@ -6,7 +6,7 @@ import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, initEnergyForm, } from '../entities/EnergyFormData';
 import { DegreeDayData, initDegreeDayMonths } from '../entities/DegreeDayData';
-import { isEmpty } from '../common/Util';
+import { isEmpty, validateZip } from '../common/Util';
 import { Updater } from 'use-immer';
 
 type EnergyUsageFormProps = {
@@ -26,12 +26,6 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const kWhData = {jan: '743', feb: '725', mar: '589', apr: '550', may: '714', jun: '1243', jul: '1635', aug: '1384', sep: '972', oct: '529', nov: '620', dec: '723',};
   const gasData = {jan: '171', feb: '156', mar: '143', apr: '65', may: '25', jun: '13', jul: '12', aug: '12', sep: '11', oct: '20', nov: '69', dec: '134'};
-
-  const validateZip = (zipCode: string) => {
-    if (zipCode.length !== 5) return false;
-    if (!/^[0-9]*\.?[0-9]*$/.test(zipCode)) return false;
-    return true;
-  };
 
   const degreeDayDataOutOfDate = (degreeDayData: DegreeDayData): boolean => {
     let res = (isEmpty(degreeDayData) || degreeDayData.cooling.jan === '' || degreeDayData.zip !== formData.selectedClimate);
@@ -63,8 +57,8 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   }, []);
 
   useEffect(() => {
-    energyFormData.monthlyElectricUsage = kWhData;
-    energyFormData.monthlyGasUsage = gasData;
+    // energyFormData.monthlyElectricUsage = kWhData;
+    // energyFormData.monthlyGasUsage = gasData;
     setFormData((formDataDraft) => {
       Object.assign(formDataDraft, {
         monthlyElectricUsage: {...energyFormData.monthlyElectricUsage},

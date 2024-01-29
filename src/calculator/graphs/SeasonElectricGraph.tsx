@@ -1,6 +1,6 @@
-import React, { ForwardedRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormData } from '../../entities/FormData';
-import { EnergyFormData, MonthlyUsage, } from '../../entities/EnergyFormData';
+import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
