@@ -59,7 +59,7 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
 
   useEffect(() => {
     if (coolingMonthLine && heatingMonthLine) {
-      setBaseGasUsage((coolingMonthLine.intercept + heatingMonthLine.intercept) / 2);
+      setBaseGasUsage(coolingMonthsGas.map(([k, [unit, dd]]) => unit).reduce((a, b) => a + b) / coolingMonthsGas.length);
     }
   }, [coolingMonthLine, heatingMonthLine]);
 
