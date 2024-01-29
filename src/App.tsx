@@ -19,9 +19,11 @@ import { isEmpty } from './common/Util';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
 import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
 import { useImmer } from 'use-immer';
+import { validateCurrentSystemData } from './entities/CurrentSystemData';
 
 export default function App() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [nextDisabled, setNextDisabled] = useState(false);
   const [formData, setFormData] = useImmer({...defaultFormData} as FormData);
 
   useEffect(() => {
@@ -41,6 +43,16 @@ export default function App() {
       const timer = setTimeout(() => {
         localStorage.setItem('formData', JSON.stringify(formData));
       }, 3000);
+      switch(currentStep) {
+        case 1:
+          setNextDisabled(!validateCurrentSystemData(formData));
+          break;
+          // validate current system form.
+        case 2:
+          // validate energyusage form
+        case 3:
+          // validate energy analysis form
+      }
   
       // Return clearTimeout as the cleanup so that it clears if unmounted or called again.
       return () => clearTimeout(timer);
@@ -100,6 +112,7 @@ export default function App() {
           </Button>
           <Button
             onClick={() => handleNextStep()}
+            disabled={nextDisabled}
             style={{
               width: currentStep !== 0 ? '50%' : '100%',
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',

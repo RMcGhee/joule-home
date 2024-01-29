@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ValidatedField, ValidatedFieldProps } from './Basic';
 import { ZipDist } from '../entities/ZipDist';
 import { CircularProgress, InputAdornment } from '@mui/material';
+import { validateZip } from './Util';
 
 type ZipFieldProps = ValidatedFieldProps & {
   onZipDataReceived: (data: ZipDist, zipCode: string) => void; // Callback to update state in parent
@@ -31,9 +32,11 @@ export const ZipField: React.FC<ZipFieldProps> = ({
       if (!response.ok) throw new Error('Network response was not ok');
       const responseData = await response.json();
       let zips = responseData.data[0];
-      for (let [key, value] of Object.entries(zips)) {
-        if (key.includes('zip') && typeof value === 'number') {
-          zips[key] = value.toString().padStart(5, '0');
+      if (zips !== undefined) {
+        for (let [key, value] of Object.entries(zips)) {
+          if (key.includes('zip') && typeof value === 'number') {
+            zips[key] = value.toString().padStart(5, '0');
+          }
         }
       }
       const data = zips as ZipDist;
@@ -41,11 +44,6 @@ export const ZipField: React.FC<ZipFieldProps> = ({
     }
   };
 
-  const validateZip = (zipCode: string) => {
-    if (zipCode.length !== 5) return false;
-    if (!/^[0-9]*\.?[0-9]*$/.test(zipCode)) return false;
-    return true;
-  };
 
   const handleZipChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     validatedFieldProps.setter(e);
