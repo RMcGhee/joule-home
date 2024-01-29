@@ -6,7 +6,7 @@ import { SelectClimate } from '../common/SelectClimate';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { CurrentSystemData } from '../entities/CurrentSystemData';
+import { CurrentSystemData, initCurrentSystem } from '../entities/CurrentSystemData';
 import { Updater } from 'use-immer';
 
 type CurrentSystemFormProps = {
@@ -18,7 +18,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
   formData,
   setFormData,
 }) => {
-  const [systemData, setSystemData] = useState({...formData} as CurrentSystemData);
+  const [systemData, setSystemData] = useState(initCurrentSystem(formData) as CurrentSystemData);
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
