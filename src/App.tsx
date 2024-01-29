@@ -28,8 +28,10 @@ export default function App() {
     // Load cached data from localStorage
     const savedData = localStorage.getItem('formData');
     if (savedData) {
-      let loadedData = {...defaultFormData, ...JSON.parse(savedData)}
-      setFormData(loadedData);
+      let loadedData = {...defaultFormData, ...JSON.parse(savedData)};
+      setFormData((draftFormData) => {
+        Object.assign(draftFormData, loadedData);
+      });
     }
   }, []);
 
