@@ -7,6 +7,7 @@ import { Chart } from 'react-chartjs-2';
 import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { useTheme } from '@mui/material';
 
 type SeasonElectricGraphProps = {
   formData: FormData;
@@ -17,6 +18,7 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
   formData,
   setBaseElectricUsage,
 }) => {
+  const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
 
   const chartRefElectric = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
@@ -111,12 +113,19 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
               display: true,
               color: getLinearGradient(chartRefElectric),
             },
+            ticks: {
+              color: theme.palette.text.primary,
+            },
           },
           y: {
             beginAtZero: true,
             title: {
               text: 'kWh',
               display: true,
+              color: theme.palette.text.primary,
+            },
+            ticks: {
+              color: theme.palette.text.primary,
             },
           }
         },
@@ -125,6 +134,7 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
             display: true,
             text: 'kWh per season',
             align: 'center',
+            color: theme.palette.text.primary,
             font: {
               size: 18
             }

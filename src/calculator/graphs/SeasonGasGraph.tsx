@@ -7,6 +7,7 @@ import { Chart } from 'react-chartjs-2';
 import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { useTheme } from '@mui/material';
 
 type SeasonGasGraphProps = {
   formData: FormData;
@@ -17,6 +18,7 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
   formData,
   setBaseGasUsage,
 }) => {
+  const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
 
   const chartRefGas = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
@@ -112,12 +114,19 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
               display: true,
               color: getLinearGradient(chartRefGas),
             },
+            ticks: {
+              color: theme.palette.text.primary,
+            }
           },
           y: {
             beginAtZero: true,
             title: {
               text: `Gas (${formData.gasUnits})`,
               display: true,
+              color: theme.palette.text.primary,
+            },
+            ticks: {
+              color: theme.palette.text.primary,
             },
           }
         },
@@ -126,6 +135,7 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
             display: true,
             text: `Gas (${formData.gasUnits}) per season`,
             align: 'center',
+            color: theme.palette.text.primary,
             font: {
               size: 18
             }
