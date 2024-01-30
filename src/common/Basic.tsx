@@ -1,6 +1,9 @@
 import { Grow, TextField, TextFieldProps, Tooltip } from '@mui/material';
 import React, { useState, ReactElement } from 'react';
 
+export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export const btuInkWh = 3412;
+export const btuInCcf = 103900;
 interface LeftGrowProps {
     children: ReactElement;
     timeout?: number;
