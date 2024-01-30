@@ -9,6 +9,9 @@ import SeasonElectricGraph from './graphs/SeasonElectricGraph';
 import SeasonGasGraph from './graphs/SeasonGasGraph';
 import { Updater } from 'use-immer';
 
+const btuInkWh = 3412;
+const btuInCcf = 103900;
+
 export type MonthDataEntry = [string, [number, number]];
 
 type EnergyUsageAnalysisProps = {
