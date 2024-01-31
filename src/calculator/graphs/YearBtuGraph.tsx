@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { FormData } from '../../entities/FormData';
 import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
-import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
+import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ChartArea, } from 'chart.js';
 import { Chart, Line } from 'react-chartjs-2';
 import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
@@ -20,7 +20,7 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
 
-  const chartRefBtu = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
+  const chartRefBtu = useRef <ChartJSOrUndefined<"line", number[], unknown>>(null);
 
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
   const coolingMonthsGas = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
@@ -64,6 +64,24 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
     ) / 1000;
   };
 
+  const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
+    if (chartRef && chartRef.current) {
+      const chart = chartRef.current;
+      const ctx = chart.ctx;
+      const area = chart.chartArea;
+      const heatingColor = 'red';
+      const coolingColor = 'blue';
+    
+      const gradient = ctx.createLinearGradient(30, area.top/2, area.right, area.top/2);
+    
+      gradient.addColorStop(0, heatingColor);
+      gradient.addColorStop(0.6, coolingColor);
+      gradient.addColorStop(1, heatingColor);
+      
+      return gradient;
+    }
+  }
+
   const chartData = {
     labels: months,
     datasets: [
@@ -77,7 +95,7 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
       {
         label: 'Real kBTU',
         data: months.map((month) => getRealBtuMonth(month)),
-        borderColor: theme.palette.text.primary,
+        borderColor: getLinearGradient(chartRefBtu),
         borderWidth: 2,
         yAxisId: 'y1',
       },
@@ -86,6 +104,7 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
 
   return (
     <Line
+      ref={chartRefBtu}
       key='yearRawBtuGraph'
       title='Raw kBTU per month'
       data={chartData}
