@@ -8,13 +8,13 @@ import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
-import { btuInCcf, btuInkWh, months } from '../../common/Basic';
+import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
 
-type YearRawBtuGraphProps = {
+type YearBtuGraphProps = {
   formData: FormData;
 };
 
-const YearRawBtuGraph: React.FC<YearRawBtuGraphProps> = ({
+const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   formData,
 }) => {
   const theme = useTheme();
@@ -43,15 +43,25 @@ const YearRawBtuGraph: React.FC<YearRawBtuGraphProps> = ({
   const heatingMonthScatter = heatingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
   const coolingMonthLine = new SimpleLinearRegression(coolingMonthScatter.map((pair) => pair.x), coolingMonthScatter.map((pair) => pair.y));
   const heatingMonthLine = new SimpleLinearRegression(heatingMonthScatter.map((pair) => pair.x), heatingMonthScatter.map((pair) => pair.y));
-  const coolingMonthMaxDd = Math.max(...coolingMonthsGas.map(([k, [unit, dd]]) => dd));
-  const heatingMonthMaxDd = Math.max(...heatingMonthsGas.map(([k, [unit, dd]]) => dd));
+  
 
   // useEffect(() => {}, []);
 
+  const acCop = Number(formData.currentACSeer) * copInSeer;
+  const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
   // in kBTU
   const getRawBtuMonth = (month: string) => {
-    return ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) * btuInkWh) +
-    (Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) * btuInCcf)) / 1000;
+    return (
+      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh) +
+      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf)
+    ) / 1000;
+  };
+
+  const getRealBtuMonth = (month: string) => {
+    return (
+      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh * acCop) +
+      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf * furnaceEfficiency)
+    ) / 1000;
   };
 
   const chartData = {
@@ -63,6 +73,13 @@ const YearRawBtuGraph: React.FC<YearRawBtuGraphProps> = ({
         borderColor: '#4e79a7',
         borderWidth: 2,
         yAxisId: 'y',
+      },
+      {
+        label: 'Real kBTU',
+        data: months.map((month) => getRealBtuMonth(month)),
+        borderColor: theme.palette.text.primary,
+        borderWidth: 2,
+        yAxisId: 'y1',
       },
     ],
   };
@@ -89,7 +106,7 @@ const YearRawBtuGraph: React.FC<YearRawBtuGraphProps> = ({
           y: {
             beginAtZero: true,
             title: {
-              text: 'Raw kBTU per month',
+              text: 'kBTU per month',
               display: true,
               color: theme.palette.text.primary,
             },
@@ -101,7 +118,7 @@ const YearRawBtuGraph: React.FC<YearRawBtuGraphProps> = ({
         plugins: {
           title: {
             display: true,
-            text: ``,
+            text: 'HVAC energy use/month',
             align: 'center',
             color: theme.palette.text.primary,
             font: {
@@ -114,4 +131,4 @@ const YearRawBtuGraph: React.FC<YearRawBtuGraphProps> = ({
   );
 }
 
-export default YearRawBtuGraph;
+export default YearBtuGraph;
