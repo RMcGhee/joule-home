@@ -1,10 +1,8 @@
 import React, { useRef } from 'react';
 import { FormData } from '../../entities/FormData';
 import { MonthlyUsage, } from '../../entities/EnergyFormData';
-import { DegreeDayMonths } from '../../entities/DegreeDayData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
 import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
