@@ -4,8 +4,11 @@ export type DegreeDayData = {
     lat: number
     lon: number
     zip: string
-    cooling: DegreeDayMonths
-    heating: DegreeDayMonths
+    cooling: DegreeDayMonths // average for three years
+    heating: DegreeDayMonths // average for three years
+    year_2021: {cooling: DegreeDayMonths, heating: DegreeDayMonths}
+    year_2022: {cooling: DegreeDayMonths, heating: DegreeDayMonths}
+    year_2023: {cooling: DegreeDayMonths, heating: DegreeDayMonths}
 };
 
 export type DegreeDayMonths = {

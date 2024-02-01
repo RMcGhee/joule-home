@@ -48,6 +48,13 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
         const data = responseData.data[0] as DegreeDayData;
         data.cooling = initDegreeDayMonths(data.cooling);
         data.heating = initDegreeDayMonths(data.heating);
+        data.year_2021.cooling = initDegreeDayMonths(data.year_2021.cooling);
+        data.year_2021.heating = initDegreeDayMonths(data.year_2021.heating);
+        data.year_2022.cooling = initDegreeDayMonths(data.year_2022.cooling);
+        data.year_2022.heating = initDegreeDayMonths(data.year_2022.heating);
+        data.year_2023.cooling = initDegreeDayMonths(data.year_2023.cooling);
+        data.year_2023.heating = initDegreeDayMonths(data.year_2023.heating);
+
         setFormData((formDataDraft) => {
           formDataDraft.degreeDayData = data;
         });
