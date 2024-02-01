@@ -38,6 +38,8 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
 
   const averageBtuDd = realBtuMonths.reduce((acc, next, i) => (acc + (next / ddMonths[i])), 0) / 12;
 
+  const naiveBtuNeeds = ddMonths.map((dd) => dd * averageBtuDd);
+
   console.log(averageBtuDd);
 
   const getDollarsMonth = (month: string) => {
@@ -84,10 +86,10 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
         yAxisID: 'y',
       },
       {
-        label: 'Estimated kBTU',
-        data: months.map((month) => getDollarsMonth(month)),
-        borderColor: 'green',
-        yAxisID: 'y1',
+        label: 'Naive kBTU Needs',
+        data: naiveBtuNeeds,
+        borderColor: theme.palette.text.secondary,
+        yAxisID: 'y',
       },
     ],
   };

@@ -74,6 +74,17 @@ def get_map_info(result: dict) -> dict:
     
     return result
 
+def get_json_out_data(result: dict) -> dict:
+    for key, value in result.items():
+        value['cooling'] = {month.lower(): value[f'cdd {month}'] for month in months.keys()}
+        value['heating'] = {month.lower(): value[f'hdd {month}'] for month in months.keys()}
+        for year in ['2021', '2022', '2023']:
+            value[year] = {
+                'cooling': {month.lower(): value[f'cdd {month} {year}'] for month in months.keys()},
+                'heating': {month.lower(): value[f'hdd {month} {year}'] for month in months.keys()},
+            }
+    return result
+
 cdd_monthly_files = [x for x in os.listdir('./scripts/cdd-data/monthly/2021') if 'DS_Store' not in x]
 hdd_monthly_files = [x for x in os.listdir('./scripts/hdd-data/monthly/2021') if 'DS_Store' not in x]
 
@@ -98,23 +109,19 @@ dd_data = fix_map_names(dd_data)
 
 dd_data = get_map_info(dd_data)
 
+dd_data = get_json_out_data(dd_data)
+
 csv_headers = {}
 for city_data in dd_data.values():
     csv_headers.update(city_data.items())
 
-csv_headers = list(csv_headers.keys())
-csv_av_headers = list(filter(lambda x: x.split(' ')[-1] not in ['2021', '2022', '2023'], csv_headers))
-csv_mon_headers = list(filter(lambda x: x.split(' ')[-1] in ['2021', '2022', '2023'], csv_headers))
-csv_city_headers = ['City', 'id', 'zip', 'lat', 'lon']
-csv_headers = csv_city_headers
-csv_headers.extend(csv_av_headers)
-csv_headers.extend(csv_mon_headers)
+csv_headers = ['City', 'id', 'zip', 'lat', 'lon', 'heating', 'cooling', '2021', '2022', '2023']
 
 out_data = {}
 out_keys: list = list(dd_data.keys())
 out_keys.sort(key=lambda x: (x.split(', ')[1], x.split(', ')[0]))
 
-with open('./scripts/dd-average/monthly_dd.csv', 'w', newline='') as csv_file:
+with open('./scripts/dd-average/year_monthly_dd.csv', 'w', newline='') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
 
     writer.writeheader()
