@@ -1,7 +1,7 @@
 import os
 import csv
-import sqlalchemy as sa
-from uszipcode import SearchEngine, SimpleZipcode
+import json
+from uszipcode import SearchEngine
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=2)
@@ -76,13 +76,13 @@ def get_map_info(result: dict) -> dict:
 
 def get_json_out_data(result: dict) -> dict:
     for key, value in result.items():
-        value['cooling'] = {month.lower(): value[f'cdd {month}'] for month in months.keys()}
-        value['heating'] = {month.lower(): value[f'hdd {month}'] for month in months.keys()}
+        value['cooling'] = json.dumps({month.lower(): value[f'cdd {month}'] for month in months.keys()})
+        value['heating'] = json.dumps({month.lower(): value[f'hdd {month}'] for month in months.keys()})
         for year in ['2021', '2022', '2023']:
-            value[year] = {
+            value[f'year_{year}'] = json.dumps({
                 'cooling': {month.lower(): value[f'cdd {month} {year}'] for month in months.keys()},
                 'heating': {month.lower(): value[f'hdd {month} {year}'] for month in months.keys()},
-            }
+            })
     return result
 
 cdd_monthly_files = [x for x in os.listdir('./scripts/cdd-data/monthly/2021') if 'DS_Store' not in x]
@@ -111,22 +111,18 @@ dd_data = get_map_info(dd_data)
 
 dd_data = get_json_out_data(dd_data)
 
-csv_headers = {}
-for city_data in dd_data.values():
-    csv_headers.update(city_data.items())
-
-csv_headers = ['City', 'id', 'zip', 'lat', 'lon', 'heating', 'cooling', '2021', '2022', '2023']
+csv_headers = ['city', 'id', 'zip', 'lat', 'lon', 'heating', 'cooling', 'year_2021', 'year_2022', 'year_2023']
 
 out_data = {}
 out_keys: list = list(dd_data.keys())
 out_keys.sort(key=lambda x: (x.split(', ')[1], x.split(', ')[0]))
 
 with open('./scripts/dd-average/year_monthly_dd.csv', 'w', newline='') as csv_file:
-    writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+    writer = csv.DictWriter(csv_file, fieldnames=csv_headers, extrasaction='ignore')
 
     writer.writeheader()
     for id, key in enumerate(out_keys):
-        dd_data[key]['City'] = key
+        dd_data[key]['city'] = key
         dd_data[key]['id'] = id
         writer.writerow(dd_data[key])
 
