@@ -27,12 +27,18 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
   const gasPrice = Number(formData.gasPrice);
 
   // in kBTU
-  const getRealBtuMonth = (month: string) => {
+  const realBtuMonths = months.map((month: string) => {
     return (
       ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh * acCop) +
       ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf * furnaceEfficiency)
     ) / 1000;
-  };
+  });
+
+  const getDdMonths = months.map((month) => formData.degreeDayData.cooling[month as keyof MonthlyUsage] + formData.degreeDayData.heating[month as keyof MonthlyUsage]);
+
+  const getAverageBtuDd = (realBtu: Number[], dd: Number[]) => {
+
+  }
 
   const getDollarsMonth = (month: string) => {
     return (
@@ -41,7 +47,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
     );
   };
 
-  // Calculate the average kBTU used per dd, regardless of source.
+  // Calculate the average real kBTU used per dd, regardless of source.
   // Make a line based on degree days that indicates, based on the above average, how much kBTU your house will need in that month
   // Generate an area line that takes into account that heating months will actually see less energy usage due to solar heat gain
   //  and cooling months will see more energy usage due to SHG.
@@ -73,7 +79,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
     datasets: [
       {
         label: 'Used kBTU',
-        data: months.map((month) => getRealBtuMonth(month)),
+        data: realBtuMonths,
         borderColor: getLinearGradient(chartRefBtu),
         yAxisID: 'y',
       },
