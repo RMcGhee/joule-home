@@ -3,7 +3,7 @@ import { FormData } from '../../entities/FormData';
 import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ChartArea, } from 'chart.js';
-import { Chart, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
@@ -49,6 +49,9 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
 
   const acCop = Number(formData.currentACSeer) * copInSeer;
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
+  const electricPrice = Number(formData.electricPrice);
+  const gasPrice = Number(formData.gasPrice);
+
   // in kBTU
   const getRawBtuMonth = (month: string) => {
     return (
@@ -62,6 +65,13 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
       ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh * acCop) +
       ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf * furnaceEfficiency)
     ) / 1000;
+  };
+
+  const getDollarsMonth = (month: string) => {
+    return (
+      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * electricPrice) +
+      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * gasPrice)
+    );
   };
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
@@ -82,70 +92,93 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
     }
   }
 
-  const chartData = {
-    labels: months,
+  // For some reason, importing an alias to a const string[] breaks multi axis... no idea why.
+  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const data = {
+    labels,
     datasets: [
       {
         label: 'Raw kBTU',
         data: months.map((month) => getRawBtuMonth(month)),
         borderColor: '#4e79a7',
-        borderWidth: 2,
-        yAxisId: 'y',
+        yAxisID: 'y',
       },
       {
-        label: 'Real kBTU',
+        label: 'Raw kBTU',
         data: months.map((month) => getRealBtuMonth(month)),
         borderColor: getLinearGradient(chartRefBtu),
-        borderWidth: 2,
-        yAxisId: 'y1',
+        yAxisID: 'y',
+      },
+      {
+        label: 'Cost/Month',
+        data: months.map((month) => getDollarsMonth(month)),
+        borderColor: 'green',
+        yAxisID: 'y1',
       },
     ],
   };
+
+  const btuOptions = {
+      stacked: false,
+      responsive: true,
+      interaction: {
+        mode: 'index' as const,
+        intersect: false,
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: {
+            color: theme.palette.text.primary,
+          }
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            text: 'kBTU per month',
+            display: true,
+            color: theme.palette.text.primary,
+          },
+          ticks: {
+            color: theme.palette.text.primary,
+          },
+        },
+        y1: {
+          type: 'linear' as const,
+          beginAtZero: true,
+          title: {
+            text: '$ per month',
+            display: true,
+            color: theme.palette.text.primary,
+          },
+          display: true,
+          position: 'right' as const,
+          ticks: {
+            color: theme.palette.text.primary,
+          },
+        },
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'HVAC energy transfer/month',
+          color: theme.palette.text.primary,
+          font: {
+            size: 18
+          }
+        },
+      },
+    };
 
   return (
     <Line
       ref={chartRefBtu}
       key='yearRawBtuGraph'
-      title='Raw kBTU per month'
-      data={chartData}
-      width={400}
-      height={400}
-      options={{
-        scales: {
-          x: {
-            beginAtZero: true,
-            title: {
-              text: 'Month',
-              display: true,
-            },
-            ticks: {
-              color: theme.palette.text.primary,
-            }
-          },
-          y: {
-            beginAtZero: true,
-            title: {
-              text: 'kBTU per month',
-              display: true,
-              color: theme.palette.text.primary,
-            },
-            ticks: {
-              color: theme.palette.text.primary,
-            },
-          }
-        },
-        plugins: {
-          title: {
-            display: true,
-            text: 'HVAC energy use/month',
-            align: 'center',
-            color: theme.palette.text.primary,
-            font: {
-              size: 18
-            }
-          },
-        },
-      }}
+      title='Energy use per month'
+      data={data}
+      width={500}
+      height={500}
+      options={btuOptions}
     />
   );
 }

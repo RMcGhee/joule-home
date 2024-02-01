@@ -94,7 +94,7 @@ export default function App() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        maxWidth: '400px',
+        maxWidth: '500px',
       }}>
         {renderStep()}
 
