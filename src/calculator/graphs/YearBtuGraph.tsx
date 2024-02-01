@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { FormData } from '../../entities/FormData';
 import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
-import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ChartArea, } from 'chart.js';
+import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 import { MonthDataEntry } from '../EnergyUsageAnalysis';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
@@ -41,11 +40,6 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   
   const coolingMonthScatter = coolingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
   const heatingMonthScatter = heatingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
-  const coolingMonthLine = new SimpleLinearRegression(coolingMonthScatter.map((pair) => pair.x), coolingMonthScatter.map((pair) => pair.y));
-  const heatingMonthLine = new SimpleLinearRegression(heatingMonthScatter.map((pair) => pair.x), heatingMonthScatter.map((pair) => pair.y));
-  
-
-  // useEffect(() => {}, []);
 
   const acCop = Number(formData.currentACSeer) * copInSeer;
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
