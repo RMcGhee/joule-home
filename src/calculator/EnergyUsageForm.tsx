@@ -188,9 +188,11 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
     </Box>
   );
 
+  // TODO: below
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2, transition: 'all 1s' }}>
+        {/* TODO: add year selector, remove biannual/monthly */}
         <ToggleButtonGroup
           color="primary"
           value={energyFormData.energyResolution}
