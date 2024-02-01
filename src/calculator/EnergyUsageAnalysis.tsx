@@ -9,6 +9,7 @@ import SeasonElectricGraph from './graphs/SeasonElectricGraph';
 import SeasonGasGraph from './graphs/SeasonGasGraph';
 import { Updater } from 'use-immer';
 import YearBtuGraph from './graphs/YearBtuGraph';
+import YearBtuNeedsGraph from './graphs/YearBtuNeedsGraph';
 
 export type MonthDataEntry = [string, [number, number]];
 
@@ -74,6 +75,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
         </div>
         <div id='seasonGasGraph' style={{ width: '1'}}>
           <YearBtuGraph formData={formData}/>
+        </div>
+        <div id='seasonGasGraph' style={{ width: '1'}}>
+          <YearBtuNeedsGraph formData={formData}/>
         </div>
         <IconButton
           color='primary'

@@ -25,26 +25,26 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   const gasPrice = Number(formData.gasPrice);
 
   // in kBTU
-  const getRawBtuMonth = (month: string) => {
+  const rawBtuMonths = months.map((month: string) => {
     return (
       ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh) +
       ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf)
     ) / 1000;
-  };
+  });
 
-  const getRealBtuMonth = (month: string) => {
+  const realBtuMonths = months.map((month: string) => {
     return (
       ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh * acCop) +
       ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf * furnaceEfficiency)
     ) / 1000;
-  };
+  });
 
-  const getDollarsMonth = (month: string) => {
+  const dollarMonths = months.map((month: string) => {
     return (
       ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * electricPrice) +
       ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * gasPrice)
     );
-  };
+  });
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {
@@ -71,19 +71,19 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
     datasets: [
       {
         label: 'Raw kBTU',
-        data: months.map((month) => getRawBtuMonth(month)),
+        data: rawBtuMonths,
         borderColor: '#4e79a7',
         yAxisID: 'y',
       },
       {
         label: 'Real kBTU',
-        data: months.map((month) => getRealBtuMonth(month)),
+        data: realBtuMonths,
         borderColor: getLinearGradient(chartRefBtu),
         yAxisID: 'y',
       },
       {
         label: 'Cost/Month',
-        data: months.map((month) => getDollarsMonth(month)),
+        data: dollarMonths,
         borderColor: 'green',
         yAxisID: 'y1',
       },

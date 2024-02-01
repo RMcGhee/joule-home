@@ -34,11 +34,11 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
     ) / 1000;
   });
 
-  const getDdMonths = months.map((month) => formData.degreeDayData.cooling[month as keyof MonthlyUsage] + formData.degreeDayData.heating[month as keyof MonthlyUsage]);
+  const ddMonths = months.map((month) => Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof MonthlyUsage]) + Number(formData.degreeDayData.heating[month.toLowerCase() as keyof MonthlyUsage]));
 
-  const getAverageBtuDd = (realBtu: Number[], dd: Number[]) => {
+  const averageBtuDd = realBtuMonths.reduce((acc, next, i) => (acc + (next / ddMonths[i])), 0) / 12;
 
-  }
+  console.log(averageBtuDd);
 
   const getDollarsMonth = (month: string) => {
     return (
