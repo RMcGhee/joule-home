@@ -39,12 +39,25 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
 
   const helpText = (
     <div>
-      <h3>Summer/winter electric or gas usage</h3>
-      <p>These should be the average of the three hottest (summer) and coldest (winter) months. For example, to get winter gas usage,
-        average your gas usages for December, January, and Febuary (if these are the coldest months for your area). For summer,
-        you would average months June, July, and August. If you use a different energy source (propane, oil, kerosene, etc), then
-        use your units for this for winter and summer gas usage. As long as you use the same units, most calculations will be accurate.
-        If you don't use a fossil fuel for heating, leave these blank.
+      <h3>kWh per Season</h3>
+      <p>This represents the kWh that your household uses (heating or cooling), versus the total degree days seen in a month.
+        A heating season is one in which your heating needs exceed your cooling needs, and vice versa for the cooling season.
+        Since an HVAC system uses electricity to run the air handler for the furnace, the calculation of base kWh load for
+        your household takes this into account.
+      </p>
+      <hr />
+      <h3>Gas ({formData.gasUnits}) per Season</h3>
+      <p>This represents the gas that your household uses, and heating/cooling season is determined as above. Since gas is not
+        used to run an air conditioner, the base gas usage for your household is calculated as an average of the usage
+        during cooling months. While not perfectly accurate, it's pretty close.
+      </p>
+      <hr />
+      <h3>HVAC energy transfer/month</h3>
+      <p>This graph shows the raw kBTUs used by your household for heating and cooling each month (less your base usage). It
+        also shows the 'Real' kBTU transfered by your system, taking into account furnace efficiency, and COP of your AC.
+        Since AC's can move more heat than the energy content of the electricity they use, 'Real' kBTU will be higher in
+        the summer, and lower in the winter. This graph also shows the cost to purchase this energy, based on the electric and
+        gas cost you provided.
       </p>
       <hr />
     </div>

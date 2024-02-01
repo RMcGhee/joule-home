@@ -104,7 +104,7 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
         yAxisID: 'y',
       },
       {
-        label: 'Raw kBTU',
+        label: 'Real kBTU',
         data: months.map((month) => getRealBtuMonth(month)),
         borderColor: getLinearGradient(chartRefBtu),
         yAxisID: 'y',
