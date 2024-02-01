@@ -21,26 +21,6 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
 
   const chartRefBtu = useRef <ChartJSOrUndefined<"line", number[], unknown>>(null);
 
-  // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
-  const coolingMonthsGas = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
-    if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
-    }
-    return null;
-  })
-  .filter((entry): entry is MonthDataEntry => entry !== null);
-
-  const heatingMonthsGas = Object.entries(formData.degreeDayData.heating).map(([month, dd]) => {
-    if (dd > formData.degreeDayData.cooling[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
-    }
-    return null;
-  })
-  .filter((entry): entry is MonthDataEntry => entry !== null);
-  
-  const coolingMonthScatter = coolingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
-  const heatingMonthScatter = heatingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
-
   const acCop = Number(formData.currentACSeer) * copInSeer;
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
   const electricPrice = Number(formData.electricPrice);
