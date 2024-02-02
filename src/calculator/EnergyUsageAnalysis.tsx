@@ -81,16 +81,16 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-        <div id='seasonElectricGraph' style={{ width: '1'}}>
+        <div id='seasonElectricGraph' style={{ width: '1' }}>
           <SeasonElectricGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
         </div>
-        <div id='seasonGasGraph' style={{ width: '1'}}>
+        <div id='seasonGasGraph' style={{ width: '1' }}>
           <SeasonGasGraph formData={formData} setBaseGasUsage={setBaseGasUsage}/>
         </div>
-        <div id='yearBtuGraph' style={{ width: '1'}}>
+        <div id='yearBtuGraph' style={{ width: '1' }}>
           <YearBtuGraph formData={formData}/>
         </div>
-        <div id='yearBtuNeedsGraph' style={{ width: '1'}}>
+        <div id='yearBtuNeedsGraph' style={{ width: '1' }}>
           <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
         </div>
         
