@@ -40,14 +40,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
 
   const naiveBtuNeeds = ddMonths.map((dd) => dd * averageBtuDd);
 
-  console.log(averageBtuDd);
-
-  const getDollarsMonth = (month: string) => {
-    return (
-      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * electricPrice) +
-      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * gasPrice)
-    );
-  };
+  const estimatedBtuNeeds = months.map((month) => ((Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(formData.degreeDayData.heating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
 
   // Calculate the average real kBTU used per dd, regardless of source.
   // Make a line based on degree days that indicates, based on the above average, how much kBTU your house will need in that month
@@ -89,6 +82,12 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
         label: 'Naive kBTU Needs',
         data: naiveBtuNeeds,
         borderColor: theme.palette.text.secondary,
+        yAxisID: 'y',
+      },
+      {
+        label: 'Est. kBTU Needs',
+        data: estimatedBtuNeeds,
+        borderColor: 'gold',
         yAxisID: 'y',
       },
     ],
