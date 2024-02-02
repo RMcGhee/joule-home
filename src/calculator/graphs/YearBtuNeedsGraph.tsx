@@ -6,15 +6,18 @@ import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
 import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
+import { MonthData, initMonthData } from '../../entities/CalculatedData';
 
 type YearBtuNeedsGraphProps = {
   formData: FormData;
   setAveragekBTUdd: (e: number) => void;
+  setkBTUNeeds: (e: MonthData) => void;
 };
 
 const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
   formData,
   setAveragekBTUdd,
+  setkBTUNeeds,
 }) => {
   const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
@@ -41,8 +44,9 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
   const estimatedBtuNeeds = months.map((month) => ((Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(formData.degreeDayData.heating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
 
   useEffect(() => {
+    setkBTUNeeds(initMonthData(estimatedBtuNeeds));
     setAveragekBTUdd(averageBtuDd);
-  }, [averageBtuDd]);
+  }, []);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {

@@ -1,4 +1,4 @@
-import { CalculatedData } from "./CalculatedData";
+import { CalculatedData, MonthData } from "./CalculatedData";
 import { CurrentSystemData } from "./CurrentSystemData";
 import { DegreeDayData } from "./DegreeDayData";
 import { EnergyFormData, defaultMonthlyUsage, } from "./EnergyFormData";
@@ -28,4 +28,5 @@ export const defaultFormData: FormData = {
     baseElectricUsage: 0,
     baseGasUsage: 0,
     averagekBTUdd: 0,
+    estimatedkBTUmonths: {} as MonthData,
 };

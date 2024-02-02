@@ -10,6 +10,7 @@ import SeasonGasGraph from './graphs/SeasonGasGraph';
 import { Updater } from 'use-immer';
 import YearBtuGraph from './graphs/YearBtuGraph';
 import YearBtuNeedsGraph from './graphs/YearBtuNeedsGraph';
+import { MonthData } from '../entities/CalculatedData';
 
 export type MonthDataEntry = [string, [number, number]];
 
@@ -29,16 +30,19 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const [baseElectricUsage, setBaseElectricUsage] = useState(0);
   const [baseGasUsage, setBaseGasUsage] = useState(0);
   const [averagekBTUdd, setAveragekBTUdd] = useState(0);
+  const [kBTUNeeds, setkBTUNeeds] = useState({} as MonthData);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   useEffect(() => {
     setFormData((formDataDraft) => {
+      console.log('hitting this hard?');
       formDataDraft.baseElectricUsage = baseElectricUsage;
       formDataDraft.baseGasUsage = baseGasUsage;
       formDataDraft.averagekBTUdd = averagekBTUdd;
+      formDataDraft.estimatedkBTUmonths = kBTUNeeds;
     });
-  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd]);
+  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds]);
 
   const helpText = (
     <div>
@@ -88,8 +92,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <YearBtuGraph formData={formData}/>
         </div>
         <div id='yearBtuNeedsGraph' style={{ width: '1'}}>
-          <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd}/>
+          <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
         </div>
+        
         <IconButton
           color='primary'
           sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%' }}
