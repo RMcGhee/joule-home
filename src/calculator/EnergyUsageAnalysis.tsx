@@ -61,6 +61,15 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
         gas cost you provided.
       </p>
       <hr />
+      <h3>Estimated kBTU needs</h3>
+      <p>This graph shows the approximate kBTUs need to heat and cool your home based on your current energy usage and solar
+        heat gain. In the winter, your heating needs are decreased by this (~15%), and in the summer, your cooling needs are
+        increased (~10%). This is only an estimate, and is influenced by the efficiency of your current system. If your actual
+        cooling or heating needs deviate from this significantly, it may indicate that your current system isn't running
+        at the efficiency expected, that other activities are increasing your heating and cooling needs, or that your home
+        may have a larger or smaller influence from solar heat gain than the average home.
+      </p>
+      <hr />
     </div>
   );
 
@@ -73,10 +82,10 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
         <div id='seasonGasGraph' style={{ width: '1'}}>
           <SeasonGasGraph formData={formData} setBaseGasUsage={setBaseGasUsage}/>
         </div>
-        <div id='seasonGasGraph' style={{ width: '1'}}>
+        <div id='yearBtuGraph' style={{ width: '1'}}>
           <YearBtuGraph formData={formData}/>
         </div>
-        <div id='seasonGasGraph' style={{ width: '1'}}>
+        <div id='yearBtuNeedsGraph' style={{ width: '1'}}>
           <YearBtuNeedsGraph formData={formData}/>
         </div>
         <IconButton
