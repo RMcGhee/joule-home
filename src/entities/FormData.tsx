@@ -9,8 +9,8 @@ export type FormData = CurrentSystemData & EnergyFormData & CalculatedData & {};
 export const defaultFormData: FormData = {
     currentACSeer: '',
     currentFurnaceEfficiency: '',
-    currentHeatPumpHspf: '',
-    currentHeatPumpSeer: '',
+    desiredHeatPumpHspf: '',
+    desiredHeatPumpSeer: '',
     zipCode: '',
     selectedClimate: '',
     zipDistData: {} as ZipDist,

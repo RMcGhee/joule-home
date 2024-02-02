@@ -6,8 +6,8 @@ import { isEmpty, isNumeric, validateZip } from "../common/Util";
 export type CurrentSystemData = {
     currentACSeer: string
     currentFurnaceEfficiency: string
-    currentHeatPumpHspf: string
-    currentHeatPumpSeer: string
+    desiredHeatPumpHspf: string
+    desiredHeatPumpSeer: string
     zipCode: string
     selectedClimate: string
     zipDistData: ZipDist
@@ -18,8 +18,8 @@ export const initCurrentSystem = (formData: FormData): CurrentSystemData => {
   return {
     currentACSeer: formData.currentACSeer,
     currentFurnaceEfficiency: formData.currentFurnaceEfficiency,
-    currentHeatPumpHspf: formData.currentHeatPumpHspf,
-    currentHeatPumpSeer: formData.currentHeatPumpSeer,
+    desiredHeatPumpHspf: formData.desiredHeatPumpHspf,
+    desiredHeatPumpSeer: formData.desiredHeatPumpSeer,
     zipCode: formData.zipCode,
     selectedClimate: formData.selectedClimate,
     zipDistData: {...formData.zipDistData},
@@ -29,7 +29,7 @@ export const initCurrentSystem = (formData: FormData): CurrentSystemData => {
 
 export const validateCurrentSystemData = (formData: FormData): boolean => {
   return (
-      (isNumeric(formData.currentHeatPumpHspf) && isNumeric(formData.currentHeatPumpSeer)) || 
+      (isNumeric(formData.desiredHeatPumpHspf) && isNumeric(formData.desiredHeatPumpSeer)) || 
       (isNumeric(formData.currentACSeer) && isNumeric(formData.currentFurnaceEfficiency))
     ) &&
     validateZip(formData.zipCode) &&

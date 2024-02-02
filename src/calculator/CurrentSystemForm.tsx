@@ -22,8 +22,6 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
-  const isHeatPumpFilled = (systemData.currentHeatPumpSeer.trim() !== '' || systemData.currentHeatPumpHspf.trim() !== '');
-  const isACFilled = systemData.currentACSeer.trim() !== '';
   const haveZipDistData = Object.keys(systemData.zipDistData).length !== 0;
 
   useEffect(() => {
@@ -56,21 +54,19 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
         <ValidatedField 
-          label="Current Heat Pump SEER" 
-          value={systemData.currentHeatPumpSeer}
+          label="Desired Heat Pump SEER" 
+          value={systemData.desiredHeatPumpSeer}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          disabled={isACFilled}
-          setter={(e) => setSystemData({...systemData, currentHeatPumpSeer: e.target.value})} 
+          setter={(e) => setSystemData({...systemData, desiredHeatPumpSeer: e.target.value})} 
           formOrder={0}
         />
         <ValidatedField 
-          label="Current Heat Pump HSPF"
-          value={systemData.currentHeatPumpHspf}
+          label="Desired Heat Pump HSPF"
+          value={systemData.desiredHeatPumpHspf}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          disabled={isACFilled}
-          setter={(e) => setSystemData({...systemData, currentHeatPumpHspf: e.target.value})} 
+          setter={(e) => setSystemData({...systemData, desiredHeatPumpHspf: e.target.value})} 
           formOrder={1}
         />
         <ValidatedField 
@@ -78,7 +74,6 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           value={systemData.currentACSeer}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          disabled={isHeatPumpFilled}
           setter={(e) => setSystemData({...systemData, currentACSeer: e.target.value})} 
           formOrder={2}
         />
