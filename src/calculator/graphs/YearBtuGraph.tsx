@@ -39,12 +39,24 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
     ) / 1000;
   });
 
-  const dollarMonths = months.map((month: string) => {
+  const hvacCostMonths = months.map((month: string) => {
     return (
       ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * electricPrice) +
       ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * gasPrice)
     );
   });
+
+  const totalCostMonths = months.map((month: string) => {
+    return (
+      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage])) * electricPrice) +
+      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage])) * gasPrice)
+    );
+  });
+
+  const currentYearHVACCost = hvacCostMonths.reduce((acc, next) => acc + next);
+  const currentYearTotalCost = totalCostMonths.reduce((acc, next) => acc + next);
+
+  console.log(`current hvac cost: $${currentYearHVACCost} | total: $${currentYearTotalCost}`);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {
@@ -84,8 +96,15 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
         lineTension: 0.3,
       },
       {
-        label: 'Cost/Month',
-        data: dollarMonths,
+        label: 'HVAC Cost',
+        data: hvacCostMonths,
+        borderColor: 'green',
+        yAxisID: 'y1',
+        lineTension: 0.3,
+      },
+      {
+        label: 'Total Cost',
+        data: totalCostMonths,
         borderColor: 'green',
         yAxisID: 'y1',
         lineTension: 0.3,

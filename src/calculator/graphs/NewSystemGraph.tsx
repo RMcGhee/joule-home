@@ -4,7 +4,7 @@ import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
-import { copInSeer, months } from '../../common/Basic';
+import { btuInkWh, copInSeer, months } from '../../common/Basic';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 
 type NewSystemGraphProps = {
@@ -22,21 +22,34 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
   const hpCoolCop = Number(formData.desiredHeatPumpSeer) * copInSeer;
   const hpHeatCop = Number(formData.desiredHeatPumpHspf) * copInSeer;
   const electricPrice = Number(formData.electricPrice);
+  const gasPrice = Number(formData.gasPrice);
 
-  const monthlyCost = months.map((month) => {
+  const monthlyHVACkWh = months.map((month) => {
     let cdd = Number(formData.degreeDayData.year_2023.cooling[month.toLowerCase() as keyof DegreeDayMonths]);
     let hdd = Number(formData.degreeDayData.year_2023.heating[month.toLowerCase() as keyof DegreeDayMonths]);
-    let cost = 0;
+    let kWh = 0;
     if (cdd > 0) {
-      cost += (((cdd * formData.averagekBTUdd) / hpCoolCop) * electricPrice);
+      kWh += ((cdd * formData.averagekBTUdd) / hpCoolCop / btuInkWh * 1000);
     }
     if (hdd > 0) {
-      cost += (((hdd * formData.averagekBTUdd) / hpHeatCop) * electricPrice);
+      kWh += ((hdd * formData.averagekBTUdd) / hpHeatCop / btuInkWh * 1000);
     }
-    return cost;
+    return kWh;
   });
 
-  console.log(monthlyCost);
+  const monthlyHVACCost = monthlyHVACkWh.map((kWh) => kWh * electricPrice);
+
+  const monthlyTotalCost = monthlyHVACkWh.map((kWh) => {
+    return (
+      ((kWh + formData.baseElectricUsage) * electricPrice) +
+      (formData.baseGasUsage * gasPrice)
+    );
+  });
+
+  const currentYearHVACCost = monthlyHVACCost.reduce((acc, next) => acc + next);
+  const currentYearTotalCost = monthlyTotalCost.reduce((acc, next) => acc + next);
+
+  console.log(`desired hvac cost: $${currentYearHVACCost} | total: $${currentYearTotalCost}`);
 
   // useEffect(() => {}, []);
 
@@ -71,8 +84,15 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
         lineTension: 0.3,
       },
       {
-        label: 'Monthly Cost',
-        data: monthlyCost,
+        label: 'HVAC Cost',
+        data: monthlyHVACCost,
+        borderColor: 'green',
+        yAxisID: 'y1',
+        lineTension: 0.3,
+      },
+      {
+        label: 'Total Cost',
+        data: monthlyTotalCost,
         borderColor: 'green',
         yAxisID: 'y1',
         lineTension: 0.3,
