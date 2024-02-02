@@ -35,9 +35,13 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
     }
   };
 
+  // TODO: properly select year when we add that to the energy usage form
+  const yearHeatingData = formData.degreeDayData.year_2023.heating;
+  const yearCoolingData = formData.degreeDayData.year_2023.cooling;
+
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
-  const coolingMonthsKwh = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
-    if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
+  const coolingMonthsKwh = Object.entries(yearCoolingData).map(([month, dd]) => {
+    if (dd > yearHeatingData[month as keyof DegreeDayMonths]) {
       return [month, [Number(formData.monthlyElectricUsage[month as keyof MonthlyUsage]), dd]];
     }
     return null;

@@ -35,8 +35,12 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
     }
   };
 
+  // TODO: properly select year when we add that to the energy usage form
+  const yearHeatingData = formData.degreeDayData.year_2023.heating;
+  const yearCoolingData = formData.degreeDayData.year_2023.cooling;
+
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
-  const coolingMonthsGas = Object.entries(formData.degreeDayData.cooling).map(([month, dd]) => {
+  const coolingMonthsGas = Object.entries(yearCoolingData).map(([month, dd]) => {
     if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
       return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
     }
@@ -44,7 +48,7 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
   })
   .filter((entry): entry is MonthDataEntry => entry !== null);
 
-  const heatingMonthsGas = Object.entries(formData.degreeDayData.heating).map(([month, dd]) => {
+  const heatingMonthsGas = Object.entries(yearHeatingData).map(([month, dd]) => {
     if (dd > formData.degreeDayData.cooling[month as keyof DegreeDayMonths]) {
       return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
     }
