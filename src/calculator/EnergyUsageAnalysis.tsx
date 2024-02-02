@@ -28,6 +28,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
 
   const [baseElectricUsage, setBaseElectricUsage] = useState(0);
   const [baseGasUsage, setBaseGasUsage] = useState(0);
+  const [averagekBTUdd, setAveragekBTUdd] = useState(0);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -35,8 +36,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
     setFormData((formDataDraft) => {
       formDataDraft.baseElectricUsage = baseElectricUsage;
       formDataDraft.baseGasUsage = baseGasUsage;
+      formDataDraft.averagekBTUdd = averagekBTUdd;
     });
-  }, [energyFormData, baseElectricUsage, baseGasUsage]);
+  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd]);
 
   const helpText = (
     <div>
@@ -86,7 +88,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <YearBtuGraph formData={formData}/>
         </div>
         <div id='yearBtuNeedsGraph' style={{ width: '1'}}>
-          <YearBtuNeedsGraph formData={formData}/>
+          <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd}/>
         </div>
         <IconButton
           color='primary'

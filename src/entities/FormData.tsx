@@ -27,4 +27,5 @@ export const defaultFormData: FormData = {
     gasUnits: 'ccf',
     baseElectricUsage: 0,
     baseGasUsage: 0,
+    averagekBTUdd: 0,
 };
