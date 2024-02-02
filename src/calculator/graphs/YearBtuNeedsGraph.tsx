@@ -76,18 +76,21 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
         data: realBtuMonths,
         borderColor: getLinearGradient(chartRefBtu),
         yAxisID: 'y',
+        lineTension: 0.3,
       },
       {
         label: 'Naive kBTU Needs',
         data: naiveBtuNeeds,
         borderColor: theme.palette.text.secondary,
         yAxisID: 'y',
+        lineTension: 0.3,
       },
       {
         label: 'Est. kBTU Needs',
         data: estimatedBtuNeeds,
         borderColor: 'gold',
         yAxisID: 'y',
+        lineTension: 0.3,
       },
     ],
   };
@@ -113,20 +116,6 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
             display: true,
             color: theme.palette.text.primary,
           },
-          ticks: {
-            color: theme.palette.text.primary,
-          },
-        },
-        y1: {
-          type: 'linear' as const,
-          beginAtZero: true,
-          title: {
-            text: '$ per month',
-            display: true,
-            color: theme.palette.text.primary,
-          },
-          display: true,
-          position: 'right' as const,
           ticks: {
             color: theme.palette.text.primary,
           },
