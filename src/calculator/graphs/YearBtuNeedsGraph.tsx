@@ -23,8 +23,6 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
 
   const acCop = Number(formData.currentACSeer) * copInSeer;
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
-  const electricPrice = Number(formData.electricPrice);
-  const gasPrice = Number(formData.gasPrice);
 
   // in kBTU
   const realBtuMonths = months.map((month: string) => {
