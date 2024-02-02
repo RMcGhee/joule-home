@@ -36,7 +36,6 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
 
   useEffect(() => {
     setFormData((formDataDraft) => {
-      console.log('hitting this hard?');
       formDataDraft.baseElectricUsage = baseElectricUsage;
       formDataDraft.baseGasUsage = baseGasUsage;
       formDataDraft.averagekBTUdd = averagekBTUdd;
