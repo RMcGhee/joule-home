@@ -24,15 +24,17 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
   const electricPrice = Number(formData.electricPrice);
   const gasPrice = Number(formData.gasPrice);
 
+  const estimatedBtuNeeds = months.map((month) => ((Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof DegreeDayMonths]) * 1.10) + (Number(formData.degreeDayData.heating[month.toLowerCase() as keyof DegreeDayMonths]) * 0.85)) * formData.averagekBTUdd);
+
   const monthlyHVACkWh = months.map((month) => {
-    let cdd = Number(formData.degreeDayData.year_2023.cooling[month.toLowerCase() as keyof DegreeDayMonths]);
-    let hdd = Number(formData.degreeDayData.year_2023.heating[month.toLowerCase() as keyof DegreeDayMonths]);
+    let cdd = Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof DegreeDayMonths]);
+    let hdd = Number(formData.degreeDayData.heating[month.toLowerCase() as keyof DegreeDayMonths]);
     let kWh = 0;
     if (cdd > 0) {
-      kWh += ((cdd * formData.averagekBTUdd) / hpCoolCop / btuInkWh * 1000);
+      kWh += (((cdd * formData.averagekBTUdd) / hpCoolCop / btuInkWh * 1000) * 1.10);
     }
     if (hdd > 0) {
-      kWh += ((hdd * formData.averagekBTUdd) / hpHeatCop / btuInkWh * 1000);
+      kWh += (((hdd * formData.averagekBTUdd) / hpHeatCop / btuInkWh * 1000) * 0.85);
     }
     return kWh;
   });
@@ -78,7 +80,7 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
     datasets: [
       {
         label: 'Est kBTU Needs',
-        data: Object.values(formData.estimatedkBTUmonths),
+        data: estimatedBtuNeeds,
         borderColor: 'gold',
         showLine: false,
         yAxisID: 'y',

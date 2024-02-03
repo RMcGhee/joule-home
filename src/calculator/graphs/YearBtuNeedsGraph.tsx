@@ -27,6 +27,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
   const acCop = Number(formData.currentACSeer) * copInSeer;
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
 
+  // TODO: switch this to use 2023 data for everything.
   // in kBTU
   const realBtuMonths = months.map((month: string) => {
     return (
@@ -35,13 +36,13 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
     ) / 1000;
   });
 
-  const ddMonths = months.map((month) => Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof MonthlyUsage]) + Number(formData.degreeDayData.heating[month.toLowerCase() as keyof MonthlyUsage]));
+  const ddMonths = months.map((month) => Number(formData.degreeDayData.year_2023.cooling[month.toLowerCase() as keyof MonthlyUsage]) + Number(formData.degreeDayData.year_2023.heating[month.toLowerCase() as keyof MonthlyUsage]));
 
   const averageBtuDd = realBtuMonths.reduce((acc, next, i) => (acc + (next / ddMonths[i])), 0) / 12;
 
   const naiveBtuNeeds = ddMonths.map((dd) => dd * averageBtuDd);
 
-  const estimatedBtuNeeds = months.map((month) => ((Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(formData.degreeDayData.heating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
+  const estimatedBtuNeeds = months.map((month) => ((Number(formData.degreeDayData.year_2023.cooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(formData.degreeDayData.year_2023.heating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
 
   useEffect(() => {
     setkBTUNeeds(initMonthData(estimatedBtuNeeds));
@@ -125,7 +126,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
       plugins: {
         title: {
           display: true,
-          text: 'Estimated kBTU needs',
+          text: '2023 Estimated kBTU needs',
           color: theme.palette.text.primary,
           font: {
             size: 18
