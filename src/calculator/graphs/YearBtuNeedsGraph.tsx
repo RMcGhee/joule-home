@@ -84,6 +84,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
         borderColor: theme.palette.text.secondary,
         yAxisID: 'y',
         lineTension: 0.3,
+        hidden: true,
       },
       {
         label: 'Est. kBTU Needs',

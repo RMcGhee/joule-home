@@ -77,16 +77,17 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
     labels,
     datasets: [
       {
-        label: 'Est kBTU',
+        label: 'Est kBTU Needs',
         data: Object.values(formData.estimatedkBTUmonths),
-        borderColor: getLinearGradient(chartRefBtu),
+        borderColor: 'gold',
+        showLine: false,
         yAxisID: 'y',
         lineTension: 0.3,
       },
       {
         label: 'HVAC Cost',
         data: monthlyHVACCost,
-        borderColor: 'green',
+        borderColor: getLinearGradient(chartRefBtu),
         yAxisID: 'y1',
         lineTension: 0.3,
       },

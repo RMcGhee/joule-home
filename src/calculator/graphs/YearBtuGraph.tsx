@@ -87,6 +87,7 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
         borderColor: '#4e79a7',
         yAxisID: 'y',
         lineTension: 0.3,
+        hidden: true,
       },
       {
         label: 'Real kBTU',
