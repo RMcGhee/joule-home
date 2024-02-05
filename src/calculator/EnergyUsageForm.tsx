@@ -64,16 +64,11 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   }, []);
 
   useEffect(() => {
-    // energyFormData.monthlyElectricUsage = kWhData;
-    // energyFormData.monthlyGasUsage = gasData;
     setFormData((formDataDraft) => {
       Object.assign(formDataDraft, {
         monthlyElectricUsage: {...energyFormData.monthlyElectricUsage},
         monthlyGasUsage: {...energyFormData.monthlyGasUsage},
-        energyResolution: energyFormData.energyResolution,
-        summerElectricUsage: energyFormData.summerElectricUsage,
-        winterElectricUsage: energyFormData.winterElectricUsage,
-        winterGasUsage: energyFormData.winterGasUsage,
+        dataYear: energyFormData.dataYear,
         electricPrice: energyFormData.electricPrice,
         gasPrice: energyFormData.gasPrice,
         gasUnits: energyFormData.gasUnits,
@@ -104,58 +99,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
     </div>
   );
 
-  const biannualShowing = energyFormData.energyResolution === 'biannual';
-
   const rowSx = { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '1rem', marginBottom: '1rem' } as React.CSSProperties;
-
-  const biannualForm = (
-    <Box sx={{justifyContent: 'space-between', flexDirection: 'column', gap: 2, marginTop: '5px'}}>
-      <div style={rowSx}>
-        <ValidatedField 
-          label="Summer Electric Usage" 
-          value={energyFormData.summerElectricUsage}
-          inputType='decimal'
-          inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ endAdornment: <InputAdornment position="end">kWh</InputAdornment> }}
-          InputLabelProps={{ shrink: true }}
-          formOrder={0}
-          setter={(e) => setEnergyFormData({...energyFormData, summerElectricUsage: e.target.value})}
-        />
-        <ValidatedField 
-          label="Summer Gas Usage"
-          value={energyFormData.summerGasUsage}
-          inputType='decimal'
-          inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ endAdornment: <InputAdornment position="end">{energyFormData.gasUnits}</InputAdornment> }}
-          InputLabelProps={{ shrink: true }}
-          formOrder={1}
-          setter={(e) => setEnergyFormData({...energyFormData, summerGasUsage: e.target.value})}
-        />
-      </div>
-      <div style={rowSx}>
-        <ValidatedField 
-          label="Winter Electric Usage" 
-          value={energyFormData.winterElectricUsage}
-          inputType='decimal'
-          inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ endAdornment: <InputAdornment position="end">kWh</InputAdornment> }}
-          InputLabelProps={{ shrink: true }}
-          formOrder={2}
-          setter={(e) => setEnergyFormData({...energyFormData, winterElectricUsage: e.target.value})}
-        />
-        <ValidatedField 
-          label="Winter Gas Usage"
-          value={energyFormData.winterGasUsage}
-          inputType='decimal'
-          inputProps={{ inputMode: 'decimal' }}
-          InputProps={{ endAdornment: <InputAdornment position="end">{energyFormData.gasUnits}</InputAdornment> }}
-          InputLabelProps={{ shrink: true }}
-          formOrder={3}
-          setter={(e) => setEnergyFormData({...energyFormData, winterGasUsage: e.target.value})}
-        />
-      </div>
-    </Box>
-  );
 
   const monthlyForm = (
     <Box sx={{justifyContent: 'space-between', flexDirection: 'column', gap: 2, marginTop: '5px', }}>
@@ -191,26 +135,28 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   // TODO: below
   return (
     <LeftGrow>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2, transition: 'all 1s' }}>
-        {/* TODO: add year selector, remove biannual/monthly */}
-        <ToggleButtonGroup
-          color="primary"
-          value={energyFormData.energyResolution}
-          exclusive
-          onChange={(e, newResolution) => {
-            if (newResolution !== null) {
-              setEnergyFormData({...energyFormData, energyResolution: newResolution})
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2, transition: 'all 1s' }} >
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 2 }} >
+          Year for data
+          <ToggleButtonGroup
+            color="primary"
+            value={energyFormData.dataYear}
+            exclusive
+            onChange={(e, newYear : 2021 | 2022 | 2023) => {
+              if (newYear !== null) {
+                setEnergyFormData({...energyFormData, dataYear: newYear})
+              }
             }
           }
-        }
-          aria-label="Monthly or biannual"
-        >
-          <ToggleButton value="biannual">Summer/Winter</ToggleButton>
-          <ToggleButton value="monthly">Monthly</ToggleButton>
-        </ToggleButtonGroup>
+            aria-label="Year for data"
+          >
+            <ToggleButton value={2023}>2023</ToggleButton>
+            <ToggleButton value={2022}>2022</ToggleButton>
+            <ToggleButton value={2021}>2021</ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, }}>
-          <Collapse in={biannualShowing} timeout={400}>{biannualForm}</Collapse>
-          <Collapse in={!biannualShowing} timeout={400}>{monthlyForm}</Collapse>
+          <Collapse in={true} timeout={400}>{monthlyForm}</Collapse>
         </Box>
         <div style={rowSx}>
           <ValidatedField 
