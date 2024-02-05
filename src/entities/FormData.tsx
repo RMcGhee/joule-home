@@ -1,6 +1,6 @@
 import { CalculatedData, MonthData } from "./CalculatedData";
 import { CurrentSystemData } from "./CurrentSystemData";
-import { DegreeDayData } from "./DegreeDayData";
+import { DegreeDayData, DegreeDayMonths } from "./DegreeDayData";
 import { EnergyFormData, defaultMonthlyUsage, } from "./EnergyFormData";
 import { ZipDist } from "./ZipDist";
 
@@ -30,3 +30,18 @@ export const defaultFormData: FormData = {
     desiredHVACCost: 0,
     desiredTotalCost: 0,
 };
+
+/**
+ * @param formData 
+ * @returns [DegreeDayMonths, DegreeDayMonths] - cooling, heating
+ */
+export const ddDataForYear = function(formData: FormData): [DegreeDayMonths, DegreeDayMonths] {
+    switch (formData.dataYear) {
+        case 2023:
+            return [formData.degreeDayData.year_2023.cooling, formData.degreeDayData.year_2023.heating];
+        case 2022:
+            return [formData.degreeDayData.year_2022.cooling, formData.degreeDayData.year_2022.heating];
+        case 2021:
+            return [formData.degreeDayData.year_2021.cooling, formData.degreeDayData.year_2021.heating];
+    }
+}

@@ -156,7 +156,7 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
       plugins: {
         title: {
           display: true,
-          text: '2023 HVAC energy transfer/month',
+          text: `${formData.dataYear} HVAC energy transfer/month`,
           color: theme.palette.text.primary,
           font: {
             size: 18

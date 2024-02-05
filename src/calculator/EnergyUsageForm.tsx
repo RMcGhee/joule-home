@@ -78,12 +78,10 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
 
   const helpText = (
     <div>
-      <h3>Summer/winter electric or gas usage</h3>
-      <p>These should be the average of the three hottest (summer) and coldest (winter) months. For example, to get winter gas usage,
-        average your gas usages for December, January, and Febuary (if these are the coldest months for your area). For summer,
-        you would average months June, July, and August. If you use a different energy source (propane, oil, kerosene, etc), then
-        use your units for this for winter and summer gas usage. As long as you use the same units, most calculations will be accurate.
-        If you don't use a fossil fuel for heating, leave these blank.
+      <h3>Monthly electric or gas usage</h3>
+      <p>You should be able to get the monthly usage from your electric and gas provider, and these should be in units of kWh (electric),
+        and Ccf or therms/kBTU (gas). If you use a different energy source (propane, oil, kerosene, etc), then use your units for this.
+        As long as you use the same units consistently, most calculations will be accurate.
       </p>
       <hr/>
       <h3>Electric/gas price</h3>

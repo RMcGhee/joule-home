@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { FormData } from '../../entities/FormData';
+import { FormData, ddDataForYear } from '../../entities/FormData';
 import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
@@ -35,9 +35,7 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
     }
   };
 
-  // TODO: properly select year when we add that to the energy usage form
-  const yearHeatingData = formData.degreeDayData.year_2023.heating;
-  const yearCoolingData = formData.degreeDayData.year_2023.cooling;
+  const [yearCoolingData, yearHeatingData] = ddDataForYear(formData);
 
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
   const coolingMonthsGas = Object.entries(yearCoolingData).map(([month, dd]) => {

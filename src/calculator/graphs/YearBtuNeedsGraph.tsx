@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { FormData } from '../../entities/FormData';
+import { FormData, ddDataForYear } from '../../entities/FormData';
 import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
 import { Line } from 'react-chartjs-2';
@@ -27,7 +27,6 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
   const acCop = Number(formData.currentACSeer) * copInSeer;
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
 
-  // TODO: switch this to use 2023 data for everything.
   // in kBTU
   const realBtuMonths = months.map((month: string) => {
     return (
@@ -36,13 +35,15 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
     ) / 1000;
   });
 
-  const ddMonths = months.map((month) => Number(formData.degreeDayData.year_2023.cooling[month.toLowerCase() as keyof MonthlyUsage]) + Number(formData.degreeDayData.year_2023.heating[month.toLowerCase() as keyof MonthlyUsage]));
+  const [ddMonthsCooling, ddMonthsHeating] = ddDataForYear(formData);
+
+  const ddMonths = months.map((month) => Number(ddMonthsCooling[month.toLowerCase() as keyof MonthlyUsage]) + Number(ddMonthsHeating[month.toLowerCase() as keyof MonthlyUsage]));
 
   const averageBtuDd = realBtuMonths.reduce((acc, next, i) => (acc + (next / ddMonths[i])), 0) / 12;
 
   const naiveBtuNeeds = ddMonths.map((dd) => dd * averageBtuDd);
 
-  const estimatedBtuNeeds = months.map((month) => ((Number(formData.degreeDayData.year_2023.cooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(formData.degreeDayData.year_2023.heating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
+  const estimatedBtuNeeds = months.map((month) => ((Number(ddMonthsCooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(ddMonthsHeating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
 
   useEffect(() => {
     setkBTUNeeds(initMonthData(estimatedBtuNeeds));
@@ -126,7 +127,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
       plugins: {
         title: {
           display: true,
-          text: '2023 Estimated kBTU needs',
+          text: `${formData.dataYear} Estimated kBTU needs`,
           color: theme.palette.text.primary,
           font: {
             size: 18
