@@ -32,6 +32,10 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const [baseGasUsage, setBaseGasUsage] = useState(0);
   const [averagekBTUdd, setAveragekBTUdd] = useState(0);
   const [kBTUNeeds, setkBTUNeeds] = useState({} as MonthData);
+  const [currentHVACCost, setCurrentHVACCost] = useState(0);
+  const [currentTotalCost, setCurrentTotalCost] = useState(0);
+  const [desiredHVACCost, setDesiredHVACCost] = useState(0);
+  const [desiredTotalCost, setDesiredTotalCost] = useState(0);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -41,8 +45,12 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
       formDataDraft.baseGasUsage = baseGasUsage;
       formDataDraft.averagekBTUdd = averagekBTUdd;
       formDataDraft.estimatedkBTUmonths = kBTUNeeds;
+      formDataDraft.currentHVACCost = currentHVACCost;
+      formDataDraft.currentTotalCost = currentTotalCost;
+      formDataDraft.desiredHVACCost = desiredHVACCost;
+      formDataDraft.desiredTotalCost = desiredTotalCost;
     });
-  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds]);
+  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds, currentHVACCost, currentTotalCost, desiredHVACCost, desiredTotalCost]);
 
   const helpText = (
     <div>
@@ -89,13 +97,13 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <SeasonGasGraph formData={formData} setBaseGasUsage={setBaseGasUsage}/>
         </div>
         <div id='yearBtuGraph' style={{ width: '1' }}>
-          <YearBtuGraph formData={formData}/>
+          <YearBtuGraph formData={formData} setCurrentHVACCost={setCurrentHVACCost} setCurrentTotalCost={setCurrentTotalCost}/>
         </div>
         <div id='yearBtuNeedsGraph' style={{ width: '1' }}>
           <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
         </div>
         <div id='newSystemGraph' style={{ width: '1' }}>
-          <NewSystemGraph formData={formData}/>
+          <NewSystemGraph formData={formData} setDesiredHVACCost={setDesiredHVACCost} setDesiredTotalCost={setDesiredTotalCost}/>
         </div>
         <IconButton
           color='primary'

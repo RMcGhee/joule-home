@@ -9,10 +9,14 @@ import { DegreeDayMonths } from '../../entities/DegreeDayData';
 
 type NewSystemGraphProps = {
   formData: FormData;
+  setDesiredHVACCost: (e: number) => void;
+  setDesiredTotalCost: (e: number) => void;
 };
 
 const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
   formData,
+  setDesiredHVACCost,
+  setDesiredTotalCost,
 }) => {
   const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
@@ -48,12 +52,13 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
     );
   });
 
-  const currentYearHVACCost = monthlyHVACCost.reduce((acc, next) => acc + next);
-  const currentYearTotalCost = monthlyTotalCost.reduce((acc, next) => acc + next);
+  const desiredHVACCost = monthlyHVACCost.reduce((acc, next) => acc + next);
+  const desiredTotalCost = monthlyTotalCost.reduce((acc, next) => acc + next);
 
-  console.log(`desired hvac cost: $${currentYearHVACCost} | total: $${currentYearTotalCost}`);
-
-  // useEffect(() => {}, []);
+  useEffect(() => {
+    setDesiredHVACCost(desiredHVACCost);
+    setDesiredTotalCost(desiredTotalCost);
+  }, []);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {

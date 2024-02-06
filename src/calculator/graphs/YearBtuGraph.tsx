@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormData } from '../../entities/FormData';
 import { MonthlyUsage, } from '../../entities/EnergyFormData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
@@ -9,10 +9,14 @@ import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
 
 type YearBtuGraphProps = {
   formData: FormData;
+  setCurrentHVACCost: (e: number) => void;
+  setCurrentTotalCost: (e: number) => void;
 };
 
 const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   formData,
+  setCurrentHVACCost,
+  setCurrentTotalCost,
 }) => {
   const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
@@ -56,7 +60,10 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   const currentYearHVACCost = hvacCostMonths.reduce((acc, next) => acc + next);
   const currentYearTotalCost = totalCostMonths.reduce((acc, next) => acc + next);
 
-  console.log(`current hvac cost: $${currentYearHVACCost} | total: $${currentYearTotalCost}`);
+  useEffect(() => {
+    setCurrentHVACCost(currentYearHVACCost);
+    setCurrentTotalCost(currentYearTotalCost);
+  }, []);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {
