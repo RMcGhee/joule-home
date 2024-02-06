@@ -114,7 +114,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
         </IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
         <Grid container spacing={2}>
-          <HeaderItem>2023 HVAC Cost</HeaderItem> <DataItem>{formData.currentHVACCost}</DataItem>
+          <HeaderItem>2023 HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.currentHVACCost}</DataItem>
         </Grid>
       </Box>
     </LeftGrow>
@@ -142,11 +142,15 @@ type DataItemProps = {
   asDollars: boolean;
 };
 
-const DataItem: React.FC<HeaderItemProps> = ({ children }, asDollars) => {
+const DataItem: React.FC<DataItemProps> = ({ children }, asDollars) => {
+  let formatted = null;
+  if (asDollars && typeof children === 'number') {
+    formatted = Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+  }
   return (
     <Grid item xs={6}>
       <Paper sx={{ padding: 1, textAlign: 'center' }}>
-        {children}
+        {formatted !== null ? formatted.format(children as number) : children}
       </Paper>
     </Grid>
   );
