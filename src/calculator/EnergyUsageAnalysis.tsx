@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton, } from '@mui/material';
+import { Box, Grid, IconButton, Paper, } from '@mui/material';
 import { LeftGrow } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
@@ -113,9 +113,41 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <QuestionMark />
         </IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
+        <Grid container spacing={2}>
+          <HeaderItem>2023 HVAC Cost</HeaderItem> <DataItem>{formData.currentHVACCost}</DataItem>
+        </Grid>
       </Box>
     </LeftGrow>
   );
 }
 
 export default EnergyUsageAnalysis;
+
+type HeaderItemProps = {
+  children: React.ReactNode;
+};
+
+const HeaderItem: React.FC<HeaderItemProps> = ({ children }) => {
+  return (
+    <Grid item xs={6}>
+      <Paper sx={{ padding: 1, textAlign: 'center' }}>
+        {children}
+      </Paper>
+    </Grid>
+  );
+};
+
+type DataItemProps = {
+  children: React.ReactNode;
+  asDollars: boolean;
+};
+
+const DataItem: React.FC<HeaderItemProps> = ({ children }, asDollars) => {
+  return (
+    <Grid item xs={6}>
+      <Paper sx={{ padding: 1, textAlign: 'center' }}>
+        {children}
+      </Paper>
+    </Grid>
+  );
+};
