@@ -34,8 +34,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const [kBTUNeeds, setkBTUNeeds] = useState({} as MonthData);
   const [currentHVACCost, setCurrentHVACCost] = useState(0);
   const [currentTotalCost, setCurrentTotalCost] = useState(0);
-  const [desiredHVACCost, setDesiredHVACCost] = useState(0);
-  const [desiredTotalCost, setDesiredTotalCost] = useState(0);
+  const [desiredHvacYearlyCost, setDesiredHvacYearlyCost] = useState(0);
+  const [desiredTotalYearlyCost, setDesiredTotalYearlyCost] = useState(0);
+  const [oldHvacYearlyCost, setOldHvacYearlyCost] = useState(0);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -45,12 +46,14 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
       formDataDraft.baseGasUsage = baseGasUsage;
       formDataDraft.averagekBTUdd = averagekBTUdd;
       formDataDraft.estimatedkBTUmonths = kBTUNeeds;
-      formDataDraft.currentHVACCost = currentHVACCost;
+      formDataDraft.currentHvacCost = currentHVACCost;
       formDataDraft.currentTotalCost = currentTotalCost;
-      formDataDraft.desiredHVACCost = desiredHVACCost;
-      formDataDraft.desiredTotalCost = desiredTotalCost;
+      formDataDraft.desiredHvacCost = desiredHvacYearlyCost;
+      formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
+      formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
+      formDataDraft.oldHvacCost = oldHvacYearlyCost;
     });
-  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds, currentHVACCost, currentTotalCost, desiredHVACCost, desiredTotalCost]);
+  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds, currentHVACCost, currentTotalCost, desiredHvacYearlyCost, desiredTotalYearlyCost]);
 
   const helpText = (
     <div>
@@ -103,7 +106,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
         </div>
         <div id='newSystemGraph' style={{ width: '1' }}>
-          <NewSystemGraph formData={formData} setDesiredHVACCost={setDesiredHVACCost} setDesiredTotalCost={setDesiredTotalCost}/>
+          <NewSystemGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
         </div>
         <IconButton
           color='primary'
@@ -114,7 +117,9 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
         </IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
         <Grid container spacing={2}>
-          <HeaderItem>2023 HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.currentHVACCost}</DataItem>
+          <HeaderItem>Old HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.oldHvacCost}</DataItem>
+          <HeaderItem>New HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.desiredHvacCost}</DataItem>
+          <HeaderItem>Difference</HeaderItem> <DataItem asDollars={true}>{formData.oldHvacCost - formData.desiredHvacCost}</DataItem>
         </Grid>
       </Box>
     </LeftGrow>

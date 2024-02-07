@@ -25,10 +25,11 @@ export const defaultFormData: FormData = {
     baseGasUsage: 0,
     averagekBTUdd: 0,
     estimatedkBTUmonths: {} as MonthData,
-    currentHVACCost: 0,
+    currentHvacCost: 0,
     currentTotalCost: 0,
-    desiredHVACCost: 0,
+    desiredHvacCost: 0,
     desiredTotalCost: 0,
+    oldHvacCost: 0,
 };
 
 /**

@@ -5,10 +5,11 @@ export type CalculatedData = {
   baseGasUsage: number;
   averagekBTUdd: number;
   estimatedkBTUmonths: MonthData;
-  currentHVACCost: number;
+  currentHvacCost: number;
   currentTotalCost: number;
-  desiredHVACCost: number;
+  desiredHvacCost: number;
   desiredTotalCost: number;
+  oldHvacCost: number;
 };
 
 export type MonthData = {

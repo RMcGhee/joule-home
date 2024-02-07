@@ -4,19 +4,21 @@ import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
-import { btuInkWh, copInSeer, months } from '../../common/Basic';
+import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 
 type NewSystemGraphProps = {
   formData: FormData;
-  setDesiredHVACCost: (e: number) => void;
-  setDesiredTotalCost: (e: number) => void;
+  setDesiredHvacYearlyCost: (e: number) => void;
+  setDesiredTotalYearlyCost: (e: number) => void;
+  setOldHvacYearlyCost: (e: number) => void;
 };
 
 const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
   formData,
-  setDesiredHVACCost,
-  setDesiredTotalCost,
+  setDesiredHvacYearlyCost,
+  setDesiredTotalYearlyCost,
+  setOldHvacYearlyCost,
 }) => {
   const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
@@ -25,6 +27,8 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
 
   const hpCoolCop = Number(formData.desiredHeatPumpSeer) * copInSeer;
   const hpHeatCop = Number(formData.desiredHeatPumpHspf) * copInSeer;
+  const acCop = Number(formData.currentACSeer) * copInSeer;
+  const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
   const electricPrice = Number(formData.electricPrice);
   const gasPrice = Number(formData.gasPrice);
 
@@ -52,12 +56,27 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
     );
   });
 
-  const desiredHVACCost = monthlyHVACCost.reduce((acc, next) => acc + next);
-  const desiredTotalCost = monthlyTotalCost.reduce((acc, next) => acc + next);
+  const monthlyOldHvacCost = months.map((month) => {
+    let cdd = Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof DegreeDayMonths]);
+    let hdd = Number(formData.degreeDayData.heating[month.toLowerCase() as keyof DegreeDayMonths]);
+    let monthCost = 0;
+    if (cdd > 0) {
+      monthCost += ((((cdd * formData.averagekBTUdd) / acCop / btuInkWh * 1000) * 1.10) * electricPrice);
+    }
+    if (hdd > 0) {
+      monthCost += ((((hdd * formData.averagekBTUdd) / furnaceEfficiency  / btuInCcf * 1000) * 0.85) * gasPrice);
+    }
+    return monthCost;
+  });
+
+  const desiredHvacYearlyCost = monthlyHVACCost.reduce((acc, next) => acc + next);
+  const desiredTotalYearlyCost = monthlyTotalCost.reduce((acc, next) => acc + next);
+  const oldHvacYearlyCost = monthlyOldHvacCost.reduce((acc, next) => acc + next)
 
   useEffect(() => {
-    setDesiredHVACCost(desiredHVACCost);
-    setDesiredTotalCost(desiredTotalCost);
+    setDesiredHvacYearlyCost(desiredHvacYearlyCost);
+    setDesiredTotalYearlyCost(desiredTotalYearlyCost);
+    setOldHvacYearlyCost(oldHvacYearlyCost);
   }, []);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
@@ -95,6 +114,13 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
         label: 'HVAC Cost',
         data: monthlyHVACCost,
         borderColor: getLinearGradient(chartRefBtu),
+        yAxisID: 'y1',
+        lineTension: 0.3,
+      },
+      {
+        label: 'Old HVAC Cost',
+        data: monthlyOldHvacCost,
+        borderColor: 'grey',
         yAxisID: 'y1',
         lineTension: 0.3,
       },
