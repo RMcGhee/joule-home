@@ -11,7 +11,7 @@ import { Updater } from 'use-immer';
 import YearBtuGraph from './graphs/YearBtuGraph';
 import YearBtuNeedsGraph from './graphs/YearBtuNeedsGraph';
 import { MonthData } from '../entities/CalculatedData';
-import NewSystemGraph from './graphs/NewSystemGraph';
+import NewSystemCostGraph from './graphs/NewSystemCostGraph';
 
 export type MonthDataEntry = [string, [number, number]];
 
@@ -106,7 +106,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
         </div>
         <div id='newSystemGraph' style={{ width: '1' }}>
-          <NewSystemGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
+          <NewSystemCostGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
         </div>
         <IconButton
           color='primary'

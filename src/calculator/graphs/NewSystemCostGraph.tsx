@@ -7,14 +7,14 @@ import { useTheme } from '@mui/material';
 import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 
-type NewSystemGraphProps = {
+type NewSystemCostGraphProps = {
   formData: FormData;
   setDesiredHvacYearlyCost: (e: number) => void;
   setDesiredTotalYearlyCost: (e: number) => void;
   setOldHvacYearlyCost: (e: number) => void;
 };
 
-const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
+const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
   formData,
   setDesiredHvacYearlyCost,
   setDesiredTotalYearlyCost,
@@ -67,6 +67,16 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
       monthCost += ((((hdd * formData.averagekBTUdd) / furnaceEfficiency  / btuInCcf * 1000) * 0.85) * gasPrice);
     }
     return monthCost;
+  });
+
+  const monthlyOldHvackWh = months.map((month) => {
+    let cdd = Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof DegreeDayMonths]);
+    let kWh = 0;
+    if (cdd > 0) {
+      kWh += (((cdd * formData.averagekBTUdd) / acCop / btuInkWh * 1000) * 1.10);
+    }
+    kWh += formData.baseElectricUsage
+    return kWh;
   });
 
   const desiredHvacYearlyCost = monthlyHVACCost.reduce((acc, next) => acc + next);
@@ -125,6 +135,14 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
         lineTension: 0.3,
       },
       {
+        label: 'Old HVAC kWh',
+        data: monthlyOldHvackWh,
+        borderColor: '#f73378',
+        yAxisID: 'y2',
+        lineTension: 0.3,
+        onClick: () => console.log('got clicked!'),
+      },
+      {
         label: 'Total Cost',
         data: monthlyTotalCost,
         borderColor: 'green',
@@ -173,11 +191,25 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
             color: theme.palette.text.primary,
           },
         },
+        y2: {
+          type: 'linear' as const,
+          beginAtZero: true,
+          title: {
+            text: 'kWh per month',
+            display: true,
+            color: '#f73378',
+          },
+          display: true,
+          position: 'right' as const,
+          ticks: {
+            color: '#f73378',
+          },
+        },
       },
       plugins: {
         title: {
           display: true,
-          text: 'New System Estimate',
+          text: 'New System Cost Estimate',
           color: theme.palette.text.primary,
           font: {
             size: 18
@@ -199,4 +231,4 @@ const NewSystemGraph: React.FC<NewSystemGraphProps> = ({
   );
 }
 
-export default NewSystemGraph;
+export default NewSystemCostGraph;
