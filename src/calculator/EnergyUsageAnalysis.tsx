@@ -12,6 +12,7 @@ import YearBtuGraph from './graphs/YearBtuGraph';
 import YearBtuNeedsGraph from './graphs/YearBtuNeedsGraph';
 import { MonthData } from '../entities/CalculatedData';
 import NewSystemCostGraph from './graphs/NewSystemCostGraph';
+import NewSystemUsageGraph from './graphs/NewSystemUsageGraph';
 
 export type MonthDataEntry = [string, [number, number]];
 
@@ -105,8 +106,11 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
         <div id='yearBtuNeedsGraph' style={{ width: '1' }}>
           <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
         </div>
-        <div id='newSystemGraph' style={{ width: '1' }}>
+        <div id='newSystemCostGraph' style={{ width: '1' }}>
           <NewSystemCostGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
+        </div>
+        <div id='newSystemUsageGraph' style={{ width: '1' }}>
+          <NewSystemUsageGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
         </div>
         <IconButton
           color='primary'
