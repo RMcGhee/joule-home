@@ -5,6 +5,9 @@ export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', '
 export const btuInkWh = 3412;
 export const btuInCcf = 103900;
 export const copInSeer = 0.293;
+export const supabaseBaseUrl = 'https://uqjgvhebgvzrbbfjcxsg.supabase.co/functions/v1/';
+// export const supabaseBaseUrl = 'http://127.0.0.1:54321/functions/v1/';
+
 
 interface LeftGrowProps {
     children: ReactElement;

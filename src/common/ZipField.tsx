@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ValidatedField, ValidatedFieldProps } from './Basic';
+import { ValidatedField, ValidatedFieldProps, supabaseBaseUrl } from './Basic';
 import { ZipDist } from '../entities/ZipDist';
 import { CircularProgress, InputAdornment } from '@mui/material';
 import { validateZip } from './Util';
@@ -15,8 +15,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
   const [zipDataLoading, setZipDataLoading] = useState(false);
   
   const fetchZipData = async (zipCode: string) => {
-    // const edgeFunction = 'https://uqjgvhebgvzrbbfjcxsg.supabase.co/functions/v1/get-zip';
-    const edgeFunction = 'http://127.0.0.1:54321/functions/v1/get-zip'
+    const edgeFunction = supabaseBaseUrl + 'get-zip';
     // Need to validate here too, since the setter is always called after validation, even
     // if validation fails.
     if (validateZip(zipCode)) {

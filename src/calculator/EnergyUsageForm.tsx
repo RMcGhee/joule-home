@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Collapse, IconButton, InputAdornment, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { LeftGrow, ValidatedField } from '../common/Basic';
+import { LeftGrow, ValidatedField, supabaseBaseUrl } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
@@ -35,7 +35,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   useEffect(() => {
     if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
       const getDegreeDayData = async () => {
-        const edgeFunction = 'http://127.0.0.1:54321/functions/v1/get-dd'
+        const edgeFunction = supabaseBaseUrl + 'get-dd'
         const response = await fetch(edgeFunction, {
           method: 'POST',
           body: JSON.stringify({ 'zip': formData.selectedClimate }),
