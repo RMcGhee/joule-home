@@ -87,7 +87,7 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
     setDesiredHvacYearlyCost(desiredHvacYearlyCost);
     setDesiredTotalYearlyCost(desiredTotalYearlyCost);
     setOldHvacYearlyCost(oldHvacYearlyCost);
-  }, []);
+  }, [desiredHvacYearlyCost, desiredTotalYearlyCost, oldHvacYearlyCost]);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {
