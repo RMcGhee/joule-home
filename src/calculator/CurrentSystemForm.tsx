@@ -6,7 +6,7 @@ import { SelectClimate } from '../common/SelectClimate';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { CurrentSystemData, initCurrentSystem } from '../entities/CurrentSystemData';
+import { initCurrentSystem } from '../entities/CurrentSystemData';
 import { Updater } from 'use-immer';
 
 type CurrentSystemFormProps = {
