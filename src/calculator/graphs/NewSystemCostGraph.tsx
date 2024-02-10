@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { FormData } from '../../entities/FormData';
-import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
+import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController, } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
@@ -21,7 +21,7 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
   setOldHvacYearlyCost,
 }) => {
   const theme = useTheme();
-  ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
+  ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController);
 
   const chartRefBtu = useRef <ChartJSOrUndefined<"line", number[], unknown>>(null);
 
