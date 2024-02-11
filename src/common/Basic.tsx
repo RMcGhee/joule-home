@@ -1,7 +1,7 @@
 import { Grow, TextField, TextFieldProps, Tooltip } from '@mui/material';
 import React, { useState, ReactElement } from 'react';
 
-const prod_env = true;
+const prod_env = false;
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const btuInkWh = 3412;
 export const btuInCcf = 103900;
