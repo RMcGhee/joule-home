@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Collapse, IconButton, InputAdornment, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, Button, Collapse, IconButton, InputAdornment, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 import { LeftGrow, ValidatedField, supabaseBaseUrl } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
@@ -26,6 +26,10 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const kWhData = {jan: '743', feb: '725', mar: '589', apr: '550', may: '714', jun: '1243', jul: '1635', aug: '1384', sep: '972', oct: '529', nov: '620', dec: '723',};
   const gasData = {jan: '171', feb: '156', mar: '143', apr: '65', may: '25', jun: '13', jul: '12', aug: '12', sep: '11', oct: '20', nov: '69', dec: '134'};
+
+  const fillWithExampleData = (): void => {
+    setEnergyFormData({...energyFormData, monthlyElectricUsage: {...kWhData}, monthlyGasUsage: {...gasData}});
+  };
 
   const degreeDayDataOutOfDate = (degreeDayData: DegreeDayData): boolean => {
     let res = (isEmpty(degreeDayData) || degreeDayData.cooling.jan === '' || degreeDayData.zip !== formData.selectedClimate);
@@ -130,7 +134,6 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
     </Box>
   );
 
-  // TODO: below
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2, transition: 'all 1s' }} >
@@ -153,6 +156,9 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
             <ToggleButton value={2021}>2021</ToggleButton>
           </ToggleButtonGroup>
         </Box>
+        <Tooltip title="Data comes from an 1800 sqft home in the midwest, 2023">
+          <Button onClick={fillWithExampleData}>Use Example Data</Button>
+        </Tooltip>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, }}>
           <Collapse in={true} timeout={400}>{monthlyForm}</Collapse>
         </Box>
