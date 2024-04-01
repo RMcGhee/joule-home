@@ -62,7 +62,11 @@ export default function App() {
 
   const handleNextStep = (stepChange = 1) => {
     localStorage.setItem('formData', JSON.stringify(formData));
-    setCurrentStep(currentStep + stepChange);
+    if (currentStep === 3) {
+      setCurrentStep(0);
+    } else {
+      setCurrentStep(currentStep + stepChange);
+    }
   };
 
   const renderStep = () => {
@@ -122,7 +126,7 @@ export default function App() {
               right: 0,
             }}
           >
-            Next
+            {currentStep === 3 ? 'Home' : 'Next'}
           </Button>
         </Box>
       </Box>
