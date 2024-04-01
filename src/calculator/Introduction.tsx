@@ -7,7 +7,7 @@ const Introduction: React.FC = () => {
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
       <Typography variant='h5'>
-        This is a work in progress, and is not currently functional.
+        This is a work in progress, but is mostly functional.
       </Typography>
       <Typography variant='body1' gutterBottom>
         joule-home is a free calculator to help you figure out what your home heating and cooling costs would be if you replaced
@@ -46,17 +46,6 @@ const Introduction: React.FC = () => {
                      ))}
                 </Paper>
             </Grid>
-            {/* <Grid item xs={12} sm={6} textAlign='center'>
-                <Paper>
-                    <Typography variant="h6">Optional</Typography>
-                    <Divider />
-                    {["Gas/electric bill by month", "Home sqft",].map(item => (
-                        <Typography key={item} sx={{ marginBottom: 1.3, padding: 1 }}>
-                            {item}
-                        </Typography>
-                     ))}
-                </Paper>
-            </Grid> */}
         </Grid>
         Don't worry, we won't hide your results at the end by asking for your email or phone number.
         <br/>We don't wan't those.

@@ -14,9 +14,12 @@ const user_home_url = 'https://rmcghee.github.io/'
 const BottomNav: React.FC = () => {
   const tooltipContent = (
     <React.Fragment>
-      <Typography color="inherit">Additional Info</Typography>
-      <Link href={user_home_url + "extra_info.html"} target="_blank" rel="noopener noreferrer">
-        Click here for more info
+      <Typography color="inherit">Want to connect?</Typography>
+      <Link href="https://www.linkedin.com/in/rich-mcghee-18a41757" target="_blank" rel="noopener noreferrer">
+        LinkedIn
+      </Link><br/>
+      <Link href={user_home_url} target="_self" rel="noopener noreferrer">
+        Home
       </Link>
     </React.Fragment>
   );
@@ -33,7 +36,7 @@ const BottomNav: React.FC = () => {
           <h2 style={{ cursor: 'pointer' }}>r.mcghee</h2>
         </Tooltip>
         <Divider orientation='vertical'/>
-        <Link href={user_home_url + "synbio.html"}>synthetic biology</Link><br />
+        <Link href={user_home_url + "synbio.html"}>biology</Link><br />
         <Link href={user_home_url + "photography.html"}>photography</Link><br />
         <Link href="/">joule-home</Link><br />
       </Stack>
