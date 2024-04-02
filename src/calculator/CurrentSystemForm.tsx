@@ -46,7 +46,7 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
       <p>Use this if you have any kind of burning heating device. Find by searching the model of your furnace, this value is usually between 80% and 95%, although older furnaces or boilers can be lower. Higher is better.</p>
       <hr/>
       <h3>Zip code/Closest Climate</h3>
-      <p>Type in any zip code near you. After entering your zip code, select the closest locale to you in the Closest Climate box.</p>
+      <p>Type in any zip code near you. After entering your zip code, select the closest locale to you in the Closest Climate box. If you want to use example data, use 64124</p>
     </div>
   );
 

@@ -38,8 +38,9 @@ const Introduction: React.FC = () => {
                     <Typography variant="h6">Required</Typography>
                     <Divider />
                     {["Nearest Zipcode", "Current Furnace efficiency (%)", 
-                        "Current AC efficiency (SEER)", 
-                        "Gas/electric price per unit"].map(item => (
+                      "Current AC efficiency (SEER)", 
+                      "Gas/electric price per unit",
+                      "Gas/electric usage/month (there's example data available)"].map(item => (
                         <Typography key={item} sx={{ marginBottom: 1.3, padding: 1 }}>
                             {item}
                         </Typography>

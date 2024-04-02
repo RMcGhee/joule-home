@@ -156,7 +156,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
             <ToggleButton value={2021}>2021</ToggleButton>
           </ToggleButtonGroup>
         </Box>
-        <Tooltip title="Data comes from an 1800 sqft home in the midwest, 2023">
+        <Tooltip title="Data comes from an 1800 sqft home in the midwest, 2023, use Zip 64124.">
           <Button onClick={fillWithExampleData}>Use Example Data</Button>
         </Tooltip>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, }}>

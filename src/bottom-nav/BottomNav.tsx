@@ -9,7 +9,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-const user_home_url = 'https://rmcghee.github.io/'
+const user_home_url = 'https://rmcghee.github.io/portfolio/'
 
 const BottomNav: React.FC = () => {
   const tooltipContent = (
@@ -36,8 +36,6 @@ const BottomNav: React.FC = () => {
           <h2 style={{ cursor: 'pointer' }}>r.mcghee</h2>
         </Tooltip>
         <Divider orientation='vertical'/>
-        <Link href={user_home_url + "synbio.html"}>biology</Link><br />
-        <Link href={user_home_url + "photography.html"}>photography</Link><br />
         <Link href="/">joule-home</Link><br />
       </Stack>
     </LeftGrow>
