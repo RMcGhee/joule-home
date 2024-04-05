@@ -50,6 +50,7 @@ const Introduction: React.FC = () => {
         </Grid>
         Don't worry, we won't hide your results at the end by asking for your email or phone number.
         <br/>We don't wan't those.
+        <br/>Why? I like heat pumps and wanted to play around with React. Stack is React, github static hosting, and Supabase for serverless functions/db.
       </Box>
     </LeftGrow>
   );
